@@ -1,9 +1,10 @@
 const express = require('express')
 const helpers = require('./_helpers')
-
+const db = require('./models') // 引入資料庫
 const app = express()
 const port = 3000
 const exphbs = require('express-handlebars')
+
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
 app.set('view engine', 'handlebars')
 
