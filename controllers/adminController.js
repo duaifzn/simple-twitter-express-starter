@@ -6,7 +6,17 @@ const adminController = {
     return User.findAll().then(users => {
       return res.render('admin/users', { users })
     })
+  },
+
+  adminHomePage: (req, res) => {
+    res.redirect('/tweets')
+  },
+
+  deleteTweet: (req, res) => {
+
+  },
+  adminUserPage: (req, res) => {
+
   }
 }
-
 module.exports = adminController

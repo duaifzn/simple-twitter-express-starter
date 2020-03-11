@@ -2,6 +2,7 @@ const db = require('../models')
 const User = db.User
 const Like = db.Like
 const Tweet = db.Tweet
+const helpers = require('../_helpers')
 const userController = {
   tweetPage: (req, res) => {
     return res.send(`User${req.params.id} 的 Tweet`)
@@ -52,6 +53,28 @@ const userController = {
       return res.render('likePage', JSON.parse(JSON.stringify({ user: user })))
     })
   },
+  signInPage: (req, res) => {
+    res.render('signInPage')
+  },
+  signIn: (req, res) => {
+
+  },
+  signUpPage: (req, res) => {
+
+  },
+  signUp: (req, res) => {
+
+  },
+  logOut: (req, res) => {
+
+  },
+  createFollowship: (req, res) => {
+
+  },
+  deleteFollowship: (req, res) => {
+
+  },
+
 }
 
 module.exports = userController
