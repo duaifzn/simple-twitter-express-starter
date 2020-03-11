@@ -10,6 +10,7 @@ module.exports = {
       role: 'admin',
       name: "root",
       avatar: faker.image.imageUrl(),
+      introduction: faker.lorem.sentences(),
       createdAt: new Date(),
       updatedAt: new Date()
     }, {
@@ -18,6 +19,7 @@ module.exports = {
       role: 'user',
       name: "user1",
       avatar: faker.image.imageUrl(),
+      introduction: faker.lorem.sentences(),
       createdAt: new Date(),
       updatedAt: new Date()
     }, {
@@ -26,6 +28,7 @@ module.exports = {
       role: 'user',
       name: "user2",
       avatar: faker.image.imageUrl(),
+      introduction: faker.lorem.sentences(),
       createdAt: new Date(),
       updatedAt: new Date()
     }, {
@@ -34,6 +37,7 @@ module.exports = {
       role: 'admin',
       name: "dabon",
       avatar: faker.image.imageUrl(),
+      introduction: faker.lorem.sentences(),
       createdAt: new Date(),
       updatedAt: new Date()
     }], {});
