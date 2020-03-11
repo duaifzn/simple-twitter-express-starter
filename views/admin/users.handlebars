@@ -1,3 +1,26 @@
-<div>
-  <h1>admin users</h1>
-</div>
+<h1>簡易推特後台</h1>
+
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Id</th>
+      <th scope="col">Name</th>
+      <th scope="col">Email</th>
+      <th scope="col">Avatar</th>
+      <th scope="col">社群活躍數據</th>
+      <th scope="col">清單預設按推播文數排序</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each users}}
+    <tr>
+      <th scope="row">{{this.id}}</th>
+      <td>{{this.name}}</td>
+      <td>{{this.email}}</td>
+      <td><img src="{{this.avatar}}" alt="avatar" class="border"></td>
+      <td>WIP</td>
+      <td>WIP</td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>

@@ -3,7 +3,9 @@ const User = db.User
 
 const adminController = {
   getUsers: (req, res) => {
-    res.render('admin/users')
+    return User.findAll().then(users => {
+      return res.render('admin/users', { users })
+    })
   }
 }
 
