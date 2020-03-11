@@ -1,0 +1,26 @@
+<h1>推文後台</h1>
+<span>切換：</span>
+<a href="#">推文</a>
+<span>/</span>
+<a href="/admin/users">使用者</a>
+
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Id</th>
+      <th scope="col">Description</th>
+      <th scope="col">User</th>
+      <th scope="col">Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each tweets}}
+    <tr>
+      <th scope="row">{{this.id}}</th>
+      <td>{{this.description}}</td>
+      <td>{{this.user.name}}</td>
+      <td><button>Delete</button></td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
