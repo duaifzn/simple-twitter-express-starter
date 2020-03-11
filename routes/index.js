@@ -23,7 +23,10 @@ module.exports = (app, passport) => {
   //登入頁面
   app.get('/signin', userController.signInPage)
   //登入
-  app.post('/signin', userController.signIn)
+  app.post('/signin', passport.authenticate('local', {
+    failureRedirect: '/signin',
+    failureFlash: true
+  }), userController.signIn)
   //註冊頁面
   app.get('/signup', userController.signUpPage)
   //註冊
