@@ -57,7 +57,7 @@ const userController = {
     res.render('signInPage')
   },
   signIn: (req, res) => {
-
+    res.send('sign in!!!')
   },
   signUpPage: (req, res) => {
 

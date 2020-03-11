@@ -1,5 +1,6 @@
 const passport = require('passport')
-const LocalStrategy = require('passport-local')
+const LocalStrategy = require('passport-local').Strategy;
+const bcrypt = require('bcryptjs')
 const db = require('../models')
 const User = db.User
 
@@ -10,11 +11,11 @@ passport.use(new LocalStrategy(
     passReqToCallback: true
   },
   // authenticate user
-  (req, username, password, cb) => {
-    User.findOne({ where: { email: username } }).then(user => {
+  (req, email, password, cb) => {
+    User.findOne({ where: { email: email } }).then(user => {
       if (!user)
         return cb(null, false, req.flash('error_messages', '帳號或密碼輸入錯誤'))
-      if (password !== user.password)
+      if (!bcrypt.compareSync(password, user.password))
         return cb(null, false, req.flash('error_messages', '帳號或密碼輸入錯誤！'))
       return cb(null, user)
     })
