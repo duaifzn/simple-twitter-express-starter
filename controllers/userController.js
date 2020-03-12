@@ -73,8 +73,7 @@ const userController = {
         if (user) {
           req.flash('error_messages', '帳號已註冊')
           return res.redirect('back')
-        }
-        else {
+        } else {
           User.create({
             name: req.body.name,
             email: req.body.email,

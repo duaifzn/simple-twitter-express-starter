@@ -34,7 +34,7 @@ const tweetController = {
           {
             ...user.dataValues,
             PopularNumber: user.Followers.length,
-            introduction: user.dataValues.introduction.substring(0, 50),
+            introduction: user.dataValues.introduction !== null ? user.dataValues.introduction.substring(0, 50) : '', // 避免無法處理字串
             isFollowed: req.user.Followings.map(d => d.id).includes(user.id)
           }
         ))
