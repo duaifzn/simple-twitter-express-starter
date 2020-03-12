@@ -1,5 +1,50 @@
-<h1>tweet Home Page</h1>
-{{#each tweets}}
-<h2>{{this.description}}</h2>
-<br>
-{{/each}}
+<div class="row">
+  <div class="col">
+    <form action="/tweets" method="POST">
+      <div class="form-group">
+        <textarea class="form-control" id="tweetText" rows="4" placeholder="What's on your mind ?"></textarea>
+      </div>
+      <button type="submit">Tweet</button>
+    </form>
+    <div class="tweets">
+      {{#each tweets}}
+      <div class="card">
+        <div class="card-body">
+          <label>
+            <h4 class="card-title">{{this.User.name}}</h4>
+          </label>
+          <label>
+            <h5>{{moment this.createdAt}}</h5>
+          </label>
+          <p>{{this.description}}</p>
+          <a href="/tweets/{{this.id}}/replies">Reply({{this.replyNumber}})</a>
+          <a class="ml-2" href="#">Like({{this.likeNumber}})</a>
+        </div>
+      </div>
+      {{/each}}
+    </div>
+  </div>
+  <div class="col">
+    <h2>Popular</h2>
+    {{#each users}}
+    <div class="card mb-3" style="max-width: 540px;">
+      <div class="row no-gutters">
+        <div class="col-md-4">
+          <img src="{{this.avatar}}" class="card-img" alt="avatar">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 class="card-title"><a href="/users/{{this.id}}/tweets">{{this.name}}</a></h5>
+            <p class="card-text">{{this.introduction}}</p>
+            {{#if this.isFollowed}}
+            <a class="btn btn-danger" href="">取消追蹤</a>
+            {{else}}
+            <a class="btn btn-primary" href="">追蹤</a>
+            {{/if}}
+          </div>
+        </div>
+      </div>
+    </div>
+    {{/each}}
+  </div>
+</div>
