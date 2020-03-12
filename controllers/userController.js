@@ -8,16 +8,15 @@ const userController = {
     return res.send(`User${req.params.id} 的 Tweet`)
   },
   editUserPage: (req, res) => {
-    if (req.params.id == 1) {
+    if (req.params.id === 1) {
       return res.render('editUserPage')
-    }
-    else {
+    } else {
       return res.redirect(`/users/${req.params.id}/edit`)
     }
   },
   editUser: (req, res) => {
-    //console.log('req.body:', req.body)
-    //console.log('req.params:', req.params)
+    // console.log('req.body:', req.body)
+    // console.log('req.params:', req.params)
     User.findByPk(req.params.id).then(user => {
       user.update({
         name: req.body.name
@@ -25,7 +24,6 @@ const userController = {
         console.log('user', user.name)
         return res.redirect('back')
       })
-
     })
   },
   followingPage: (req, res) => {
@@ -57,7 +55,8 @@ const userController = {
     res.render('signInPage')
   },
   signIn: (req, res) => {
-    res.send('sign in!!!')
+    req.flash('success_messages', 'Login successfully')
+    res.redirect('/restaurants')
   },
   signUpPage: (req, res) => {
 
@@ -66,18 +65,17 @@ const userController = {
 
   },
   logOut: (req, res) => {
-
+    req.flash('success_messages', 'Logout successfully')
+    req.logout()
+    res.redirect('/signin')
   },
   createFollowship: (req, res) => {
 
   },
   deleteFollowship: (req, res) => {
 
-  },
+  }
 
 }
 
 module.exports = userController
-
-
-
