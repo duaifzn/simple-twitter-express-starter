@@ -2,6 +2,10 @@ const db = require('../models')
 const User = db.User
 const Tweet = db.Tweet
 const tweetController = {
+  redirectInvalidUrl: (req, res) => { // 防止亂打網址404
+    res.redirect('back')
+  },
+
   createTweet: (req, res) => {
     User.findByPk(1).then(user => {
       Tweet.create({
