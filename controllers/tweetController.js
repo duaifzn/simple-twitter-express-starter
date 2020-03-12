@@ -19,7 +19,7 @@ const tweetController = {
     })
   },
   tweetHomePage: (req, res) => {
-    Tweet.findAll({ include: [Like, Reply] }).then(tweets => {
+    Tweet.findAll({ include: [Like, Reply, User] }).then(tweets => {
       tweets = tweets.map(tweet => (
         {
           ...tweet.dataValues,
@@ -39,7 +39,7 @@ const tweetController = {
           }
         ))
         users = users.sort((a, b) => b.PopularNumber - a.PopularNumber).slice(1, 11)
-        return res.render('tweetHomePage', { users: users, tweets: tweets })
+        return res.render('tweetHomePage', JSON.parse(JSON.stringify({ users: users, tweets: tweets })))
       })
 
     })
