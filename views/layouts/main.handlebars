@@ -19,9 +19,9 @@
       <ul class="navbar-nav mr-auto">
       </ul>
       <div>
-        {{!-- {{#if user.isAdmin}} --}}
+        {{#if user.isAdmin}}
         <a href="/admin" style="color: white;margin-right: 10px;">Admin 後台</a>
-        {{!-- {{/if}} --}}
+        {{/if}}
         {{#if user}}
         <span style="color: white;margin-right: 10px;">Hi, {{user.email}}</span>
         <a href="/users/{{user.id}}" style="color: white;margin-right: 10px;">Profile</a>
@@ -33,7 +33,7 @@
   </header>
   <main role="main">
     <div class="album py-5 bg-light">
-      <div class="container mt-4">
+      <div class="container mt-5">
         {{{body}}}
       </div>
     </div>
