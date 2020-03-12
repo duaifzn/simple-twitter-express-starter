@@ -16,12 +16,10 @@ module.exports = (app, passport) => {
     }
     res.redirect('/signin')
   }
-
   // 轉向/tweets
   app.get('/', authenticated, (req, res) => {
     res.redirect('/tweets')
   })
-
   // 登入頁面
   app.get('/signin', userController.signInPage)
   // 登入

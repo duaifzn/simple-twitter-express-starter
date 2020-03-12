@@ -4,7 +4,7 @@ const faker = require('faker')
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.bulkInsert('Users', [{
+    queryInterface.bulkInsert('Users', [{
       email: 'root@example.com',
       password: bcrypt.hashSync('12345678', bcrypt.genSaltSync(10), null),
       role: 'admin',
@@ -41,7 +41,57 @@ module.exports = {
       createdAt: new Date(),
       updatedAt: new Date()
     }], {});
+    queryInterface.bulkInsert('Tweets',
+      Array.from({ length: 30 }).map(d => ({
+        UserId: Math.floor(Math.random() * 6) + 1,
+        description: faker.lorem.sentences(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      })
+      ), {});
 
+    queryInterface.bulkInsert('Followships', [{
+      followerId: 1,
+      followingId: 2,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      followerId: 3,
+      followingId: 2,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      followerId: 4,
+      followingId: 2,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      followerId: 3,
+      followingId: 1,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    ], {});
+    queryInterface.bulkInsert('Tweets',
+      Array.from({ length: 30 }).map(d => ({
+        UserId: Math.floor(Math.random() * 6) + 1,
+        description: faker.lorem.sentences(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      })
+      ), {});
+
+    return queryInterface.bulkInsert('Tweets',
+      Array.from({ length: 30 }).map(d => ({
+        UserId: Math.floor(Math.random() * 6) + 1,
+        description: faker.lorem.sentences(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      })
+      ), {});
   },
 
   down: (queryInterface, Sequelize) => {
