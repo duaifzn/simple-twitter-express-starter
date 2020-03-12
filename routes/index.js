@@ -1,16 +1,16 @@
 const adminController = require('../controllers/adminController.js')
 const userController = require('../controllers/userController')
 const tweetController = require('../controllers/tweetController')
-
+const helpers = require('../_helpers')
 module.exports = (app, passport) => {
   const authenticated = (req, res, next) => {
-    if (req.isAuthenticated()) {
+    if (helpers.ensureAuthenticated(req)) {
       return next()
     }
     res.redirect('/signin')
   }
   const authenticatedAdmin = (req, res, next) => {
-    if (req.isAuthenticated()) {
+    if (helpers.ensureAuthenticated(req)) {
       if (req.user.role === 'admin') { return next() }
       return res.redirect('/')
     }
@@ -50,7 +50,7 @@ module.exports = (app, passport) => {
   app.get('/users/:id/likes', userController.likePage)
 
   // 看見站內所有的推播，以及跟隨者最多的使用者 (設為前台首頁)
-  app.get('/tweets', tweetController.tweetHomePage)
+  app.get('/tweets', authenticated, tweetController.tweetHomePage)
   // 將新增的推播寫入資料庫
   app.post('/tweets', tweetController.createTweet)
   // 可以在這頁回覆特定的 tweet，並看見 tweet 主人的簡介
