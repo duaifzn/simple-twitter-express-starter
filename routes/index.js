@@ -1,7 +1,7 @@
 const adminController = require('../controllers/adminController.js')
 const userController = require('../controllers/userController')
 const tweetController = require('../controllers/tweetController')
-
+const helpers = require('../_helpers')
 module.exports = (app, passport) => {
   const unAuthenticated = (req, res, next) => { // 限制登入頁只能在未登入時看到用
     if (!req.isAuthenticated()) {
@@ -11,13 +11,13 @@ module.exports = (app, passport) => {
   }
 
   const authenticated = (req, res, next) => {
-    if (req.isAuthenticated()) {
+    if (helpers.ensureAuthenticated(req)) {
       return next()
     }
     res.redirect('/signin')
   }
   const authenticatedAdmin = (req, res, next) => {
-    if (req.isAuthenticated()) {
+    if (helpers.ensureAuthenticated(req)) {
       if (req.user.role === 'admin') { return next() }
       return res.redirect('/')
     }

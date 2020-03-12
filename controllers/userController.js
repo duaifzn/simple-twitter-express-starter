@@ -3,6 +3,8 @@ const User = db.User
 const Like = db.Like
 const Tweet = db.Tweet
 const helpers = require('../_helpers')
+const bcrypt = require('bcryptjs')
+
 const userController = {
   tweetPage: (req, res) => {
     return res.send(`User${req.params.id} 的 Tweet`)
@@ -52,17 +54,37 @@ const userController = {
     })
   },
   signInPage: (req, res) => {
-    res.render('signInPage')
+    return res.render('signInPage')
   },
   signIn: (req, res) => {
     req.flash('success_messages', 'Login successfully')
-    res.redirect('/restaurants')
+    return res.redirect('/')
   },
   signUpPage: (req, res) => {
-
+    return res.render('signUpPage')
   },
   signUp: (req, res) => {
-
+    if (req.body.password !== req.body.password2) {
+      req.flash('error_message', '密碼輸入不相同')
+      return res.redirect('/signup')
+    }
+    User.findOne({ where: { email: req.body.email } })
+      .then(user => {
+        if (user) {
+          req.flash('error_message', '帳號已註冊')
+          return res.redirect('/signup')
+        }
+        else {
+          User.create({
+            name: req.body.name,
+            email: req.body.email,
+            password: bcrypt.hashSync(req.body.password, 10)
+          }).then(user => {
+            req.flash('success_messages', '成功註冊')
+            return res.redirect('/signin')
+          })
+        }
+      })
   },
   logOut: (req, res) => {
     req.flash('success_messages', 'Logout successfully')
