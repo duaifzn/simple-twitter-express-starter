@@ -13,20 +13,16 @@
 <body>
   <header>
   {{!-- Navbar --}}
-  <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-info">
+  <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-info d-flex justify-content-between">
     <a class="navbar-brand text-dark font-weight-bold" href="/">Simple Twitter</a>
-    <div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
-      <ul class="navbar-nav mr-auto">
-      </ul>
-      <div>
-        {{#if user.isAdmin}}
-        <a href="/admin" style="color: white;margin-right: 10px;">Admin 後台</a>
-        {{/if}}
+    <div class="navbar-collapse offcanvas-collapse col-3 justify-content-end" id="navbarsExampleDefault">
+      <div class="links">
         {{#if user}}
-        <span style="color: white;margin-right: 10px;">Hi, {{user.email}}</span>
-        <a href="/users/{{user.id}}" style="color: white;margin-right: 10px;">Profile</a>
-        <a href="/logout"><button class="btn btn-outline-success my-2 my-sm-0">LogOut</button></a>
-        {{/if}}
+        <a href="/users/{{user.id}}"><img src="{{user.avatar}}" alt="avatar"  width="50px" height="50px" class="img-thumbnail border"></a>
+        <a href="/logout" class="text-primary font-weight-bold">LogOut</a>
+        {{/if}}{{#ifRole user.role }}
+        <a href="/admin" class="text-light btn btn-warning" height="50px">管理後台</a>
+        {{/ifRole}}
       </div>
     </nav>
     {{#if success_messages}}
@@ -42,7 +38,7 @@
   </header>
   <main role="main">
     <div class="album py-5 bg-light">
-      <div class="container mt-5">
+      <div class="container mt-5 pt-2">
         {{{body}}}
       </div>
     </div>
