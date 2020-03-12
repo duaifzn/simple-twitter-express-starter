@@ -57,7 +57,7 @@ const userController = {
     return res.render('signInPage')
   },
   signIn: (req, res) => {
-    req.flash('success_messages', 'Login successfully')
+    req.flash('success_messages', '登入成功')
     return res.redirect('/')
   },
   signUpPage: (req, res) => {
@@ -65,14 +65,14 @@ const userController = {
   },
   signUp: (req, res) => {
     if (req.body.password !== req.body.password2) {
-      req.flash('error_message', '密碼輸入不相同')
-      return res.redirect('/signup')
+      req.flash('error_messages', '密碼輸入不相同')
+      return res.redirect('back')
     }
     User.findOne({ where: { email: req.body.email } })
       .then(user => {
         if (user) {
-          req.flash('error_message', '帳號已註冊')
-          return res.redirect('/signup')
+          req.flash('error_messages', '帳號已註冊')
+          return res.redirect('back')
         }
         else {
           User.create({

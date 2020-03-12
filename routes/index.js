@@ -3,13 +3,6 @@ const userController = require('../controllers/userController')
 const tweetController = require('../controllers/tweetController')
 const helpers = require('../_helpers')
 module.exports = (app, passport) => {
-  const unAuthenticated = (req, res, next) => { // 限制登入頁只能在未登入時看到用
-    if (!req.isAuthenticated()) {
-      return next()
-    }
-    res.redirect('/tweets')
-  }
-
   const authenticated = (req, res, next) => {
     if (helpers.ensureAuthenticated(req)) {
       return next()
@@ -30,9 +23,9 @@ module.exports = (app, passport) => {
   })
 
   // 登入頁面
-  app.get('/signin', unAuthenticated, userController.signInPage)
+  app.get('/signin', userController.signInPage)
   // 登入
-  app.post('/signin', unAuthenticated, passport.authenticate('local', {
+  app.post('/signin', passport.authenticate('local', {
     failureRedirect: '/signin',
     failureFlash: true
   }), userController.signIn)
