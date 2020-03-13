@@ -3,6 +3,7 @@ const User = db.User
 const Tweet = db.Tweet
 const Like = db.Like
 const Reply = db.Reply
+
 const tweetController = {
   redirectInvalidUrl: (req, res) => { // 防止亂打網址404
     res.redirect('back')
@@ -20,6 +21,15 @@ const tweetController = {
   },
   tweetHomePage: (req, res) => {
     Tweet.findAll({ include: [Like, Reply, User] }).then(tweets => {
+      tweets = tweets.map(tweet => (
+        {
+          ...tweet.dataValues,
+          replyNumber: tweet.dataValues.Replies.length,
+          likeNumber: tweet.dataValues.Likes.length,
+          isLiked: req.user.LikedTweets.map(d => d.id).includes(tweet.id)
+
+        }))
+
       User.findAll({
         include: [{ model: User, as: 'Followers' }, { model: User, as: 'Followings' }]
       }).then(users => {

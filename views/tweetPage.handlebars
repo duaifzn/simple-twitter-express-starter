@@ -21,7 +21,8 @@
                 {{else}}
                 <form action="/following/{{user.id}}" method="POST" style="display: inline">
                     <button type="submit" class="btn btn-primary">Follow</button></form>
-                 {{/if}}
+                {{/if}}
+               
             </ul>
         </div>
         <div class="col-8">
@@ -43,8 +44,21 @@
                             <h5>{{moment this.createdAt}}</h5>
                         </label>
                         <p>{{this.description}}</p>
-                        <a href="/tweets/{{this.id}}/replies">Reply({{this.Replies.length}})</a>
-                        <a class="ml-2" href="#">Like({{this.Likes.length}})</a>
+                        <div class="d-flex bd-highlight mb-3">
+                            <a href="/tweets/{{this.id}}/replies">Reply({{this.Replies.length}})</a>
+                            <a class="ml-2" href="#">Like({{this.Likes.length}})</a>
+                            <div class="ml-auto">
+                                {{#if this.isLiked}}
+                                <form action="/like/{{this.id}}?_method=DELETE" method="POST" style="display: inline;">
+                                    <button type="submit" class="btn btn-danger">Unlike</button>
+                                </form>
+                                {{else}}
+                                <form action="/like/{{this.id}}" method="POST" style="display: inline;">
+                                    <button type="submit" class="btn btn-primary">Like</button>
+                                </form>
+                                {{/if}}
+                            </div>
+                        </div>
                     </div>
                 </div>
                 {{/each}}
