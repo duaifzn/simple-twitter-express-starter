@@ -16,10 +16,10 @@
                     <a href="/users/{{user.id}}/edit" class="btn btn-primary">edit</a>
                 </li>
                 {{#if isFollowed}}
-                <form action="/following/{{userProfile.id}}?_method=DELETE" method="POST" style="display: inline">
+                <form action="/following/{{user.id}}?_method=DELETE" method="POST" style="display: inline">
                     <button type="submit" class="btn btn-danger">Unfollow</button></form>
                 {{else}}
-                <form action="/following/{{userProfile.id}}" method="POST" style="display: inline">
+                <form action="/following/{{user.id}}" method="POST" style="display: inline">
                     <button type="submit" class="btn btn-primary">Follow</button></form>
                  {{/if}}
             </ul>

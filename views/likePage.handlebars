@@ -1,4 +1,40 @@
 <h1>Like Page</h1>
-{{#each user.Likes}}
-<h1>{{this.Tweet.description}}</h1><br>
-{{/each}}
+<div class="row">
+  <div class="col-4">
+    <img src="{{user.avatar}}" alt="avatar" height="200px" width="200px">
+    <h4>{{user.name}}</h4>
+    <p>{{user.introduction}}</p>
+    <ul>
+      <li>Tweets:{{tweetNumber}}</li>
+      <li>Following:{{followingNumber}}</li>
+      <li>Follower:{{followerNumber}}</li>
+      <li>Like:{{likeNumber}}</li>
+    </ul>
+    {{#if isFollowed}}
+    <form action="/following/{{user.id}}?_method=DELETE" method="POST" style="display: inline">
+      <button type="submit" class="btn btn-danger">Unfollow</button></form>
+    {{else}}
+    <form action="/following/{{user.id}}" method="POST" style="display: inline">
+      <button type="submit" class="btn btn-primary">Follow</button> </form>
+    {{/if}}
+  </div>
+</div>
+<div class="col-8">
+  {{#each user.Likes}}
+  <div class="card">
+    <div class="card-body">
+      <label>
+        <h4 class="card-title">{{this.Tweet.User.name}}</h4>
+      </label>
+      <label class="m-auto">
+        <h5>{{moment this.Tweet.createdAt}}</h5>
+      </label>
+      <p>{{this.Tweet.description}}</p>
+      <a href="/tweets/{{this.UserId}}/replies">Reply({{#count this.Tweet.Replies}}{{/count}})</a>
+      <a class="ml-2" href="#">Like({{#count this.Tweet.Likes}}{{/count}})</a>
+    </div>
+  </div>
+  {{/each}}
+
+</div>
+</div>

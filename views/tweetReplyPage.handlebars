@@ -1,0 +1,46 @@
+<h1>tweetReplyPage</h1>
+<div class="row">
+  <div class="col-4">
+    <img src="{{tweet.User.avatar}}" alt="avatar" height="200px" width="200px">
+    <h4>{{tweet.User.name}}</h4>
+    <p>{{tweet.User.introduction}}</p>
+    <ul>
+      <li>Tweets:{{tweetNumber}}</li>
+      <li>Following:{{followingNumber}}</li>
+      <li>Follower:{{followerNumber}}</li>
+      <li>Like:{{likeNumber}}</li>
+    </ul>
+    {{#if isFollowed}}
+    <a class="btn btn-danger" href="">取消追蹤</a>
+    {{else}}
+    <a class="btn btn-primary" href="">追蹤</a>
+    {{/if}}
+  </div>
+  <div class="col-8">
+    <div class="tweets">
+      <h1>Tweets</h1>
+      <h4><a href="/users/{{tweet.User.id}}/tweets">{{tweet.User.name}}</a></h4>
+      <p>{{tweet.description}}</p>
+      <span>Reply({{replyNumber}})</span>
+      <span>Like({{likeNumber}})</span>
+    </div>
+    <div class="replies">
+      <h1>Replies</h1>
+      {{#each tweet.Replies}}
+      <blockquote class="blockquote mb-0">
+        {{this.comment}}
+      </blockquote>
+      <hr />
+      {{/each}}
+
+      <form action="/tweets/{{tweet.id}}/replies" method="POST">
+        <div class="form-group">
+          <label for="text">Reply：</label>
+          <textarea class="form-control" id="text" name="text" rows="3" required></textarea>
+        </div>
+        <input type="hidden" name="userId" value="{{tweet.User.id}}" />
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+  </div>
+</div>
