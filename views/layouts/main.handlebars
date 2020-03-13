@@ -14,15 +14,23 @@
   <header>
   {{!-- Navbar --}}
   <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-info d-flex justify-content-between">
-    <a class="navbar-brand text-dark font-weight-bold" href="/">Simple Twitter</a>
-    <div class="navbar-collapse offcanvas-collapse col-5 col-sm-3 justify-content-end" id="navbarsExampleDefault">
-      <div class="links">
-        {{#if user}}
-        <a href="/users/{{user.id}}"><img src="{{user.avatar}}" alt="avatar"  width="50px" height="50px" class="img-thumbnail border"></a>
-        <a href="/logout" class="text-primary font-weight-bold">LogOut</a>
-        {{/if}}{{#ifRole user.role }}
-        <a href="/admin" class="text-light btn btn-warning mt-2" height="50px">管理後台</a>
+    <a class="navbar-brand text-dark font-weight-bold ml-1" href="/">
+      <h3>Simple Twitter</h3>
+    </a>
+    <div class="navbar-collapse offcanvas-collapse col-5 col-sm-4 col-md-3 d-flex justify-content-end" id="navbarsExampleDefault">      
+      {{!-- <div class="admin-button">
+        
+      </div> --}}
+      <div class="buttons col-8 mx-1 px-1 d-flex justify-content-end">
+        {{#ifRole user.role }}
+        <a href="/admin" class="text-light btn btn-warning font-weight-bold mx-1" height="50px">
+          後台管理
+        </a>
         {{/ifRole}}
+        {{#if user}}
+        <a href="/users/{{user.id}}/tweets"><img src="{{user.avatar}}" alt="avatar" width="50px" class="border"></a>
+        <a href="/logout" class="text-primary font-weight-bold ml-2 mt-1">LogOut</a>
+        {{/if}}
       </div>
     </nav>
     {{#if success_messages}}
@@ -38,7 +46,7 @@
   </header>
   <main role="main">
     <div class="album py-5 bg-light">
-      <div class="container mt-5 pt-5">
+      <div class="container pt-5">
         {{#if success_messages}}
         <div class="alert alert-success" role="alert" style="margin: 30px 0 ;">
           {{success_messages}}
