@@ -28,7 +28,7 @@ const tweetController = {
         }))
 
       User.findAll({
-        include: { model: User, as: 'Followers' }
+        include: [{ model: User, as: 'Followers' }, { model: User, as: "Followings" }]
       }).then(users => {
         users = users.map(user => (
           {
