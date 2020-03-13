@@ -36,10 +36,12 @@
           <div class="card-body">
             <h5 class="card-title"><a href="/users/{{this.id}}/tweets">{{this.name}}</a></h5>
             <p class="card-text">{{this.introduction}}</p>
-            {{#if this.isFollowed}}
-            <a class="btn btn-danger" href="">取消追蹤</a>
+            {{#if isFollowed}}
+            <form action="/following/{{this.id}}?_method=DELETE" method="POST" style="display: inline">
+                    <button type="submit" class="btn btn-danger">Unfollow</button></form>
             {{else}}
-            <a class="btn btn-primary" href="">追蹤</a>
+           <form action="/following/{{this.id}}" method="POST" style="display: inline">
+                    <button type="submit" class="btn btn-primary">Follow</button> </form>
             {{/if}}
           </div>
         </div>

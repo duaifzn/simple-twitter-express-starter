@@ -47,6 +47,11 @@ module.exports = (app, passport) => {
   app.get('/users/:id/followers', authenticated, userController.followerPage)
   // 看見某一使用者按過 like 的推播
   app.get('/users/:id/likes', authenticated, userController.likePage)
+  // 使用者可以追蹤
+  app.post('/following/:userId', authenticated, userController.createFollowship)
+  // 使用者可以刪除追蹤
+  app.delete('/following/:userId', authenticated, userController.deleteFollowship)
+
 
   // 看見站內所有的推播，以及跟隨者最多的使用者 (設為前台首頁)
   app.get('/tweets', authenticated, tweetController.tweetHomePage)
