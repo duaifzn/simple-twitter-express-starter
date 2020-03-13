@@ -68,9 +68,9 @@ module.exports = (app, passport) => {
   app.delete('/followships/:followingId', authenticated, userController.deleteFollowship)
 
   // 新增一筆 like 記錄
-  app.post('/tweets/:id/like', authenticated, tweetController.createLike)
+  app.post('/like/:tweetId', authenticated, userController.createLike)
   // 刪除一筆 like 記錄
-  app.post('/tweets/:id/unlike', authenticated, tweetController.deleteLike)
+  app.delete('/like/:tweetId', authenticated, userController.deleteLike)
 
   app.get('/admin', authenticatedAdmin, (req, res) => res.redirect('/admin/tweets'))
   // 看見站內所有的推播 (設為後台首頁)
