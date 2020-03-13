@@ -13,7 +13,7 @@ const userController = {
       include: [
         { model: Tweet, include: [Like, Reply, User] },
         { model: User, as: "Followers" },
-        { model: User, as: "Followings" }
+        { model: User, as: "Followings" },
       ]
     }).then(user => {
       let tweets = [];
@@ -23,6 +23,14 @@ const userController = {
       user.Tweets.map(tweet => {
         tweets.push(tweet.User);
       });
+      
+      Tweet.findAll({ include: [Like, Reply, User] }).then(tweets => {
+        tweets = tweets.map(tweet => (
+          {
+            ...tweet.dataValues,
+            isLiked: req.user.LikedTweets.map(d => d.id).includes(tweet.id)
+          }))
+
       return res.render(
         "tweetPage",
         JSON.parse(
@@ -30,6 +38,7 @@ const userController = {
         )
       );
     });
+  })
   },
 
   editUserPage: (req, res) => {
@@ -160,7 +169,31 @@ const userController = {
             return res.redirect('back')
           })
       })
-  }
+  },
+
+  createLike: (req, res) => {
+    return Like.create({
+      UserId: req.user.id,
+      TweetId: req.params.tweetId
+    }).then((tweet) => {
+      return res.redirect('back')
+    })
+  },
+
+  deleteLike: (req, res) => {
+    return Like.findOne({
+      where: {
+        UserId: req.user.id,
+        TweetId: req.params.tweetId
+      }
+    }).then((like) => {
+      like.destroy()
+        .then((tweet) => {
+          return res.redirect('back')
+        })
+    })
+  },
+
 };
 
 module.exports = userController;
