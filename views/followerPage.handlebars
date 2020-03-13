@@ -6,10 +6,10 @@
     <h4>{{user.name}}</h4>
     <p>{{user.introduction}}</p>
     <ul>
-      <li>Tweets:{{#userCountTweets user}}{{/userCountTweets}}</li>
-      <li>Following:{{#userCountFollowings user}}{{/userCountFollowings}}</li>
-      <li>Follower:{{#userCountFollowers user}}{{/userCountFollowers}}</li>
-      <li>Like:{{#userCountLikes user}}{{/userCountLikes}}</li>
+      <li>Tweets:{{#countTweets user.Tweets}}{{/countTweets}}</li>
+      <li>Following:{{#countFollowings user.Followings}}{{/countFollowings}}</li>
+      <li>Follower:{{#countFollowers user.Followers}}{{/countFollowers}}</li>
+      <li>Like:{{#countLikes user.Likes}}{{/countLikes}}</li>
     </ul>
     <a href="/users/{{user.id}}/edit">編輯個人資料</a>
   </div>
