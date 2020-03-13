@@ -1,4 +1,45 @@
 <h1>Follower Page</h1>
-{{#each user.Followers}}
-<h2>{{this.name}}</h2>
-{{/each}}
+
+<div class="row">
+  <div class="col-4">
+    <img src="{{user.avatar}}" alt="avatar" height="200px" width="200px">
+    <h4>{{user.name}}</h4>
+    <p>{{user.introduction}}</p>
+    <ul>
+      <li>Tweets:{{#userCountTweets user}}{{/userCountTweets}}</li>
+      <li>Following:{{#userCountFollowings user}}{{/userCountFollowings}}</li>
+      <li>Follower:{{#userCountFollowers user}}{{/userCountFollowers}}</li>
+      <li>Like:{{#userCountLikes user}}{{/userCountLikes}}</li>
+    </ul>
+    <a href="/users/{{user.id}}/edit">編輯個人資料</a>
+  </div>
+  <div class="col-8">
+    <h1>Follower</h1>
+    <div class="row">
+      {{#each user.Followers}}
+      <div class="col-6">
+        <div class="card mb-3">
+          <div class="row no-gutters">
+            <div class="col-md-4">
+              <img src="{{this.avatar}}" class="card-img" alt="avatar">
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title"><a href="/users/{{this.id}}/tweets">{{this.name}}</a></h5>
+                <p class="card-text">{{this.introduction}}</p>
+                {{#ifFollowed user.id this.id}}
+                <form action="/following/{{this.id}}?_method=DELETE" method="POST" style="display: inline">
+                  <button type="submit" class="btn btn-danger">Unfollow</button></form>
+                {{else}}
+                <form action="/following/{{this.id}}" method="POST" style="display: inline">
+                  <button type="submit" class="btn btn-primary">Follow</button> </form>
+                {{/ifFollowed}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {{/each}}
+    </div>
+  </div>
+</div>

@@ -55,7 +55,12 @@ const userController = {
   },
   followingPage: (req, res) => {
     User.findByPk(req.params.id, {
-      include: [{ model: User, as: "Followings" }]
+      include: [
+        Like,
+        Tweet,
+        Reply,
+        { model: User, as: "Followings" },
+        { model: User, as: "Followers" }]
     }).then(user => {
       return res.render(
         "followingPage",
@@ -65,7 +70,12 @@ const userController = {
   },
   followerPage: (req, res) => {
     User.findByPk(req.params.id, {
-      include: [{ model: User, as: "Followers" }]
+      include: [
+        Like,
+        Tweet,
+        Reply,
+        { model: User, as: "Followings" },
+        { model: User, as: "Followers" }]
     }).then(user => {
       return res.render(
         "followerPage",

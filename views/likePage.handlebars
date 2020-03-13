@@ -30,8 +30,8 @@
         <h5>{{moment this.Tweet.createdAt}}</h5>
       </label>
       <p>{{this.Tweet.description}}</p>
-      <a href="/tweets/{{this.UserId}}/replies">Reply({{#countReplies this.Tweet}}{{/countReplies}})</a>
-      <a class="ml-2" href="#">Like({{#countLikes this.Tweet}}{{/countLikes}})</a>
+      <a href="/tweets/{{this.UserId}}/replies">Reply({{#tweetCountReplies this.Tweet}}{{/tweetCountReplies}})</a>
+      <a class="ml-2" href="#">Like({{#tweetCountLikes this.Tweet}}{{/tweetCountLikes}})</a>
     </div>
   </div>
   {{/each}}
