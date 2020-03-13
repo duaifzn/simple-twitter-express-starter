@@ -3,7 +3,7 @@ const User = db.User;
 const Like = db.Like;
 const Tweet = db.Tweet;
 const Reply = db.Reply;
-const Followship = db.Followship 
+const Followship = db.Followship
 const helpers = require("../_helpers");
 const bcrypt = require("bcryptjs");
 
@@ -75,9 +75,19 @@ const userController = {
   },
   likePage: (req, res) => {
     User.findByPk(req.params.id, {
-      include: [{ model: Like, include: [Tweet] }]
+      include: [
+        Reply,
+        Tweet,
+        { model: Like, include: [{ model: Tweet, include: [User, Reply, Like] }] },
+        { model: User, as: 'Followings' },
+        { model: User, as: 'Followers' }
+      ]
     }).then(user => {
-      return res.render("likePage", JSON.parse(JSON.stringify({ user: user })));
+      let tweetNumber = user.Tweets.length
+      let likeNumber = user.Likes.length
+      let followingNumber = user.Followers.length
+      let followerNumber = user.Followings.length
+      return res.render("likePage", JSON.parse(JSON.stringify({ user: user, tweetNumber: tweetNumber, likeNumber: likeNumber, followingNumber: followingNumber, followerNumber, followerNumber })));
     });
   },
   signInPage: (req, res) => {
@@ -116,27 +126,29 @@ const userController = {
     req.logout();
     res.redirect("/signin");
   },
-  
+
   createFollowship: (req, res) => {
     return Followship.create({
       followerId: req.user.id,
       followingId: req.params.userId
     })
-     .then((followship) => {
-       return res.redirect('back')
-     })
+      .then((followship) => {
+        return res.redirect('back')
+      })
   },
 
   deleteFollowship: (req, res) => {
-    return Followship.findOne({where: {
-      followerId: req.user.id,
-      followingId: req.params.userId
-    }})
+    return Followship.findOne({
+      where: {
+        followerId: req.user.id,
+        followingId: req.params.userId
+      }
+    })
       .then((followship) => {
         followship.destroy()
-         .then((followship) => {
-           return res.redirect('back')
-         })
+          .then((followship) => {
+            return res.redirect('back')
+          })
       })
   }
 };

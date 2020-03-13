@@ -20,12 +20,6 @@ const tweetController = {
   },
   tweetHomePage: (req, res) => {
     Tweet.findAll({ include: [Like, Reply, User] }).then(tweets => {
-      tweets = tweets.map(tweet => (
-        {
-          ...tweet.dataValues,
-          replyNumber: tweet.dataValues.Replies.length,
-          likeNumber: tweet.dataValues.Likes.length
-        }))
 
       User.findAll({
         include: [{ model: User, as: 'Followers' }, { model: User, as: "Followings" }]

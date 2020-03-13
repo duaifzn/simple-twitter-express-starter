@@ -10,5 +10,11 @@ module.exports = {
   },
   moment: function (a) {
     return moment(a).fromNow()
-  }
+  },
+  countReplies: function (tweet) {
+    return tweet.Replies.length
+  },
+  countLikes: function (tweet) {
+    return tweet.Likes.length
+  },
 }

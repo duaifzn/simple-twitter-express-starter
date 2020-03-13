@@ -17,8 +17,8 @@
             <h5>{{moment this.createdAt}}</h5>
           </label>
           <p>{{this.description}}</p>
-          <a href="/tweets/{{this.id}}/replies">Reply({{this.replyNumber}})</a>
-          <a class="ml-2" href="#">Like({{this.likeNumber}})</a>
+          <a href="/tweets/{{this.id}}/replies">Reply({{#countReplies this}}{{/countReplies}})</a>
+          <a class="ml-2" href="#">Like({{#countLikes this}}{{/countLikes}})</a>
         </div>
       </div>
       {{/each}}
@@ -38,10 +38,10 @@
             <p class="card-text">{{this.introduction}}</p>
             {{#if isFollowed}}
             <form action="/following/{{this.id}}?_method=DELETE" method="POST" style="display: inline">
-                    <button type="submit" class="btn btn-danger">Unfollow</button></form>
+              <button type="submit" class="btn btn-danger">Unfollow</button></form>
             {{else}}
-           <form action="/following/{{this.id}}" method="POST" style="display: inline">
-                    <button type="submit" class="btn btn-primary">Follow</button> </form>
+            <form action="/following/{{this.id}}" method="POST" style="display: inline">
+              <button type="submit" class="btn btn-primary">Follow</button> </form>
             {{/if}}
           </div>
         </div>
