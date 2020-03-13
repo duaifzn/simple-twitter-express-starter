@@ -2,6 +2,7 @@ const adminController = require('../controllers/adminController.js')
 const userController = require('../controllers/userController')
 const tweetController = require('../controllers/tweetController')
 const helpers = require('../_helpers')
+
 module.exports = (app, passport) => {
   const authenticated = (req, res, next) => {
     if (helpers.ensureAuthenticated(req)) {
