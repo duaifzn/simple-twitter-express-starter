@@ -11,20 +11,8 @@ module.exports = {
   moment: function (a) {
     return moment(a).fromNow()
   },
-  countReplies: function (Replies) {
-    return Replies.length
-  },
-  countLikes: function (Likes) {
-    return Likes.length
-  },
-  countTweets: function (Tweets) {
-    return Tweets.length
-  },
-  countFollowings: function (Followings) {
-    return Followings.length
-  },
-  countFollowers: function (Followers) {
-    return Followers.length
+  count: function (data) {
+    return data.length
   },
   ifFollowed: function (a, b, options) {
     if (a === b) {
