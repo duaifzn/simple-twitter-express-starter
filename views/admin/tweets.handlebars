@@ -39,12 +39,12 @@
       </a>
     </li>
     {{#each totalPage}}
-    {{#ifCond this ../page}}
+    {{#ifFollowed this ../page}}
     <li class="page-item active"><a class="page-link" href="#">{{this}}</a></li>
     {{else}}
     <li class="page-item"><a class="page-link"
         href="/admin/tweets?page={{this}}">{{this}}</a></li>
-    {{/ifCond}}
+    {{/ifFollowed}}
     {{/each}}
     <a class="page-link" href="/admin/tweets?page={{next}}" aria-label="Next">
       <span aria-hidden="true">&raquo;</span>
