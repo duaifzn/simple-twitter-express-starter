@@ -26,13 +26,6 @@
             </ul>
         </div>
         <div class="col-8">
-            <form action="/tweets" method="POST">
-                <div class="form-group">
-                    <textarea class="form-control" id="tweetText" rows="4"
-                        placeholder="What's on your mind ?"></textarea>
-                </div>
-                <button type="submit">Tweet</button>
-            </form>
             <div class="tweets">
                 {{#each user.Tweets}}
                 <div class="card">

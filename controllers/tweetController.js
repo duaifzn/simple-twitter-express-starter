@@ -10,15 +10,25 @@ const tweetController = {
   },
 
   createTweet: (req, res) => {
-    User.findByPk(1).then(user => {
-      Tweet.create({
-        UserId: user.id,
+    if (!req.body.description) {
+      req.flash('error_messages', '要有內容才可以發 tweet!')
+      return res.redirect('/tweets')
+    }
+
+    if (req.body.description.length > 140) {
+      req.flash('error_messages', '每則 tweet 最長只能 140 字')
+      return res.redirect('/tweets')
+    }
+   
+     return Tweet.create({
+        UserId: req.user.id,
         description: req.body.description
       }).then(tweet => {
         res.redirect('back')
       })
-    })
+
   },
+
   tweetHomePage: (req, res) => {
     Tweet.findAll({ include: [Like, Reply, User] }).then(tweets => {
       tweets = tweets.map(tweet => (
