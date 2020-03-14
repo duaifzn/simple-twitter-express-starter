@@ -3,8 +3,7 @@ module.exports = {
   ifRole: function (role, options) {
     if (role === 'admin') {
       return options.fn(this)
-    }
-    else {
+    } else {
       return options.inverse(this)
     }
   },
@@ -17,10 +16,14 @@ module.exports = {
   ifFollowed: function (a, b, options) {
     if (a === b) {
       return options.fn(this)
-    }
-    else {
+    } else {
       return options.inverse(this)
     }
   },
-
+  ifCond: function (a, b, options) {
+    if (a === b) {
+      return options.fn(this)
+    }
+    return options.inverse(this)
+  }
 }
