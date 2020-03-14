@@ -1,33 +1,33 @@
 <div class="container my-3">
     <div class="row" style="background-color: white;">
         <div class="col-4">
-            <img src="{{user.avatar}}" class="rounded-circle" width="100px" height="100px">
+            <img src="{{userData.avatar}}" class="rounded-circle" width="100px" height="100px">
             <ul class="list-unstyled">
-                <li class="my-2"><strong>{{user.name}}</strong></li>
-                <li>{{user.introduction}}</li>
+                <li class="my-2"><strong>{{userData.name}}</strong></li>
+                <li>{{userData.introduction}}</li>
                 <br>
-                <li>Tweets {{tweets.length}}</li>
-                <li>Following {{followingNum}}</li>
-                <li>Follower {{followerNum}}</li>
-                <li>Like </li>
+                <li><a href="/users/{{userData.id}}/tweets">Tweets {{tweets.length}}</a></li>
+                <li><a href="/users/{{userData.id}}/followings">Following {{followingNum}}</a></li>
+                <li><a href="/users/{{userData.id}}/followers">Follower {{followerNum}}</a></li>
+                <li><a href="/users/{{userData.id}}/likes">Like</a> </li>
                 <br>
 
                 <li class="my-3" style="display: inline">
-                    <a href="/users/{{user.id}}/edit" class="btn btn-primary">edit</a>
+                    <a href="/users/{{userData.id}}/edit" class="btn btn-primary">edit</a>
                 </li>
                 {{#if isFollowed}}
-                <form action="/following/{{user.id}}?_method=DELETE" method="POST" style="display: inline">
+                <form action="/following/{{userData.id}}?_method=DELETE" method="POST" style="display: inline">
                     <button type="submit" class="btn btn-danger">Unfollow</button></form>
                 {{else}}
-                <form action="/following/{{user.id}}" method="POST" style="display: inline">
+                <form action="/following/{{userData.id}}" method="POST" style="display: inline">
                     <button type="submit" class="btn btn-primary">Follow</button></form>
                 {{/if}}
-               
+
             </ul>
         </div>
         <div class="col-8">
             <div class="tweets">
-                {{#each user.Tweets}}
+                {{#each userData.Tweets}}
                 <div class="card">
                     <div class="card-body">
                         <label>

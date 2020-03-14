@@ -32,18 +32,11 @@ const userController = {
 
         return res.render(
           "tweetPage",
-          JSON.parse(
-            JSON.stringify({
-              user,
-              isFollowed,
-              followerNum,
-              followingNum,
-              tweets
-            })
+          JSON.parse(JSON.stringify({ userData: user, isFollowed, followerNum, followingNum, tweets })
           )
         );
       });
-    });
+    })
   },
 
   editUserPage: (req, res) => {
@@ -73,34 +66,62 @@ const userController = {
     User.findByPk(req.params.id, {
       include: [
         Like,
-        Tweet,
         Reply,
         { model: User, as: "Followings" },
-        { model: User, as: "Followers" }
+        { model: User, as: "Followers" },
+        { model: Tweet, as: "LikedTweets" },
       ]
-    }).then(user => {
+    }).then(userData => {
       return res.render(
         "followingPage",
-        JSON.parse(JSON.stringify({ user: user }))
+        JSON.parse(JSON.stringify({ userData: userData }))
       );
     });
+    //原本資料架構
+    // User.findByPk(req.params.id, {
+    //   include: [
+    //     Like,
+    //     Tweet,
+    //     Reply,
+    //     { model: User, as: "Followings" },
+    //     { model: User, as: "Followers" }]
+    // }).then(user => {
+    //   return res.render(
+    //     "followingPage",
+    //     JSON.parse(JSON.stringify({ user: user }))
+    //   );
+    // });
+
   },
 
   followerPage: (req, res) => {
     User.findByPk(req.params.id, {
       include: [
         Like,
-        Tweet,
         Reply,
         { model: User, as: "Followings" },
-        { model: User, as: "Followers" }
-      ]
-    }).then(user => {
+        { model: User, as: "Followers" },
+        { model: Tweet, as: "LikedTweets" }]
+    }).then(userData => {
       return res.render(
         "followerPage",
-        JSON.parse(JSON.stringify({ user: user }))
+        JSON.parse(JSON.stringify({ userData: userData }))
       );
     });
+    //原本資料架構
+    // User.findByPk(req.params.id, {
+    //   include: [
+    //     Like,
+    //     Tweet,
+    //     Reply,
+    //     { model: User, as: "Followings" },
+    //     { model: User, as: "Followers" }]
+    // }).then(user => {
+    //   return res.render(
+    //     "followerPage",
+    //     JSON.parse(JSON.stringify({ user: user }))
+    //   );
+    // });
   },
   likePage: (req, res) => {
     User.findByPk(req.params.id, {

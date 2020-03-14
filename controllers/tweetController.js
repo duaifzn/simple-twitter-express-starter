@@ -23,6 +23,7 @@ const tweetController = {
      return Tweet.create({
         UserId: req.user.id,
         description: req.body.description
+
       }).then(tweet => {
         res.redirect('back')
       })
@@ -34,8 +35,6 @@ const tweetController = {
       tweets = tweets.map(tweet => (
         {
           ...tweet.dataValues,
-          replyNumber: tweet.dataValues.Replies.length,
-          likeNumber: tweet.dataValues.Likes.length,
           isLiked: req.user.LikedTweets.map(d => d.id).includes(tweet.id)
 
         }))
@@ -90,13 +89,7 @@ const tweetController = {
       return res.redirect('back')
     })
   },
-  
-  createLike: (req, res) => {
 
-  },
-  deleteLike: (req, res) => {
-
-  }
 
 }
 
