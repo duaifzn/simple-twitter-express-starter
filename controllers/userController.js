@@ -3,7 +3,7 @@ const User = db.User;
 const Like = db.Like;
 const Tweet = db.Tweet;
 const Reply = db.Reply;
-const Followship = db.Followship
+const Followship = db.Followship;
 const helpers = require("../_helpers");
 const bcrypt = require("bcryptjs");
 
@@ -13,7 +13,7 @@ const userController = {
       include: [
         { model: Tweet, include: [Like, Reply, User] },
         { model: User, as: "Followers" },
-        { model: User, as: "Followings" },
+        { model: User, as: "Followings" }
       ]
     }).then(user => {
       let tweets = [];
@@ -25,16 +25,14 @@ const userController = {
       });
 
       Tweet.findAll({ include: [Like, Reply, User] }).then(tweets => {
-        tweets = tweets.map(tweet => (
-          {
-            ...tweet.dataValues,
-            isLiked: req.user.LikedTweets.map(d => d.id).includes(tweet.id)
-          }))
+        tweets = tweets.map(tweet => ({
+          ...tweet.dataValues,
+          isLiked: req.user.LikedTweets.map(d => d.id).includes(tweet.id)
+        }));
 
         return res.render(
           "tweetPage",
-          JSON.parse(
-            JSON.stringify({ userData: user, isFollowed, followerNum, followingNum, tweets })
+          JSON.parse(JSON.stringify({ userData: user, isFollowed, followerNum, followingNum, tweets })
           )
         );
       });
@@ -48,6 +46,7 @@ const userController = {
       return res.redirect(`/users/${req.params.id}/edit`);
     }
   },
+  
   editUser: (req, res) => {
     // console.log('req.body:', req.body)
     // console.log('req.params:', req.params)
@@ -62,6 +61,7 @@ const userController = {
         });
     });
   },
+
   followingPage: (req, res) => {
     User.findByPk(req.params.id, {
       include: [
@@ -93,6 +93,7 @@ const userController = {
     // });
 
   },
+
   followerPage: (req, res) => {
     User.findByPk(req.params.id, {
       include: [
@@ -135,16 +136,20 @@ const userController = {
       return res.render("likePage", JSON.parse(JSON.stringify({ userData: userData })));
     });
   },
+
   signInPage: (req, res) => {
     return res.render("signInPage");
   },
+
   signIn: (req, res) => {
     req.flash("success_messages", "登入成功");
     return res.redirect("/");
   },
+
   signUpPage: (req, res) => {
     return res.render("signUpPage");
   },
+
   signUp: (req, res) => {
     if (req.body.password !== req.body.password2) {
       req.flash("error_messages", "密碼輸入不相同");
@@ -166,6 +171,7 @@ const userController = {
       }
     });
   },
+
   logOut: (req, res) => {
     req.flash("success_messages", "登出成功");
     req.logout();
@@ -173,13 +179,17 @@ const userController = {
   },
 
   createFollowship: (req, res) => {
-    return Followship.create({
-      followerId: req.user.id,
-      followingId: req.params.userId
-    })
-      .then((followship) => {
-        return res.redirect('back')
-      })
+    if (req.params.userId == req.user.id) {
+      req.flash("error_messages", "不能追蹤自己");
+      return res.redirect("back");
+    } else {
+      return Followship.create({
+        followerId: req.user.id,
+        followingId: req.params.userId
+      }).then(followship => {
+        return res.redirect("back");
+      });
+    }
   },
 
   deleteFollowship: (req, res) => {
@@ -188,22 +198,20 @@ const userController = {
         followerId: req.user.id,
         followingId: req.params.userId
       }
-    })
-      .then((followship) => {
-        followship.destroy()
-          .then((followship) => {
-            return res.redirect('back')
-          })
-      })
+    }).then(followship => {
+      followship.destroy().then(followship => {
+        return res.redirect("back");
+      });
+    });
   },
 
   createLike: (req, res) => {
     return Like.create({
       UserId: req.user.id,
       TweetId: req.params.tweetId
-    }).then((tweet) => {
-      return res.redirect('back')
-    })
+    }).then(tweet => {
+      return res.redirect("back");
+    });
   },
 
   deleteLike: (req, res) => {
@@ -212,14 +220,12 @@ const userController = {
         UserId: req.user.id,
         TweetId: req.params.tweetId
       }
-    }).then((like) => {
-      like.destroy()
-        .then((tweet) => {
-          return res.redirect('back')
-        })
-    })
-  },
-
+    }).then(like => {
+      like.destroy().then(tweet => {
+        return res.redirect("back");
+      });
+    });
+  }
 };
 
 module.exports = userController;
