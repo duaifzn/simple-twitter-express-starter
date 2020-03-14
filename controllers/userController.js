@@ -102,37 +102,17 @@ const userController = {
       );
     });
   },
-
   likePage: (req, res) => {
     User.findByPk(req.params.id, {
       include: [
         Reply,
         Tweet,
-        {
-          model: Like,
-          include: [{ model: Tweet, include: [User, Reply, Like] }]
-        },
-        { model: User, as: "Followings" },
-        { model: User, as: "Followers" }
+        { model: Like, include: [{ model: Tweet, include: [User, Reply, Like] }] },
+        { model: User, as: 'Followings' },
+        { model: User, as: 'Followers' }
       ]
-    }).then(user => {
-      let tweetNumber = user.Tweets.length;
-      let likeNumber = user.Likes.length;
-      let followingNumber = user.Followers.length;
-      let followerNumber = user.Followings.length;
-      return res.render(
-        "likePage",
-        JSON.parse(
-          JSON.stringify({
-            user: user,
-            tweetNumber: tweetNumber,
-            likeNumber: likeNumber,
-            followingNumber: followingNumber,
-            followerNumber,
-            followerNumber
-          })
-        )
-      );
+    }).then(userData => {
+      return res.render("likePage", JSON.parse(JSON.stringify({ userData: userData })));
     });
   },
 
