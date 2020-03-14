@@ -10,7 +10,7 @@
       <th scope="col">Id</th>
       <th scope="col">Description(Preview)</th>
       <th scope="col">UserId</th>
-      <th scope="col">推播回覆內容</th>
+      <th scope="col"></th>
       <th scope="col"></th>
     </tr>
   </thead>
@@ -20,7 +20,9 @@
       <th scope="row">{{this.id}}</th>
       <td>{{this.description}}</td>
       <td>{{this.UserId}}</td>
-      <td>WIP</td>
+      <td>
+        <a href="/tweets/{{this.id}}/replies" class="btn btn-info">Details</a>
+      </td>
       <td><form action="/admin/tweets/{{this.id}}?_method=DELETE" method="POST" style="display: inline;">
         <button type="submit" class="btn btn-danger"
           onclick="if(confirm('Are you sure?')) return true; else return false">Delete</button>
