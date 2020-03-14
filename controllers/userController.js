@@ -1,59 +1,53 @@
-const db = require("../models");
-const User = db.User;
-const Like = db.Like;
-const Tweet = db.Tweet;
-const Reply = db.Reply;
-const Followship = db.Followship;
-const helpers = require("../_helpers");
-const bcrypt = require("bcryptjs");
+const db = require('../models')
+const User = db.User
+const Like = db.Like
+const Tweet = db.Tweet
+const Reply = db.Reply
+const Followship = db.Followship
+const helpers = require('../_helpers')
+const bcrypt = require('bcryptjs')
 
 const userController = {
   tweetPage: (req, res) => {
     User.findByPk(req.params.id, {
       include: [
         { model: Tweet, include: [Like, Reply, User] },
-        { model: User, as: "Followers" },
-        { model: User, as: "Followings" }
+        { model: User, as: 'Followers' },
+        { model: User, as: 'Followings' }
       ]
     }).then(user => {
-      let tweets = [];
-      const isFollowed = req.user.Followings.map(d => d.id).includes(user.id);
-      const followerNum = user.Followers.length;
-      const followingNum = user.Followings.length;
+      const tweets = []
+      const isFollowed = req.user.Followings.map(d => d.id).includes(user.id)
+      const followerNum = user.Followers.length
+      const followingNum = user.Followings.length
       user.Tweets.map(tweet => {
-        tweets.push(tweet.User);
-      });
+        tweets.push(tweet.User)
+      })
 
       Tweet.findAll({ include: [Like, Reply, User] }).then(tweets => {
         tweets = tweets.map(tweet => ({
           ...tweet.dataValues,
           isLiked: req.user.LikedTweets.map(d => d.id).includes(tweet.id)
-        }));
+        }))
 
         return res.render(
-          "tweetPage",
+          'tweetPage',
           JSON.parse(
-            JSON.stringify({
-              user,
-              isFollowed,
-              followerNum,
-              followingNum,
-              tweets
-            })
+            JSON.stringify({ userData: user, isFollowed, followerNum, followingNum, tweets })
           )
-        );
-      });
-    });
+        )
+      })
+    })
   },
 
   editUserPage: (req, res) => {
     if (req.params.id === 1) {
-      return res.render("editUserPage");
+      return res.render('editUserPage')
     } else {
-      return res.redirect(`/users/${req.params.id}/edit`);
+      return res.redirect(`/users/${req.params.id}/edit`)
     }
   },
-  
+
   editUser: (req, res) => {
     // console.log('req.body:', req.body)
     // console.log('req.params:', req.params)
@@ -63,44 +57,71 @@ const userController = {
           name: req.body.name
         })
         .then(user => {
-          console.log("user", user.name);
-          return res.redirect("back");
-        });
-    });
+          console.log('user', user.name)
+          return res.redirect('back')
+        })
+    })
   },
 
   followingPage: (req, res) => {
     User.findByPk(req.params.id, {
       include: [
         Like,
-        Tweet,
         Reply,
-        { model: User, as: "Followings" },
-        { model: User, as: "Followers" }
+        { model: User, as: 'Followings' },
+        { model: User, as: 'Followers' },
+        { model: Tweet, as: 'LikedTweets' }
       ]
-    }).then(user => {
+    }).then(userData => {
       return res.render(
-        "followingPage",
-        JSON.parse(JSON.stringify({ user: user }))
-      );
-    });
+        'followingPage',
+        JSON.parse(JSON.stringify({ userData: userData }))
+      )
+    })
+    // 原本資料架構
+    // User.findByPk(req.params.id, {
+    //   include: [
+    //     Like,
+    //     Tweet,
+    //     Reply,
+    //     { model: User, as: "Followings" },
+    //     { model: User, as: "Followers" }]
+    // }).then(user => {
+    //   return res.render(
+    //     "followingPage",
+    //     JSON.parse(JSON.stringify({ user: user }))
+    //   );
+    // });
   },
 
   followerPage: (req, res) => {
     User.findByPk(req.params.id, {
       include: [
         Like,
-        Tweet,
         Reply,
-        { model: User, as: "Followings" },
-        { model: User, as: "Followers" }
-      ]
-    }).then(user => {
+        { model: User, as: 'Followings' },
+        { model: User, as: 'Followers' },
+        { model: Tweet, as: 'LikedTweets' }]
+    }).then(userData => {
       return res.render(
-        "followerPage",
-        JSON.parse(JSON.stringify({ user: user }))
-      );
-    });
+        'followerPage',
+        JSON.parse(JSON.stringify({ userData: userData }))
+      )
+    })
+    // 原本資料架構
+    // User.findByPk(req.params.id, {
+    //   include: [
+    //     Like,
+    //     Tweet,
+    //     Reply,
+    //     { model: User, as: "Followings" },
+    //     { model: User, as: "Followers" }]
+    // }).then(user => {
+    //   return res.render(
+    //     "followerPage",
+    //     JSON.parse(JSON.stringify({ user: user }))
+    //   );
+    // });
   },
 
   likePage: (req, res) => {
@@ -112,82 +133,66 @@ const userController = {
           model: Like,
           include: [{ model: Tweet, include: [User, Reply, Like] }]
         },
-        { model: User, as: "Followings" },
-        { model: User, as: "Followers" }
+        { model: User, as: 'Followings' },
+        { model: User, as: 'Followers' }
       ]
-    }).then(user => {
-      let tweetNumber = user.Tweets.length;
-      let likeNumber = user.Likes.length;
-      let followingNumber = user.Followers.length;
-      let followerNumber = user.Followings.length;
-      return res.render(
-        "likePage",
-        JSON.parse(
-          JSON.stringify({
-            user: user,
-            tweetNumber: tweetNumber,
-            likeNumber: likeNumber,
-            followingNumber: followingNumber,
-            followerNumber,
-            followerNumber
-          })
-        )
-      );
-    });
+    }).then(userData => {
+      return res.render('likePage', JSON.parse(JSON.stringify({ userData: userData })))
+    })
   },
 
   signInPage: (req, res) => {
-    return res.render("signInPage");
+    return res.render('signInPage')
   },
 
   signIn: (req, res) => {
-    req.flash("success_messages", "登入成功");
-    return res.redirect("/");
+    req.flash('success_messages', '登入成功')
+    return res.redirect('/')
   },
 
   signUpPage: (req, res) => {
-    return res.render("signUpPage");
+    return res.render('signUpPage')
   },
 
   signUp: (req, res) => {
     if (req.body.password !== req.body.password2) {
-      req.flash("error_messages", "密碼輸入不相同");
-      return res.redirect("back");
+      req.flash('error_messages', '密碼輸入不相同')
+      return res.redirect('back')
     }
     User.findOne({ where: { email: req.body.email } }).then(user => {
       if (user) {
-        req.flash("error_messages", "帳號已註冊");
-        return res.redirect("back");
+        req.flash('error_messages', '帳號已註冊')
+        return res.redirect('back')
       } else {
         User.create({
           name: req.body.name,
           email: req.body.email,
           password: bcrypt.hashSync(req.body.password, 10)
         }).then(user => {
-          req.flash("success_messages", "成功註冊");
-          return res.redirect("/signin");
-        });
+          req.flash('success_messages', '成功註冊')
+          return res.redirect('/signin')
+        })
       }
-    });
+    })
   },
 
   logOut: (req, res) => {
-    req.flash("success_messages", "登出成功");
-    req.logout();
-    res.redirect("/signin");
+    req.flash('success_messages', '登出成功')
+    req.logout()
+    res.redirect('/signin')
   },
 
   createFollowship: (req, res) => {
-    if (req.params.userId == req.user.id) {
-      req.flash("error_messages", "不能追蹤自己");
-      return res.redirect("back");
+    if (req.params.userId === req.user.id) {
+      req.flash('error_messages', '不能追蹤自己')
+      return res.redirect('back')
     } else {
       return Followship.create({
         followerId: req.user.id,
         followingId: req.params.userId
       }).then(followship => {
-        return res.redirect("back");
-      });
+        return res.redirect('back')
+      })
     }
   },
 
@@ -199,9 +204,9 @@ const userController = {
       }
     }).then(followship => {
       followship.destroy().then(followship => {
-        return res.redirect("back");
-      });
-    });
+        return res.redirect('back')
+      })
+    })
   },
 
   createLike: (req, res) => {
@@ -209,8 +214,8 @@ const userController = {
       UserId: req.user.id,
       TweetId: req.params.tweetId
     }).then(tweet => {
-      return res.redirect("back");
-    });
+      return res.redirect('back')
+    })
   },
 
   deleteLike: (req, res) => {
@@ -221,10 +226,10 @@ const userController = {
       }
     }).then(like => {
       like.destroy().then(tweet => {
-        return res.redirect("back");
-      });
-    });
+        return res.redirect('back')
+      })
+    })
   }
-};
+}
 
-module.exports = userController;
+module.exports = userController
