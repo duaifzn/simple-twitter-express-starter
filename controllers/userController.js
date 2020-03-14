@@ -178,7 +178,7 @@ const userController = {
   },
 
   createFollowship: (req, res) => {
-    if (req.user.id === req.params.userId) {
+    if (req.params.userId == req.user.id) {
       req.flash("error_messages", "不能追蹤自己");
       return res.redirect("back");
     } else {
