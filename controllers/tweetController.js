@@ -3,6 +3,7 @@ const User = db.User
 const Tweet = db.Tweet
 const Like = db.Like
 const Reply = db.Reply
+
 const tweetController = {
   redirectInvalidUrl: (req, res) => { // 防止亂打網址404
     res.redirect('back')
@@ -20,9 +21,17 @@ const tweetController = {
   },
   tweetHomePage: (req, res) => {
     Tweet.findAll({ include: [Like, Reply, User] }).then(tweets => {
+      tweets = tweets.map(tweet => (
+        {
+          ...tweet.dataValues,
+          replyNumber: tweet.dataValues.Replies.length,
+          likeNumber: tweet.dataValues.Likes.length,
+          isLiked: req.user.LikedTweets.map(d => d.id).includes(tweet.id)
+
+        }))
 
       User.findAll({
-        include: [{ model: User, as: 'Followers' }, { model: User, as: "Followings" }]
+        include: [{ model: User, as: 'Followers' }, { model: User, as: 'Followings' }]
       }).then(users => {
         users = users.map(user => (
           {
@@ -35,16 +44,14 @@ const tweetController = {
         users = users.sort((a, b) => b.PopularNumber - a.PopularNumber).slice(1, 11)
         return res.render('tweetHomePage', JSON.parse(JSON.stringify({ users: users, tweets: tweets })))
       })
-
     })
-
-
   },
   tweetReplyPage: (req, res) => {
     Tweet.findByPk(req.params.tweet_id, {
       include: [
         {
-          model: User, include: [
+          model: User,
+          include: [
             Tweet,
             { model: User, as: 'Followings' },
             { model: User, as: 'Followers' }]
@@ -53,14 +60,13 @@ const tweetController = {
         Like
       ]
     }).then(tweet => {
-
-      let likeNumber = tweet.Likes.length
-      let followerNumber = tweet.User.Followings.length
-      let followingNumber = tweet.User.Followers.length
-      let tweetNumber = tweet.User.Tweets.length
-      let replyNumber = tweet.Replies.length
-      let isFollowed = req.user.Followings.map(d => d.id).includes(tweet.UserId)
-      return res.render('tweetReplyPage', JSON.parse(JSON.stringify({ tweet: tweet, likeNumber: likeNumber, followerNumber: followerNumber, followingNumber, followingNumber, tweetNumber: tweetNumber, replyNumber: replyNumber, isFollowed: isFollowed })))
+      const likeNumber = tweet.Likes.length
+      const followerNumber = tweet.User.Followings.length
+      const followingNumber = tweet.User.Followers.length
+      const tweetNumber = tweet.User.Tweets.length
+      const replyNumber = tweet.Replies.length
+      const isFollowed = req.user.Followings.map(d => d.id).includes(tweet.UserId)
+      return res.render('tweetReplyPage', JSON.parse(JSON.stringify({ tweet: tweet, likeNumber: likeNumber, followerNumber: followerNumber, followingNumber, tweetNumber: tweetNumber, replyNumber: replyNumber, isFollowed: isFollowed })))
     })
   },
   createTweetReply: (req, res) => {
@@ -77,7 +83,7 @@ const tweetController = {
   },
   deleteLike: (req, res) => {
 
-  },
+  }
 
 }
 

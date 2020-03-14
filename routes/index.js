@@ -4,6 +4,13 @@ const tweetController = require('../controllers/tweetController')
 const helpers = require('../_helpers')
 
 module.exports = (app, passport) => {
+  const unAuthenticated = (req, res, next) => {
+    if (!req.isAuthenticated()) {
+      return next()
+    }
+    res.redirect('/')
+    return req.flash('error_messages', '已登入')
+  }
   const authenticated = (req, res, next) => {
     if (helpers.ensureAuthenticated(req)) {
       return next()
@@ -22,9 +29,9 @@ module.exports = (app, passport) => {
     res.redirect('/tweets')
   })
   // 登入頁面
-  app.get('/signin', userController.signInPage)
+  app.get('/signin', unAuthenticated, userController.signInPage)
   // 登入
-  app.post('/signin', passport.authenticate('local', {
+  app.post('/signin', unAuthenticated, passport.authenticate('local', {
     failureRedirect: '/signin',
     failureFlash: true
   }), userController.signIn)
@@ -68,9 +75,9 @@ module.exports = (app, passport) => {
   app.delete('/followships/:followingId', authenticated, userController.deleteFollowship)
 
   // 新增一筆 like 記錄
-  app.post('/tweets/:id/like', authenticated, tweetController.createLike)
+  app.post('/like/:tweetId', authenticated, userController.createLike)
   // 刪除一筆 like 記錄
-  app.post('/tweets/:id/unlike', authenticated, tweetController.deleteLike)
+  app.delete('/like/:tweetId', authenticated, userController.deleteLike)
 
   app.get('/admin', authenticatedAdmin, (req, res) => res.redirect('/admin/tweets'))
   // 看見站內所有的推播 (設為後台首頁)
