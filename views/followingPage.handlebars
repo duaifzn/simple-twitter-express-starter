@@ -2,21 +2,21 @@
 
 <div class="row">
   <div class="col-4">
-    <img src="{{user.avatar}}" alt="avatar" height="200px" width="200px">
-    <h4>{{user.name}}</h4>
-    <p>{{user.introduction}}</p>
+    <img src="{{userData.avatar}}" alt="avatar" height="200px" width="200px">
+    <h4>{{userData.name}}</h4>
+    <p>{{userData.introduction}}</p>
     <ul>
-      <li>Tweets:{{#count user.Tweets}}{{/count}}</li>
-      <li>Following:{{#count user.Followings}}{{/count}}</li>
-      <li>Follower:{{#count user.Followers}}{{/count}}</li>
-      <li>Like:{{#count user.Likes}}{{/count}}</li>
+      <li>Tweets:{{#count userData.LikedTweets}}{{/count}}</li>
+      <li>Following:{{#count userData.Followings}}{{/count}}</li>
+      <li>Follower:{{#count userData.Followers}}{{/count}}</li>
+      <li>Like:{{#count userData.Likes}}{{/count}}</li>
     </ul>
-    <a href="/users/{{user.id}}/edit">編輯個人資料</a>
+    <a href="/users/{{userData.id}}/edit">編輯個人資料</a>
   </div>
   <div class="col-8">
     <h1>Following</h1>
     <div class="row">
-      {{#each user.Followings}}
+      {{#each userData.Followings}}
       <div class="col-6">
         <div class="card mb-3">
           <div class="row no-gutters">
