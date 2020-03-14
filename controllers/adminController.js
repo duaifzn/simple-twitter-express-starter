@@ -4,7 +4,9 @@ const Tweet = db.Tweet
 
 const adminController = {
   adminHomePage: (req, res) => {
-    return Tweet.findAll().then(tweets => {
+    return Tweet.findAll({
+      include: User
+    }).then(tweets => {
       for (let i = 0; i < tweets.length; i++) {
         tweets[i].description = tweets[i].description.length > 50 ? (tweets[i].description.slice(0, 50) + '...') : tweets[i].description // 只擷取前50字元顯示，此外顯示原文
       }

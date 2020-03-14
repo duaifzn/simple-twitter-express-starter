@@ -9,7 +9,7 @@
     <tr>
       <th scope="col">Id</th>
       <th scope="col">Description(Preview)</th>
-      <th scope="col">UserId</th>
+      <th scope="col">Author</th>
       <th scope="col"></th>
       <th scope="col"></th>
     </tr>
@@ -19,7 +19,7 @@
     <tr>
       <th scope="row">{{this.id}}</th>
       <td>{{this.description}}</td>
-      <td>{{this.UserId}}</td>
+      <td>{{this.User.name}}</td>
       <td>
         <a href="/tweets/{{this.id}}/replies" class="btn btn-info">Details</a>
       </td>
