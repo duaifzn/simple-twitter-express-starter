@@ -32,8 +32,7 @@ const userController = {
 
         return res.render(
           'tweetPage',
-          JSON.parse(
-            JSON.stringify({ userData: user, isFollowed, followerNum, followingNum, tweets })
+          JSON.parse(JSON.stringify({ userData: user, isFollowed, followerNum, followingNum, tweets })
           )
         )
       })
@@ -123,16 +122,12 @@ const userController = {
     //   );
     // });
   },
-
   likePage: (req, res) => {
     User.findByPk(req.params.id, {
       include: [
         Reply,
         Tweet,
-        {
-          model: Like,
-          include: [{ model: Tweet, include: [User, Reply, Like] }]
-        },
+        { model: Like, include: [{ model: Tweet, include: [User, Reply, Like] }] },
         { model: User, as: 'Followings' },
         { model: User, as: 'Followers' }
       ]
