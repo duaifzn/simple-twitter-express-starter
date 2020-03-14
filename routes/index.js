@@ -4,6 +4,13 @@ const tweetController = require('../controllers/tweetController')
 const helpers = require('../_helpers')
 
 module.exports = (app, passport) => {
+  const unAuthenticated = (req, res, next) => {
+    if (!req.isAuthenticated()) {
+      return next()
+    }
+    res.redirect('/')
+    return req.flash('error_messages', '已登入')
+  }
   const authenticated = (req, res, next) => {
     if (helpers.ensureAuthenticated(req)) {
       return next()
@@ -22,9 +29,9 @@ module.exports = (app, passport) => {
     res.redirect('/tweets')
   })
   // 登入頁面
-  app.get('/signin', userController.signInPage)
+  app.get('/signin', unAuthenticated, userController.signInPage)
   // 登入
-  app.post('/signin', passport.authenticate('local', {
+  app.post('/signin', unAuthenticated, passport.authenticate('local', {
     failureRedirect: '/signin',
     failureFlash: true
   }), userController.signIn)

@@ -1,13 +1,16 @@
 <div class="row">
-  <div class="col">
+  <div class="col-7">
     <form action="/tweets" method="POST">
-      <div class="form-group">
-        <textarea class="form-control" id="tweetText" rows="4" placeholder="What's on your mind ?"></textarea>
+      <div class="form-group mb-1">
+        <textarea class="form-control border-info" id="tweetText" rows="4" placeholder="What's on your mind ?"></textarea>
       </div>
-      <button type="submit">Tweet</button>
+      <div class="button d-flex justify-content-end">
+        <button type="submit" class="btn btn-info text-dark font-weight-bold">Tweet</button>
+      </div>
     </form>
-    <div class="tweets">
+    <div class="tweets pt-1">
       {{#each tweets}}
+<<<<<<< HEAD
       <div class="card">
         <div class="card-body">
           <label>
@@ -18,44 +21,64 @@
           </label>
           <p>{{this.description}}</p>
           <div class="d-flex bd-highlight mb-3">
+=======
+      <div class="card my-2">
+        <div class="card-body row">
+          <div class="col-md-4 pr-0">
+            <img src="{{this.User.avatar}}" class="card-img mt-2 border" width="100" alt="avatar">
+          </div>
+          <div class="col-md-8">
+            <label>
+              <h6 class="card-title text-primary">@{{this.User.name}}, {{moment this.createdAt}}</h6>              
+            </label>
+            <p>{{this.description}}</p>
+>>>>>>> 03fb154974d532beaaec81ced267f68ca3d6bb6d
             <a href="/tweets/{{this.id}}/replies">Reply({{this.replyNumber}})</a>
-            <a class="ml-2" href="#">Like({{this.likeNumber}})</a>
-            <div class="ml-auto">
+
+            {{!-- 按下與表示like數量應該要在同一個地方！ --}}
+            
+            <a class="ml-2 text-danger" href="#">Like({{this.likeNumber}})</a>
+
             {{#if this.isLiked}}
-            <form action="/like/{{this.id}}?_method=DELETE" method="POST" style="display: inline;">
+            <form action="/like/{{this.id}}?_method=DELETE" method="POST" style="display: inline;" class="ml-2">
               <button type="submit" class="btn btn-danger">Unlike</button>
             </form>
             {{else}}
-            <form action="/like/{{this.id}}" method="POST" style="display: inline;">
+            <form action="/like/{{this.id}}" method="POST" style="display: inline;" class="ml-2">
               <button type="submit" class="btn btn-primary">Like</button>
             </form>
             {{/if}}
-            </div>
+            
+            {{!-- 按下與表示like數量應該要在同一個地方！ --}}
+
           </div>
         </div>
       </div>
       {{/each}}
     </div>
   </div>
-  <div class="col">
-    <h2>Popular</h2>
+  <div class="col-5 px-0">
+    <h2 class="text-info ml-2">Popular</h2>
     {{#each users}}
     <div class="card mb-3" style="max-width: 540px;">
       <div class="row no-gutters">
-        <div class="col-md-4">
-          <img src="{{this.avatar}}" class="card-img" alt="avatar">
+        <div class="col-md-4 p-1">
+          <img src="{{this.avatar}}" class="card-img mt-4 ml-2 border" width="100" alt="avatar">
         </div>
         <div class="col-md-8">
           <div class="card-body">
-            <h5 class="card-title"><a href="/users/{{this.id}}/tweets">{{this.name}}</a></h5>
+            <h5 class="card-title"><a href="/users/{{this.id}}/tweets">@{{this.name}}</a></h5>
             <p class="card-text">{{this.introduction}}</p>
-            {{#if isFollowed}}
-            <form action="/following/{{this.id}}?_method=DELETE" method="POST" style="display: inline">
-              <button type="submit" class="btn btn-danger">Unfollow</button></form>
-            {{else}}
-            <form action="/following/{{this.id}}" method="POST" style="display: inline">
-              <button type="submit" class="btn btn-primary">Follow</button> </form>
-            {{/if}}
+            <div class="button button d-flex justify-content-end">
+               {{#if isFollowed}}
+              <form action="/following/{{this.id}}?_method=DELETE" method="POST" style="display: inline">
+                <button type="submit" class="btn btn-danger font-weight-bold">Unfollow</button></form>
+              {{else}}
+              <form action="/following/{{this.id}}" method="POST" style="display: inline">
+                <button type="submit" class="btn btn-info text-dark font-weight-bold">Follow</button> 
+                </form>
+              {{/if}}
+            </div>           
           </div>
         </div>
       </div>
