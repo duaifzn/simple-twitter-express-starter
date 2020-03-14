@@ -21,8 +21,6 @@ const tweetController = {
   },
   tweetHomePage: (req, res) => {
     Tweet.findAll({ include: [Like, Reply, User] }).then(tweets => {
-<<<<<<< HEAD
-=======
       tweets = tweets.map(tweet => (
         {
           ...tweet.dataValues,
@@ -31,7 +29,6 @@ const tweetController = {
           isLiked: req.user.LikedTweets.map(d => d.id).includes(tweet.id)
 
         }))
->>>>>>> 03fb154974d532beaaec81ced267f68ca3d6bb6d
 
       User.findAll({
         include: [{ model: User, as: 'Followers' }, { model: User, as: 'Followings' }]
@@ -49,6 +46,7 @@ const tweetController = {
       })
     })
   },
+
   tweetReplyPage: (req, res) => {
     Tweet.findByPk(req.params.tweet_id, {
       include: [
@@ -72,6 +70,7 @@ const tweetController = {
       return res.render('tweetReplyPage', JSON.parse(JSON.stringify({ tweet: tweet, likeNumber: likeNumber, followerNumber: followerNumber, followingNumber, tweetNumber: tweetNumber, replyNumber: replyNumber, isFollowed: isFollowed })))
     })
   },
+
   createTweetReply: (req, res) => {
     Reply.create({
       UserId: req.body.userId,
@@ -81,16 +80,13 @@ const tweetController = {
       return res.redirect('back')
     })
   },
+  
   createLike: (req, res) => {
 
   },
   deleteLike: (req, res) => {
 
-<<<<<<< HEAD
-  },
-=======
   }
->>>>>>> 03fb154974d532beaaec81ced267f68ca3d6bb6d
 
 }
 
