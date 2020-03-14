@@ -2,9 +2,11 @@
   <div class="col-7">
     <form action="/tweets" method="POST">
       <div class="form-group mb-1">
-        <textarea class="form-control border-info" id="tweetText" rows="4" placeholder="What's on your mind ?"></textarea>
+        <textarea class="form-control border-info" id="tweetText" name="tweetText" rows="4"
+          placeholder="What's on your mind ?"></textarea>
       </div>
       <div class="button d-flex justify-content-end">
+        <input type="hidden" id="userId" name="userId" value="{{user.id}}">
         <button type="submit" class="btn btn-info text-dark font-weight-bold">Tweet</button>
       </div>
     </form>
@@ -17,14 +19,14 @@
           </div>
           <div class="col-md-8">
             <label>
-              <h6 class="card-title text-primary">@{{this.User.name}}, {{moment this.createdAt}}</h6>              
+              <h6 class="card-title text-primary">@{{this.User.name}}, {{moment this.createdAt}}</h6>
             </label>
             <p>{{this.description}}</p>
-            <a href="/tweets/{{this.id}}/replies">Reply({{this.replyNumber}})</a>
+            <a href="/tweets/{{this.id}}/replies">Reply({{#count this.Replies}}{{/count}})</a>
 
             {{!-- 按下與表示like數量應該要在同一個地方！ --}}
-            
-            <a class="ml-2 text-danger" href="#">Like({{this.likeNumber}})</a>
+
+            <a class="ml-2 text-danger">Like({{#count this.Likes}}{{/count}})</a>
 
             {{#if this.isLiked}}
             <form action="/like/{{this.id}}?_method=DELETE" method="POST" style="display: inline;" class="ml-2">
@@ -35,7 +37,7 @@
               <button type="submit" class="btn btn-primary">Like</button>
             </form>
             {{/if}}
-            
+
             {{!-- 按下與表示like數量應該要在同一個地方！ --}}
 
           </div>
@@ -57,15 +59,15 @@
             <h5 class="card-title"><a href="/users/{{this.id}}/tweets">@{{this.name}}</a></h5>
             <p class="card-text">{{this.introduction}}</p>
             <div class="button button d-flex justify-content-end">
-               {{#if isFollowed}}
+              {{#if isFollowed}}
               <form action="/following/{{this.id}}?_method=DELETE" method="POST" style="display: inline">
                 <button type="submit" class="btn btn-danger font-weight-bold">Unfollow</button></form>
               {{else}}
               <form action="/following/{{this.id}}" method="POST" style="display: inline">
-                <button type="submit" class="btn btn-info text-dark font-weight-bold">Follow</button> 
-                </form>
+                <button type="submit" class="btn btn-info text-dark font-weight-bold">Follow</button>
+              </form>
               {{/if}}
-            </div>           
+            </div>
           </div>
         </div>
       </div>

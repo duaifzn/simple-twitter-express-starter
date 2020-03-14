@@ -1,26 +1,26 @@
 <h1>Like Page</h1>
 <div class="row">
   <div class="col-4">
-    <img src="{{user.avatar}}" alt="avatar" height="200px" width="200px">
-    <h4>{{user.name}}</h4>
-    <p>{{user.introduction}}</p>
+    <img src="{{userData.avatar}}" alt="avatar" height="200px" width="200px">
+    <h4>{{userData.name}}</h4>
+    <p>{{userData.introduction}}</p>
     <ul>
-      <li>Tweets:{{tweetNumber}}</li>
-      <li>Following:{{followingNumber}}</li>
-      <li>Follower:{{followerNumber}}</li>
-      <li>Like:{{likeNumber}}</li>
+      <li>Tweets:{{#count userData.Tweets}}{{/count}}</li>
+      <li>Following:{{#count userData.Followings}}{{/count}}</li>
+      <li>Follower:{{#count userData.Followers}}{{/count}}</li>
+      <li>Like:{{#count userData.Likes}}{{/count}}</li>
     </ul>
-    {{#if isFollowed}}
+    {{#ifFollowed userData.id user.id}}
     <form action="/following/{{user.id}}?_method=DELETE" method="POST" style="display: inline">
       <button type="submit" class="btn btn-danger">Unfollow</button></form>
     {{else}}
     <form action="/following/{{user.id}}" method="POST" style="display: inline">
       <button type="submit" class="btn btn-primary">Follow</button> </form>
-    {{/if}}
+    {{/ifFollowed}}
   </div>
 </div>
 <div class="col-8">
-  {{#each user.Likes}}
+  {{#each userData.Likes}}
   <div class="card">
     <div class="card-body">
       <label>
