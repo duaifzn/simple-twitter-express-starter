@@ -6,7 +6,8 @@ const Reply = db.Reply
 
 const tweetController = {
   redirectInvalidUrl: (req, res) => { // 防止亂打網址404
-    res.redirect('back')
+    req.flash('error_messages', '不要瞎掰好嗎？')
+    res.redirect('/tweets')
   },
 
   createTweet: (req, res) => {
