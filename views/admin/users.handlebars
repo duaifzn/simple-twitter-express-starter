@@ -11,7 +11,7 @@
       <th scope="col">Name</th>
       <th scope="col">Email</th>
       <th scope="col">Avatar</th>
-      <th scope="col">社群活躍數據</th>
+      <th scope="col">Activity</th>
     </tr>
   </thead>
   <tbody>
@@ -21,7 +21,9 @@
       <td>{{this.name}}</td>
       <td>{{this.email}}</td>
       <td><img src="{{this.avatar}}" alt="avatar" class="border" width="50px" height="50px"></td>
-      <td>WIP</td>
+      <td>
+        <a href="/users/{{this.id}}/tweets" class="btn btn-info">Details</a>
+      </td>
     </tr>
     {{/each}}
   </tbody>
