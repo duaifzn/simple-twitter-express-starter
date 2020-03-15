@@ -11,32 +11,22 @@ const userController = {
   tweetPage: (req, res) => {
     User.findByPk(req.params.id, {
       include: [
-        { model: Tweet, include: [Like, Reply, User] },
-        { model: User, as: 'Followers' },
-        { model: User, as: 'Followings' }
+        Like,
+        { model: Tweet, include: [{ model: User, as: 'LikedUsers' }, Reply, User, Like] },
+        { model: User, as: "Followers" },
+        { model: User, as: "Followings" },
       ]
     }).then(user => {
-      const tweets = []
-      const isFollowed = req.user.Followings.map(d => d.id).includes(user.id)
-      const followerNum = user.Followers.length
-      const followingNum = user.Followings.length
-      user.Tweets.map(tweet => {
-        tweets.push(tweet.User)
-      })
-
-      Tweet.findAll({ include: [Like, Reply, User] }).then(tweets => {
-        tweets = tweets.map(tweet => ({
+      user.Tweets = user.Tweets.map(tweet => (
+        {
           ...tweet.dataValues,
-          isLiked: req.user.LikedTweets.map(d => d.id).includes(tweet.id)
-        }))
-
-        return res.render(
-          'tweetPage',
-          JSON.parse(JSON.stringify({ userData: user, isFollowed, followerNum, followingNum, tweets })
-          )
-        )
-      })
-    })
+          isLiked: tweet.LikedUsers.map(u => u.id).includes(req.user.id)
+        }
+      ))
+      return res.render("tweetPage", JSON.parse(JSON.stringify({ userData: user, tweets: user.Tweets })
+      )
+      );
+    });
   },
 
   editUserPage: (req, res) => {
