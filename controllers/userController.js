@@ -24,19 +24,24 @@ const userController = {
         tweets.push(tweet.User)
       })
 
-      Tweet.findAll({ include: [Like, Reply, User] }).then(tweets => {
-        tweets = tweets.map(tweet => ({
-          ...tweet.dataValues,
-          isLiked: req.user.LikedTweets.map(d => d.id).includes(tweet.id)
-        }))
+      Tweet.findAll({ include: [Like, Reply, User] })
+        .then(tweets => {
+          tweets = tweets.map(tweet => ({
+            ...tweet.dataValues,
+            isLiked: req.user.LikedTweets.map(d => d.id).includes(tweet.id)
+          }))
 
-        return res.render(
-          'tweetPage',
-          JSON.parse(JSON.stringify({ userData: user, isFollowed, followerNum, followingNum, tweets })
+          return res.render(
+            'tweetPage',
+            JSON.parse(JSON.stringify({ userData: user, isFollowed, followerNum, followingNum, tweets })
+            )
           )
-        )
-      })
+        })
     })
+      .catch(users => {
+        req.flash('error_messages', '無此使用者！')
+        return res.redirect('/tweets')
+      })
   },
 
   editUserPage: (req, res) => {
@@ -56,7 +61,7 @@ const userController = {
           name: req.body.name
         })
         .then(user => {
-          console.log('user', user.name)
+          // console.log('user', user.name)
           return res.redirect('back')
         })
     })
