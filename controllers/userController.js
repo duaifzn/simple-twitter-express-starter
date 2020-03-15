@@ -81,6 +81,9 @@ const userController = {
         'followingPage',
         JSON.parse(JSON.stringify({ userData: userData }))
       )
+    }).catch(userData => {
+      req.flash('error_messages', '無此使用者！')
+      return res.redirect('back')
     })
     // 原本資料架構
     // User.findByPk(req.params.id, {
@@ -111,6 +114,9 @@ const userController = {
         'followerPage',
         JSON.parse(JSON.stringify({ userData: userData }))
       )
+    }).catch(userData => {
+      req.flash('error_messages', '無此使用者！')
+      return res.redirect('back')
     })
     // 原本資料架構
     // User.findByPk(req.params.id, {
@@ -138,6 +144,9 @@ const userController = {
       ]
     }).then(userData => {
       return res.render('likePage', JSON.parse(JSON.stringify({ userData: userData })))
+    }).catch(userData => {
+      req.flash('error_messages', '無此使用者！')
+      return res.redirect('back')
     })
   },
 
