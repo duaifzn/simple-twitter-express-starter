@@ -16,15 +16,15 @@ const userController = {
         { model: User, as: 'Followings' }
       ]
     }).then(user => {
-      const tweets = []
+      // const tweets = []
       const isFollowed = req.user.Followings.map(d => d.id).includes(user.id)
       const followerNum = user.Followers.length
       const followingNum = user.Followings.length
-      user.Tweets.map(tweet => {
-        tweets.push(tweet.User)
-      })
+      // user.Tweets.map(tweet => {
+      //   tweets.push(tweet.User)
+      // })
 
-      Tweet.findAll({ include: [Like, Reply, User] })
+      Tweet.findAll({ where: { userId: user.id } }, { include: [Like, Reply, User] })
         .then(tweets => {
           tweets = tweets.map(tweet => ({
             ...tweet.dataValues,
