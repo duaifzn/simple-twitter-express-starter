@@ -77,13 +77,15 @@ const userController = {
         { model: Tweet, as: 'LikedTweets' }
       ]
     }).then(userData => {
-      return res.render(
-        'followingPage',
-        JSON.parse(JSON.stringify({ userData: userData }))
-      )
-    }).catch(userData => {
-      req.flash('error_messages', '無此使用者！')
-      return res.redirect('back')
+      if (userData === null) {
+        req.flash('error_messages', '無此使用者！')
+        return res.redirect('/tweets')
+      } else {
+        return res.render(
+          'followingPage',
+          JSON.parse(JSON.stringify({ userData: userData }))
+        )
+      }
     })
     // 原本資料架構
     // User.findByPk(req.params.id, {
@@ -110,13 +112,15 @@ const userController = {
         { model: User, as: 'Followers' },
         { model: Tweet, as: 'LikedTweets' }]
     }).then(userData => {
-      return res.render(
-        'followerPage',
-        JSON.parse(JSON.stringify({ userData: userData }))
-      )
-    }).catch(userData => {
-      req.flash('error_messages', '無此使用者！')
-      return res.redirect('back')
+      if (userData === null) {
+        req.flash('error_messages', '無此使用者！')
+        return res.redirect('/tweets')
+      } else {
+        return res.render(
+          'followerPage',
+          JSON.parse(JSON.stringify({ userData: userData }))
+        )
+      }
     })
     // 原本資料架構
     // User.findByPk(req.params.id, {
@@ -143,10 +147,12 @@ const userController = {
         { model: User, as: 'Followers' }
       ]
     }).then(userData => {
-      return res.render('likePage', JSON.parse(JSON.stringify({ userData: userData })))
-    }).catch(userData => {
-      req.flash('error_messages', '無此使用者！')
-      return res.redirect('back')
+      if (userData === null) {
+        req.flash('error_messages', '無此使用者！')
+        return res.redirect('/tweets')
+      } else {
+        return res.render('likePage', JSON.parse(JSON.stringify({ userData: userData })))
+      }
     })
   },
 
