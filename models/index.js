@@ -4,7 +4,7 @@ const fs = require('fs')
 const path = require('path')
 const Sequelize = require('sequelize')
 const basename = path.basename(__filename)
-const env = process.env.NODE_ENV || 'development' // .trim也可以，並在config加上"operatorsAliases": false才不會有錯誤訊息
+const env = process.env.NODE_ENV.parse || 'development' // .trim也可以，並在config加上"operatorsAliases": false才不會有錯誤訊息
 const config = require(__dirname + '/../config/config.json')[env]
 const db = {}
 

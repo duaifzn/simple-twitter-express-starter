@@ -6,28 +6,29 @@
                 <li class="my-2"><strong>{{userData.name}}</strong></li>
                 <li>{{userData.introduction}}</li>
                 <br>
-                <li><a href="/users/{{userData.id}}/tweets">Tweets {{tweets.length}}</a></li>
-                <li><a href="/users/{{userData.id}}/followings">Following {{followingNum}}</a></li>
-                <li><a href="/users/{{userData.id}}/followers">Follower {{followerNum}}</a></li>
-                <li><a href="/users/{{userData.id}}/likes">Like</a> </li>
+                <li><a href="/users/{{userData.id}}/tweets">Tweets {{#count userData.Tweets}}{{/count}}</a></li>
+                <li><a href="/users/{{userData.id}}/followings">Following {{#count userData.Followings}}{{/count}}</a>
+                </li>
+                <li><a href="/users/{{userData.id}}/followers">Follower {{#count userData.Followers}}{{/count}}</a></li>
+                <li><a href="/users/{{userData.id}}/likes">Like{{#count userData.Likes}}{{/count}}</a> </li>
                 <br>
 
                 <li class="my-3" style="display: inline">
                     <a href="/users/{{userData.id}}/edit" class="btn btn-primary">edit</a>
                 </li>
-                {{#if isFollowed}}
+                {{#ifFollowed user.id userData.id}}
                 <form action="/following/{{userData.id}}?_method=DELETE" method="POST" style="display: inline">
                     <button type="submit" class="btn btn-danger">Unfollow</button></form>
                 {{else}}
                 <form action="/following/{{userData.id}}" method="POST" style="display: inline">
                     <button type="submit" class="btn btn-primary">Follow</button></form>
-                {{/if}}
+                {{/ifFollowed}}
 
             </ul>
         </div>
         <div class="col-8">
             <div class="tweets">
-                {{#each userData.Tweets}}
+                {{#each tweets}}
                 <div class="card">
                     <div class="card-body">
                         <label>
