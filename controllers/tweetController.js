@@ -19,15 +19,14 @@ const tweetController = {
       req.flash('error_messages', '每則 tweet 最長只能 140 字')
       return res.redirect('/tweets')
     }
-   
-     return Tweet.create({
-        UserId: req.user.id,
-        description: req.body.description
 
-      }).then(tweet => {
-        res.redirect('back')
-      })
+    return Tweet.create({
+      UserId: req.user.id,
+      description: req.body.description
 
+    }).then(tweet => {
+      res.redirect('back')
+    })
   },
 
   tweetHomePage: (req, res) => {
@@ -36,9 +35,8 @@ const tweetController = {
         {
           ...tweet.dataValues,
           isLiked: req.user.LikedTweets.map(d => d.id).includes(tweet.id)
-
         }))
-
+      tweets = tweets.sort((a, b) => b.updatedAt - a.updatedAt)
       User.findAll({
         include: [{ model: User, as: 'Followers' }, { model: User, as: 'Followings' }]
       }).then(users => {
@@ -88,8 +86,7 @@ const tweetController = {
     }).then(() => {
       return res.redirect('back')
     })
-  },
-
+  }
 
 }
 

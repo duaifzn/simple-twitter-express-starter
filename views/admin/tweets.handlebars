@@ -9,18 +9,20 @@
     <tr>
       <th scope="col">Id</th>
       <th scope="col">Description(Preview)</th>
-      <th scope="col">UserId</th>
-      <th scope="col">推播回覆內容</th>
+      <th scope="col">Author</th>
+      <th scope="col"></th>
       <th scope="col"></th>
     </tr>
   </thead>
   <tbody>
-    {{#each tweets}}
+    {{#each tweets.rows}}
     <tr>
       <th scope="row">{{this.id}}</th>
       <td>{{this.description}}</td>
-      <td>{{this.UserId}}</td>
-      <td>WIP</td>
+      <td>{{this.User.name}}</td>
+      <td>
+        <a href="/tweets/{{this.id}}/replies" class="btn btn-info">Details</a>
+      </td>
       <td><form action="/admin/tweets/{{this.id}}?_method=DELETE" method="POST" style="display: inline;">
         <button type="submit" class="btn btn-danger"
           onclick="if(confirm('Are you sure?')) return true; else return false">Delete</button>
@@ -29,3 +31,24 @@
     {{/each}}
   </tbody>
 </table>
+<nav aria-label="Page navigation example">
+  <ul class="pagination">
+    <li class="page-item">
+      <a class="page-link" href="/admin/tweets?page={{prev}}" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    {{#each totalPage}}
+    {{#ifCond this ../page}}
+    <li class="page-item active"><a class="page-link" href="#">{{this}}</a></li>
+    {{else}}
+    <li class="page-item"><a class="page-link"
+        href="/admin/tweets?page={{this}}">{{this}}</a></li>
+    {{/ifCond}}
+    {{/each}}
+    <a class="page-link" href="/admin/tweets?page={{next}}" aria-label="Next">
+      <span aria-hidden="true">&raquo;</span>
+    </a>
+    </li>
+  </ul>
+</nav>

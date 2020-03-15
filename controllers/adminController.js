@@ -2,13 +2,36 @@ const db = require('../models')
 const User = db.User
 const Tweet = db.Tweet
 
+const pageLimit = 20
+
 const adminController = {
   adminHomePage: (req, res) => {
-    return Tweet.findAll().then(tweets => {
-      for (let i = 0; i < tweets.length; i++) {
-        tweets[i].description = tweets[i].description !== null ? (tweets[i].description.slice(0, 50) + '...') : '' // 只擷取前50字元顯示
+    let offset = 0
+    if (req.query.page) {
+      offset = (req.query.page - 1) * pageLimit
+    }
+
+    return Tweet.findAndCountAll({
+      include: User, offset: offset, limit: pageLimit
+    }).then(tweets => {
+      // data for pagination
+      const page = Number(req.query.page) || 1
+      const pages = Math.ceil(tweets.count / pageLimit)
+      const totalPage = Array.from({ length: pages }).map((item, index) => index + 1)
+      const prev = page - 1 < 1 ? 1 : page - 1
+      const next = page + 1 > pages ? pages : page + 1
+
+      for (let i = 0; i < tweets.rows.length; i++) {
+        tweets.rows[i].description = tweets.rows[i].description.length > 50 ? (tweets.rows[i].description.slice(0, 50) + '...') : tweets.rows[i].description // 只擷取前50字元顯示，此外顯示原文
       }
-      return res.render('admin/tweets', JSON.parse(JSON.stringify({ tweets })))
+      console.log('test', tweets.rows)
+      return res.render('admin/tweets', JSON.parse(JSON.stringify({
+        tweets,
+        page: page,
+        totalPage: totalPage,
+        prev: prev,
+        next: next
+      })))
     })
   },
 
