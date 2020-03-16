@@ -11,42 +11,44 @@
 </head>
 
 <body>
-  <header>
-  {{!-- Navbar --}}
-  <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-info d-flex justify-content-between">
-    <a class="navbar-brand text-dark font-weight-bold ml-1" href="/">
-      <h3>Simple Twitter</h3>
-    </a>
-    <div class="navbar-collapse offcanvas-collapse col-5 col-sm-4 col-md-3 d-flex justify-content-end" id="navbarsExampleDefault">      
-      {{!-- <div class="admin-button">
+  <header class="fixed-top">
+    {{!-- Navbar --}}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-info d-flex justify-content-between">
+      <a class="navbar-brand text-dark font-weight-bold ml-1" href="/">
+        <h3>Simple Twitter</h3>
+      </a>
+      <div class="navbar-collapse offcanvas-collapse col-5 col-sm-4 col-md-3 d-flex justify-content-end"
+        id="navbarsExampleDefault">
+        {{!-- <div class="admin-button">
         
       </div> --}}
-      <div class="buttons col-8 mx-1 px-1 d-flex justify-content-end">
-        {{#ifRole user.role }}
-        <a href="/admin" class="text-light btn btn-warning font-weight-bold mx-1" height="50px">
-          後台管理
-        </a>
-        {{/ifRole}}
-        {{#if user}}
-        <a href="/users/{{user.id}}/tweets"><img src="{{user.avatar}}" alt="avatar" width="50px" class="border"></a>
-        <a href="/logout" class="text-primary font-weight-bold ml-2 mt-1">LogOut</a>
-        {{/if}}
-      </div>
-    </nav>    
+        <div class="buttons col-8 mx-1 px-1 d-flex justify-content-end">
+          {{#ifRole user.role }}
+          <a href="/admin" class="text-light btn btn-warning font-weight-bold mx-1" height="50px">
+            後台管理
+          </a>
+          {{/ifRole}}
+          {{#if user}}
+          <a href="/users/{{user.id}}/tweets"><img src="{{user.avatar}}" alt="avatar" width="50px" class="border"></a>
+          <a href="/logout" class="text-primary font-weight-bold ml-2 mt-1">LogOut</a>
+          {{/if}}
+        </div>
+    </nav>
+    {{#if success_messages}}
+    <div class="alert alert-success" role="alert">
+      {{success_messages}}
+    </div>
+    {{/if}}
+    {{#if error_messages}}
+    <div class="alert alert-danger" role="alert">
+      {{error_messages}}
+    </div>
+    {{/if}}
+
   </header>
-  <main role="main">
-    <div class="album py-5 bg-light">
-      <div class="container pt-5">
-        {{#if success_messages}}
-        <div class="alert alert-success mt-0 pt-0" role="alert" style="margin: 30px 0 ;">
-          {{success_messages}}
-        </div>
-        {{/if}}
-        {{#if error_messages}}
-        <div class="alert alert-danger mt-0 pt-0" role="alert" style="margin: 30px 0 ;">
-          {{error_messages}}
-        </div>
-        {{/if}}
+  <main role="main" style="margin-top: 12.5%;">
+    <div class="album bg-light">
+      <div class="container">
         {{{body}}}
       </div>
     </div>
@@ -61,6 +63,24 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
     integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
     crossorigin="anonymous"></script>
+  <script>
+    let ws = new WebSocket('ws://localhost:3000')
+
+    //開啟ws
+    ws.onopen = function (evt) {
+      console.log("Connection open ...");
+      ws.send("Hello WebSockets!");
+    };
+
+    ws.addEventListener('message', function (event) {
+      console.log('Message from server:', event.data);
+    });
+    //關閉ws
+    ws.onclose = function (evt) {
+      console.log("Connection closed.");
+    };
+
+  </script>
 </body>
 
 
