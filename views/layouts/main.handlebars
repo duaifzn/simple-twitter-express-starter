@@ -11,9 +11,9 @@
 </head>
 
 <body>
-  <header>
+  <header class="fixed-top">
     {{!-- Navbar --}}
-    <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-info d-flex justify-content-between">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-info d-flex justify-content-between">
       <a class="navbar-brand text-dark font-weight-bold ml-1" href="/">
         <h3>Simple Twitter</h3>
       </a>
@@ -46,19 +46,9 @@
     {{/if}}
 
   </header>
-  <main role="main">
-    <div class="album py-5 bg-light">
-      <div class="container pt-5">
-        {{#if success_messages}}
-        <div class="alert alert-success mt-0 pt-0" role="alert" style="margin: 30px 0 ;">
-          {{success_messages}}
-        </div>
-        {{/if}}
-        {{#if error_messages}}
-        <div class="alert alert-danger mt-0 pt-0" role="alert" style="margin: 30px 0 ;">
-          {{error_messages}}
-        </div>
-        {{/if}}
+  <main role="main" style="margin-top: 12.5%;">
+    <div class="album bg-light">
+      <div class="container">
         {{{body}}}
       </div>
     </div>
