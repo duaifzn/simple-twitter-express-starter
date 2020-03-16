@@ -6,6 +6,8 @@ const Reply = db.Reply
 const Followship = db.Followship
 const helpers = require('../_helpers')
 const bcrypt = require('bcryptjs')
+const imgur = require('imgur-node-api')
+const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
 
 const userController = {
   tweetPage: (req, res) => {
@@ -30,26 +32,74 @@ const userController = {
   },
 
   editUserPage: (req, res) => {
-    if (req.params.id === 1) {
-      return res.render('editUserPage')
+    if (Number(req.params.id) !== req.user.id) { // 防止進入他人修改頁面偷改資料
+      req.flash('error_messages', '只能改自己的頁面！')
+      res.redirect(`/users/${req.user.id}/edit`)
     } else {
-      return res.redirect(`/users/${req.params.id}/edit`)
+      return User.findByPk(req.params.id)
+        .then(user => {
+          return res.render('editUserPage', JSON.parse(JSON.stringify({ user: user })))
+        })
+        .catch((user) => {
+          req.flash('error_messages', "this user didn't exist!")
+          res.redirect('/tweets')
+        })
     }
   },
 
   editUser: (req, res) => {
-    // console.log('req.body:', req.body)
-    // console.log('req.params:', req.params)
-    User.findByPk(req.params.id).then(user => {
-      user
-        .update({
-          name: req.body.name
+    if (!req.body.name) {
+      req.flash('error_messages', "name didn't exist")
+      return res.redirect('back')
+    } else if (Number(req.params.id) !== req.user.id) { // 防止用 POSTMAN 發送 PutUser 的 HTTP請求，這樣還是可以改到別人的資料
+      req.flash('error_messages', '只能改自己的頁面！')
+      res.redirect(`/users/${req.user.id}/edit`)
+    }
+
+    const { file } = req
+    if (file) {
+      imgur.setClientID(IMGUR_CLIENT_ID)
+      console.log('ID', IMGUR_CLIENT_ID, file.path)
+      imgur.upload(file.path, (err, img) => {
+        return User.findByPk(req.params.id).then(user => {
+          user
+            .update({
+              name: req.body.name,
+              introduction: req.body.introduction,
+              avatar: file ? img.data.link : user.image
+            })
+            .then((user) => {
+              req.flash(
+                'success_messages',
+                'Your profile was successfully to update'
+              )
+              res.redirect(`/users/${user.id}/tweets`)
+            })
+            .catch((user) => {
+              req.flash('error_messages', 'unexpected error, try later...')
+            })
         })
-        .then(user => {
-          console.log('user', user.name)
-          return res.redirect('back')
-        })
-    })
+      })
+    } else {
+      return User.findByPk(req.params.id).then(user => {
+        user
+          .update({
+            name: req.body.name,
+            introduction: req.body.introduction,
+            avatar: user.image
+          })
+          .then((user) => {
+            req.flash(
+              'success_messages',
+              'Your profile was successfully to update'
+            )
+            res.redirect(`/users/${user.id}/tweets`)
+          })
+          .catch((user) => {
+            req.flash('error_messages', 'unexpected error, try later...')
+          })
+      })
+    }
   },
 
   followingPage: (req, res) => {
@@ -62,10 +112,15 @@ const userController = {
         { model: Tweet, as: 'LikedTweets' }
       ]
     }).then(userData => {
-      return res.render(
-        'followingPage',
-        JSON.parse(JSON.stringify({ userData: userData }))
-      )
+      if (userData === null) {
+        req.flash('error_messages', '無此使用者！')
+        return res.redirect('/tweets')
+      } else {
+        return res.render(
+          'followingPage',
+          JSON.parse(JSON.stringify({ userData: userData }))
+        )
+      }
     })
     // 原本資料架構
     // User.findByPk(req.params.id, {
@@ -92,10 +147,15 @@ const userController = {
         { model: User, as: 'Followers' },
         { model: Tweet, as: 'LikedTweets' }]
     }).then(userData => {
-      return res.render(
-        'followerPage',
-        JSON.parse(JSON.stringify({ userData: userData }))
-      )
+      if (userData === null) {
+        req.flash('error_messages', '無此使用者！')
+        return res.redirect('/tweets')
+      } else {
+        return res.render(
+          'followerPage',
+          JSON.parse(JSON.stringify({ userData: userData }))
+        )
+      }
     })
     // 原本資料架構
     // User.findByPk(req.params.id, {
@@ -122,7 +182,12 @@ const userController = {
         { model: User, as: 'Followers' }
       ]
     }).then(userData => {
-      return res.render('likePage', JSON.parse(JSON.stringify({ userData: userData })))
+      if (userData === null) {
+        req.flash('error_messages', '無此使用者！')
+        return res.redirect('/tweets')
+      } else {
+        return res.render('likePage', JSON.parse(JSON.stringify({ userData: userData })))
+      }
     })
   },
 
@@ -152,7 +217,9 @@ const userController = {
         User.create({
           name: req.body.name,
           email: req.body.email,
-          password: bcrypt.hashSync(req.body.password, 10)
+          password: bcrypt.hashSync(req.body.password, 10),
+          role: 'user',
+          avatar: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/User_font_awesome.svg/512px-User_font_awesome.svg.png'
         }).then(user => {
           req.flash('success_messages', '成功註冊')
           return res.redirect('/signin')
