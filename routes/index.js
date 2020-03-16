@@ -1,7 +1,10 @@
 const adminController = require('../controllers/adminController.js')
 const userController = require('../controllers/userController')
 const tweetController = require('../controllers/tweetController')
+
 const helpers = require('../_helpers')
+const multer = require('multer')
+const upload = multer({ dest: 'temp/' })
 
 module.exports = (app, passport) => {
   const unAuthenticated = (req, res, next) => {
@@ -47,7 +50,7 @@ module.exports = (app, passport) => {
   // 編輯自己的介紹 (表單頁)
   app.get('/users/:id/edit', authenticated, userController.editUserPage)
   // 編輯自己的介紹 (寫入資料庫)
-  app.post('/users/:id/edit', authenticated, userController.editUser)
+  app.put('/users/:id/edit', authenticated, upload.single('image'), userController.editUser)
   // 看見某一使用者正在關注的使用者
   app.get('/users/:id/followings', authenticated, userController.followingPage)
   // 看見某一使用者的跟隨者
@@ -58,7 +61,6 @@ module.exports = (app, passport) => {
   app.post('/following/:userId', authenticated, userController.createFollowship)
   // 使用者可以刪除追蹤
   app.delete('/following/:userId', authenticated, userController.deleteFollowship)
-
 
   // 看見站內所有的推播，以及跟隨者最多的使用者 (設為前台首頁)
   app.get('/tweets', authenticated, tweetController.tweetHomePage)

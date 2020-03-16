@@ -6,7 +6,8 @@ const Reply = db.Reply
 
 const tweetController = {
   redirectInvalidUrl: (req, res) => { // 防止亂打網址404
-    res.redirect('back')
+    // req.flash('error_messages', '不要瞎掰好嗎？') // 非預期出現
+    res.redirect('/tweets')
   },
 
   createTweet: (req, res) => {
@@ -75,6 +76,9 @@ const tweetController = {
       const replyNumber = tweet.Replies.length
       const isFollowed = req.user.Followings.map(d => d.id).includes(tweet.UserId)
       return res.render('tweetReplyPage', JSON.parse(JSON.stringify({ tweet: tweet, likeNumber: likeNumber, followerNumber: followerNumber, followingNumber, tweetNumber: tweetNumber, replyNumber: replyNumber, isFollowed: isFollowed })))
+    }).catch(users => {
+      req.flash('error_messages', '無此貼文！')
+      return res.redirect('/tweets')
     })
   },
 
