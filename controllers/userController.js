@@ -15,8 +15,8 @@ const userController = {
       include: [
         Like,
         { model: Tweet, include: [{ model: User, as: 'LikedUsers' }, Reply, User, Like] },
-        { model: User, as: "Followers" },
-        { model: User, as: "Followings" },
+        { model: User, as: 'Followers' },
+        { model: User, as: 'Followings' }
       ]
     }).then(user => {
       user.Tweets = user.Tweets.map(tweet => (
@@ -25,10 +25,10 @@ const userController = {
           isLiked: tweet.LikedUsers.map(u => u.id).includes(req.user.id)
         }
       ))
-      return res.render("tweetPage", JSON.parse(JSON.stringify({ userData: user, tweets: user.Tweets })
+      return res.render('tweetPage', JSON.parse(JSON.stringify({ userData: user, tweets: user.Tweets })
       )
-      );
-    });
+      )
+    })
   },
 
   editUserPage: (req, res) => {

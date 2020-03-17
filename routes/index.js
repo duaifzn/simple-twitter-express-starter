@@ -50,7 +50,7 @@ module.exports = (app, passport) => {
   // 編輯自己的介紹 (表單頁)
   app.get('/users/:id/edit', authenticated, userController.editUserPage)
   // 編輯自己的介紹 (寫入資料庫)
-  app.put('/users/:id/edit', authenticated, upload.single('image'), userController.editUser)
+  app.post('/users/:id/edit', authenticated, upload.single('image'), userController.editUser)
   // 看見某一使用者正在關注的使用者
   app.get('/users/:id/followings', authenticated, userController.followingPage)
   // 看見某一使用者的跟隨者
