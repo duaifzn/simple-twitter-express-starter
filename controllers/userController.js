@@ -14,20 +14,22 @@ const userController = {
     User.findByPk(req.params.id, {
       include: [
         Like,
-        { model: Tweet, include: [{ model: User, as: 'LikedUsers' }, Reply, User, Like] },
         { model: User, as: "Followers" },
         { model: User, as: "Followings" },
       ]
     }).then(user => {
-      user.Tweets = user.Tweets.map(tweet => (
-        {
-          ...tweet.dataValues,
-          isLiked: tweet.LikedUsers.map(u => u.id).includes(req.user.id)
-        }
-      ))
-      return res.render("tweetPage", JSON.parse(JSON.stringify({ userData: user, tweets: user.Tweets })
-      )
-      );
+
+      Tweet.findAll({ include: [Like, Reply] }, { where: { UserId: req.params.id } })
+        .then(tweets => {
+          //console.log(tweets)
+          tweets = tweets.map(tweet => (
+            {
+              ...tweet.dataValues,
+              isLiked: tweet.Likes.map(l => l.UserId).includes(req.user.id)
+            }
+          ))
+          return res.render("tweetPage", JSON.parse(JSON.stringify({ userData: user, tweets: tweets })));
+        })
     });
   },
 
@@ -105,89 +107,52 @@ const userController = {
   followingPage: (req, res) => {
     User.findByPk(req.params.id, {
       include: [
+        Tweet,
         Like,
-        Reply,
-        { model: User, as: 'Followings' },
-        { model: User, as: 'Followers' },
-        { model: Tweet, as: 'LikedTweets' }
-      ]
+        { model: User, as: "Followings" },
+        { model: User, as: "Followers" }]
     }).then(userData => {
-      if (userData === null) {
-        req.flash('error_messages', '無此使用者！')
-        return res.redirect('/tweets')
-      } else {
-        return res.render(
-          'followingPage',
-          JSON.parse(JSON.stringify({ userData: userData }))
-        )
-      }
-    })
-    // 原本資料架構
-    // User.findByPk(req.params.id, {
-    //   include: [
-    //     Like,
-    //     Tweet,
-    //     Reply,
-    //     { model: User, as: "Followings" },
-    //     { model: User, as: "Followers" }]
-    // }).then(user => {
-    //   return res.render(
-    //     "followingPage",
-    //     JSON.parse(JSON.stringify({ user: user }))
-    //   );
-    // });
+
+
+      return res.render(
+        "followingPage",
+        JSON.parse(JSON.stringify({ userData: userData }))
+      );
+    });
   },
 
   followerPage: (req, res) => {
     User.findByPk(req.params.id, {
       include: [
         Like,
-        Reply,
-        { model: User, as: 'Followings' },
-        { model: User, as: 'Followers' },
-        { model: Tweet, as: 'LikedTweets' }]
+        Tweet,
+        { model: User, as: "Followings" },
+        { model: User, as: "Followers" }]
     }).then(userData => {
-      if (userData === null) {
-        req.flash('error_messages', '無此使用者！')
-        return res.redirect('/tweets')
-      } else {
-        return res.render(
-          'followerPage',
-          JSON.parse(JSON.stringify({ userData: userData }))
-        )
-      }
-    })
-    // 原本資料架構
-    // User.findByPk(req.params.id, {
-    //   include: [
-    //     Like,
-    //     Tweet,
-    //     Reply,
-    //     { model: User, as: "Followings" },
-    //     { model: User, as: "Followers" }]
-    // }).then(user => {
-    //   return res.render(
-    //     "followerPage",
-    //     JSON.parse(JSON.stringify({ user: user }))
-    //   );
-    // });
+      return res.render(
+        "followerPage",
+        JSON.parse(JSON.stringify({ userData: userData }))
+      );
+    });
   },
   likePage: (req, res) => {
     User.findByPk(req.params.id, {
       include: [
-        Reply,
+        Like,
         Tweet,
-        { model: Like, include: [{ model: Tweet, include: [User, Reply, Like] }] },
         { model: User, as: 'Followings' },
         { model: User, as: 'Followers' }
       ]
     }).then(userData => {
-      if (userData === null) {
-        req.flash('error_messages', '無此使用者！')
-        return res.redirect('/tweets')
-      } else {
-        return res.render('likePage', JSON.parse(JSON.stringify({ userData: userData })))
-      }
+
+      Like.findAll({ include: [Tweet] }, { where: { UserId: req.params.id } })
+        .then(likes => {
+          let likeTweet = likes.map(l => l.TweetId)
+          Tweet.findAll({ include: [Reply, Like] }, { where: { id: likeTweet } })
+            .then(tweets => {
+              return res.render('likePage', JSON.parse(JSON.stringify({ userData: userData, tweets: tweets })))
+            })
+        })
     })
   },
 

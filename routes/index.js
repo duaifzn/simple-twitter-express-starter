@@ -5,8 +5,25 @@ const tweetController = require('../controllers/tweetController')
 const helpers = require('../_helpers')
 const multer = require('multer')
 const upload = multer({ dest: 'temp/' })
+const expressWs = require('express-ws')
+
 
 module.exports = (app, passport) => {
+  //web socket
+  expressWs(app)
+  app.ws('/msg', function (ws, req) {
+    //console.log(ws)
+    ws.on('open', function (msg) {
+      console.log('open!!');
+    });
+    ws.on('message', function (msg) {
+      ws.send("msg");
+    });
+    ws.on('close', function (msg) {
+
+    });
+  })
+  //
   const unAuthenticated = (req, res, next) => {
     if (!req.isAuthenticated()) {
       return next()
@@ -88,6 +105,8 @@ module.exports = (app, passport) => {
   app.delete('/admin/tweets/:id', authenticatedAdmin, adminController.deleteTweet)
   // 看見站內所有的使用者
   app.get('/admin/users', authenticatedAdmin, adminController.adminUserPage)
+
+
 
   app.all('*', tweetController.redirectInvalidUrl) // 避免404當掉
 }
