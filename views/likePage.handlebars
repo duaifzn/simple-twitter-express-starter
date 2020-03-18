@@ -1,4 +1,3 @@
-<h1>Like Page</h1>
 <div class="row">
   <div class="col-4">
     <img src="{{userData.avatar}}" alt="avatar" height="200px" width="200px">
@@ -18,23 +17,31 @@
       <button type="submit" class="btn btn-primary">Follow</button> </form>
     {{/ifFollowed}}
   </div>
-</div>
-<div class="col-8">
-  {{#each userData.Likes}}
-  <div class="card">
-    <div class="card-body">
-      <label>
-        <h4 class="card-title">{{this.Tweet.User.name}}</h4>
-      </label>
-      <label class="m-auto">
-        <h5>{{moment this.Tweet.createdAt}}</h5>
-      </label>
-      <p>{{this.Tweet.description}}</p>
-      <a href="/tweets/{{this.UserId}}/replies">Reply({{#count this.Tweet.Replies}}{{/count}})</a>
-      <a class="ml-2" href="#">Like({{#count this.Tweet.Likes}}{{/count}})</a>
+  <div class="col-8">
+    <h1>Like</h1>
+    {{#each tweets}}
+    <div class="card">
+      <div class="card-body">
+        <label>
+          <h4 class="card-title">{{this.User.name}}</h4>
+        </label>
+        <label class="m-auto">
+          <h5>{{moment this.createdAt}}</h5>
+        </label>
+        <p>{{this.description}}</p>
+        <a href="/tweets/{{this.UserId}}/replies">Reply({{#count this.Replies}}{{/count}})</a>
+        <a class="ml-2" href="#">Like({{#count this.Likes}}{{/count}})</a>
+        {{#ifLike user.id this.UserId}}
+        <form action="/like/{{this.id}}?_method=DELETE" method="POST" style="display: inline;">
+          <button type="submit" class="btn btn-danger">Unlike</button>
+        </form>
+        {{else}}
+        <form action="/like/{{this.id}}" method="POST" style="display: inline;">
+          <button type="submit" class="btn btn-primary">Like</button>
+        </form>
+        {{/ifLike}}
+      </div>
     </div>
+    {{/each}}
   </div>
-  {{/each}}
-
-</div>
 </div>

@@ -35,9 +35,10 @@ const tweetController = {
       tweets = tweets.map(tweet => (
         {
           ...tweet.dataValues,
-          isLiked: req.user.LikedTweets.map(d => d.id).includes(tweet.id)
+          isLiked: tweet.Likes.map(l => l.UserId).includes(req.user.id)
         }))
       tweets = tweets.sort((a, b) => b.updatedAt - a.updatedAt)
+
       User.findAll({
         include: [{ model: User, as: 'Followers' }, { model: User, as: 'Followings' }]
       }).then(users => {
