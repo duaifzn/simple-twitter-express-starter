@@ -19,7 +19,7 @@ const userController = {
       ]
     }).then(user => {
 
-      Tweet.findAll({ include: [Like, Reply] }, { where: { UserId: req.params.id } })
+      Tweet.findAll({ include: [Like, Reply], where: { UserId: req.params.id } })
         .then(tweets => {
           //console.log(tweets)
           tweets = tweets.map(tweet => (
@@ -145,12 +145,21 @@ const userController = {
       ]
     }).then(userData => {
 
-      Like.findAll({ include: [Tweet] }, { where: { UserId: req.params.id } })
+      Like.findAll({ include: [Tweet], where: { UserId: req.params.id } })
         .then(likes => {
-          let likeTweet = likes.map(l => l.TweetId)
-          Tweet.findAll({ include: [Reply, Like] }, { where: { id: likeTweet } })
+          let likeTweet = []
+          likes.forEach(l => {
+            likeTweet.push(l.TweetId)
+          });
+          Tweet.findAll({ include: [Reply, Like], where: { id: likeTweet } })
             .then(tweets => {
-              return res.render('likePage', JSON.parse(JSON.stringify({ userData: userData, tweets: tweets })))
+              data = tweets.map(tweet => (
+                {
+                  ...tweet.dataValues,
+                  isLiked: true
+                }
+              ))
+              return res.render('likePage', JSON.parse(JSON.stringify({ userData: userData, tweets: data })))
             })
         })
     })
