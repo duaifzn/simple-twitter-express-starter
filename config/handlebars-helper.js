@@ -13,13 +13,6 @@ module.exports = {
   },
   count: function (data) {
     return data.length
-  },
-  ifFollowed: function (a, b, options) {
-    if (a.map(u => u.id).includes(b)) {
-      return options.fn(this)
-    } else {
-      return options.inverse(this)
-    }
   }
 
 }

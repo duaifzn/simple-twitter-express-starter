@@ -154,7 +154,6 @@ const userController = {
         { model: User, as: 'Followers' }
       ]
     }).then(userData => {
-
       Like.findAll({ include: [Tweet], where: { UserId: req.params.id } })
         .then(likes => {
           let likeTweet = []

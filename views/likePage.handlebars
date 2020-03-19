@@ -9,14 +9,14 @@
       <li>Follower:{{#count userData.Followers}}{{/count}}</li>
       <li>Like:{{#count userData.Likes}}{{/count}}</li>
     </ul>
-    {{#ifFollowed userData.id user.id}}
+    {{#if this.isFollowed}}
     <form action="/followships/{{user.id}}?_method=DELETE" method="POST" style="display: inline">
       <button type="submit" class="btn btn-danger">Unfollow</button></form>
     {{else}}
     <form action="/followships" method="POST" style="display: inline">
       <input type="hidden" name="id" value="{{user.id}}">
       <button type="submit" class="btn btn-primary">Follow</button> </form>
-    {{/ifFollowed}}
+    {{/if}}
   </div>
   <div class="col-8">
     <h1>Like</h1>

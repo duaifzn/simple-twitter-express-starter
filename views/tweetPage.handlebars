@@ -16,14 +16,14 @@
                 <li class="my-3" style="display: inline">
                     <a href="/users/{{userData.id}}/edit" class="btn btn-primary">edit</a>
                 </li>
-                {{!-- {{#if}}
+                {{#if userData.isFollowed}}
                 <form action="/followships/{{user.id}}?_method=DELETE" method="POST" style="display: inline">
                     <button type="submit" class="btn btn-danger">Unfollow</button></form>
                 {{else}}
                 <form action="/followships" method="POST" style="display: inline">
                     <input type="hidden" name="id" value="{{user.id}}">
                     <button type="submit" class="btn btn-primary">Follow</button> </form>
-                {{/if}} --}}
+                {{/if}}
 
             </ul>
         </div>
