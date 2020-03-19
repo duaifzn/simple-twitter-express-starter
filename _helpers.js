@@ -1,3 +1,6 @@
+const db = require('./models')
+const Followship = db.Followship
+
 function ensureAuthenticated(req) {
   return req.isAuthenticated();
 }
@@ -8,5 +11,5 @@ function getUser(req) {
 
 module.exports = {
   ensureAuthenticated,
-  getUser,
+  getUser
 };

@@ -21,11 +21,10 @@ const userController = {
 
       Tweet.findAll({ include: [Like, Reply], where: { UserId: req.params.id } })
         .then(tweets => {
-          //console.log(tweets)
           tweets = tweets.map(tweet => (
             {
               ...tweet.dataValues,
-              isLiked: tweet.Likes.map(l => l.UserId).includes(req.user.id)
+              isLiked: tweet.Likes.map(l => l.UserId).includes(helpers.getUser(req).id)
             }
           ))
           return res.render("tweetPage", JSON.parse(JSON.stringify({ userData: user, tweets: tweets })));
@@ -34,13 +33,13 @@ const userController = {
   },
 
   editUserPage: (req, res) => {
-    if (Number(req.params.id) !== req.user.id) { // 防止進入他人修改頁面偷改資料
+    if (Number(req.params.id) !== helpers.getUser(req).id) { // 防止進入他人修改頁面偷改資料
       req.flash('error_messages', '只能改自己的頁面！')
-      res.redirect(`/users/${req.user.id}/edit`)
+      res.redirect(`/users/${helpers.getUser(req).id}/edit`)
     } else {
       return User.findByPk(req.params.id)
         .then(user => {
-          return res.render('editUserPage', JSON.parse(JSON.stringify({ user: user })))
+          return res.render('editUserPage', JSON.parse(JSON.stringify({ userData: user })))
         })
         .catch((user) => {
           req.flash('error_messages', "this user didn't exist!")
@@ -51,11 +50,14 @@ const userController = {
 
   editUser: (req, res) => {
     if (!req.body.name) {
+
       req.flash('error_messages', "name didn't exist")
       return res.redirect('back')
-    } else if (Number(req.params.id) !== req.user.id) { // 防止用 POSTMAN 發送 PutUser 的 HTTP請求，這樣還是可以改到別人的資料
+    }
+    if (Number(req.params.id) !== helpers.getUser(req).id) { // 防止用 POSTMAN 發送 PutUser 的 HTTP請求，這樣還是可以改到別人的資料
+
       req.flash('error_messages', '只能改自己的頁面！')
-      res.redirect(`/users/${req.user.id}/edit`)
+      res.redirect(`/users/${helpers.getUser(req).id}/edit`)
     }
 
     const { file } = req
@@ -112,11 +114,15 @@ const userController = {
         { model: User, as: "Followings" },
         { model: User, as: "Followers" }]
     }).then(userData => {
+      userData.Followings = userData.Followings.map(user => ({
+        ...user.dataValues,
+        isFollowed: userData.Followings.map(u => u.id).includes(user.id)
+      }))
 
-
+      //console.log(userData.Followings)
       return res.render(
         "followingPage",
-        JSON.parse(JSON.stringify({ userData: userData }))
+        JSON.parse(JSON.stringify({ userData: userData, userFollowings: userData.Followings }))
       );
     });
   },
@@ -129,9 +135,13 @@ const userController = {
         { model: User, as: "Followings" },
         { model: User, as: "Followers" }]
     }).then(userData => {
+      userData.Followers = userData.Followers.map(user => ({
+        ...user.dataValues,
+        isFollowed: userData.Followings.map(u => u.id).includes(user.id)
+      }))
       return res.render(
         "followerPage",
-        JSON.parse(JSON.stringify({ userData: userData }))
+        JSON.parse(JSON.stringify({ userData: userData, userFollowers: userData.Followers }))
       );
     });
   },
@@ -209,13 +219,13 @@ const userController = {
   },
 
   createFollowship: (req, res) => {
-    if (req.params.userId === req.user.id) {
+    if (Number(req.body.id) === helpers.getUser(req).id) {
       req.flash('error_messages', '不能追蹤自己')
       return res.redirect('back')
     } else {
       return Followship.create({
-        followerId: req.user.id,
-        followingId: req.params.userId
+        followerId: helpers.getUser(req).id,
+        followingId: req.body.id
       }).then(followship => {
         return res.redirect('back')
       })
@@ -225,33 +235,11 @@ const userController = {
   deleteFollowship: (req, res) => {
     return Followship.findOne({
       where: {
-        followerId: req.user.id,
-        followingId: req.params.userId
+        followerId: helpers.getUser(req).id,
+        followingId: req.params.followingId
       }
     }).then(followship => {
       followship.destroy().then(followship => {
-        return res.redirect('back')
-      })
-    })
-  },
-
-  createLike: (req, res) => {
-    return Like.create({
-      UserId: req.user.id,
-      TweetId: req.params.tweetId
-    }).then(tweet => {
-      return res.redirect('back')
-    })
-  },
-
-  deleteLike: (req, res) => {
-    return Like.findOne({
-      where: {
-        UserId: req.user.id,
-        TweetId: req.params.tweetId
-      }
-    }).then(like => {
-      like.destroy().then(tweet => {
         return res.redirect('back')
       })
     })
