@@ -3,6 +3,7 @@ const User = db.User
 const Tweet = db.Tweet
 const Like = db.Like
 const Reply = db.Reply
+const helpers = require('../_helpers')
 
 const tweetController = {
   redirectInvalidUrl: (req, res) => { // 防止亂打網址404
@@ -11,6 +12,7 @@ const tweetController = {
   },
 
   createTweet: (req, res) => {
+
     if (!req.body.description) {
       req.flash('error_messages', '要有內容才可以發 tweet!')
       return res.redirect('/tweets')
@@ -21,12 +23,11 @@ const tweetController = {
       return res.redirect('/tweets')
     }
 
-    return Tweet.create({
-      UserId: req.user.id,
+    Tweet.create({
+      UserId: helpers.getUser(req).id,
       description: req.body.description
-
     }).then(tweet => {
-      res.redirect('back')
+      return res.redirect('back')
     })
   },
 
@@ -35,7 +36,7 @@ const tweetController = {
       tweets = tweets.map(tweet => (
         {
           ...tweet.dataValues,
-          isLiked: tweet.Likes.map(l => l.UserId).includes(req.user.id)
+          isLiked: tweet.Likes.map(l => l.UserId).includes(helpers.getUser(req).id)
         }))
       tweets = tweets.sort((a, b) => b.updatedAt - a.updatedAt)
 
@@ -46,11 +47,13 @@ const tweetController = {
           {
             ...user.dataValues,
             PopularNumber: user.Followers.length,
-            introduction: user.dataValues.introduction !== null ? user.dataValues.introduction.substring(0, 50) : '', // 避免無法處理字串
-            isFollowed: req.user.Followings.map(d => d.id).includes(user.id)
+            introduction: user.dataValues.introduction !== null ? user.dataValues.introduction.substring(0, 50) : '',
+            isFollowed: user.Followers.map(u => u.id).includes(helpers.getUser(req).id)
           }
         ))
         users = users.sort((a, b) => b.PopularNumber - a.PopularNumber).slice(1, 11)
+
+
         return res.render('tweetHomePage', JSON.parse(JSON.stringify({ users: users, tweets: tweets })))
       })
     })
@@ -75,7 +78,7 @@ const tweetController = {
       const followingNumber = tweet.User.Followers.length
       const tweetNumber = tweet.User.Tweets.length
       const replyNumber = tweet.Replies.length
-      const isFollowed = req.user.Followings.map(d => d.id).includes(tweet.UserId)
+      const isFollowed = helpers.getUser(req).Followings.map(d => d.id).includes(tweet.UserId)
       return res.render('tweetReplyPage', JSON.parse(JSON.stringify({ tweet: tweet, likeNumber: likeNumber, followerNumber: followerNumber, followingNumber, tweetNumber: tweetNumber, replyNumber: replyNumber, isFollowed: isFollowed })))
     }).catch(users => {
       req.flash('error_messages', '無此貼文！')
@@ -85,11 +88,33 @@ const tweetController = {
 
   createTweetReply: (req, res) => {
     Reply.create({
-      UserId: req.body.userId,
+      UserId: helpers.getUser(req).id,
       TweetId: req.params.tweet_id,
       comment: req.body.text
     }).then(() => {
       return res.redirect('back')
+    })
+  },
+
+  createLike: (req, res) => {
+    return Like.create({
+      UserId: helpers.getUser(req).id,
+      TweetId: req.params.id
+    }).then(tweet => {
+      return res.redirect('back')
+    })
+  },
+
+  deleteLike: (req, res) => {
+    return Like.findOne({
+      where: {
+        UserId: helpers.getUser(req).id,
+        TweetId: req.params.id
+      }
+    }).then(like => {
+      like.destroy().then(() => {
+        return res.redirect('back')
+      })
     })
   }
 

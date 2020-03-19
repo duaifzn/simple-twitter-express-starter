@@ -1,4 +1,5 @@
 const moment = require('moment')
+const helpers = require('../_helpers')
 module.exports = {
   ifRole: function (role, options) {
     if (role === 'admin') {
@@ -14,18 +15,12 @@ module.exports = {
     return data.length
   },
   ifFollowed: function (a, b, options) {
-    if (a === b) {
-      return options.fn(this)
-    } else {
-      return options.inverse(this)
-    }
-  },
-  ifLike: function (a, b, options) {
-    if (a === b) {
+    if (a.map(u => u.id).includes(b)) {
       return options.fn(this)
     } else {
       return options.inverse(this)
     }
   }
+
 }
 

@@ -1,12 +1,13 @@
-<form action="/users/{{user.id}}/edit?_method=PUT" method="POST" enctype="multipart/form-data">
+<form action="/users/{{userData.id}}/edit?_method=PUT" method="POST" enctype="multipart/form-data">
   <div class="form-group">
     <label for="name">Name</label>
-    <input type="text" class="form-control" name="name" placeholder="name" value="{{user.name}}" id="name">
+    <input type="text" class="form-control" name="name" value="{{userData.name}}" id="name">
   </div>
 
   <div class="form-group">
     <label for="introduction">Introduction</label>
-    <textarea type="text" class="form-control" name="introduction" placeholder="introduction" id="introduction">{{user.introduction}}</textarea>
+    <textarea type="text" class="form-control" name="introduction"
+      id="introduction">{{userData.introduction}}</textarea>
   </div>
 
   <div class="form-group">

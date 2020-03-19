@@ -10,10 +10,11 @@
       <li>Like:{{#count userData.Likes}}{{/count}}</li>
     </ul>
     {{#ifFollowed userData.id user.id}}
-    <form action="/following/{{user.id}}?_method=DELETE" method="POST" style="display: inline">
+    <form action="/followships/{{user.id}}?_method=DELETE" method="POST" style="display: inline">
       <button type="submit" class="btn btn-danger">Unfollow</button></form>
     {{else}}
-    <form action="/following/{{user.id}}" method="POST" style="display: inline">
+    <form action="/followships" method="POST" style="display: inline">
+      <input type="hidden" name="id" value="{{user.id}}">
       <button type="submit" class="btn btn-primary">Follow</button> </form>
     {{/ifFollowed}}
   </div>
@@ -32,11 +33,11 @@
         <a href="/tweets/{{this.UserId}}/replies">Reply({{#count this.Replies}}{{/count}})</a>
         <a class="ml-2" href="#">Like({{#count this.Likes}}{{/count}})</a>
         {{#if this.isLiked}}
-        <form action="/like/{{this.id}}?_method=DELETE" method="POST" style="display: inline;">
+        <form action="/tweets/{{this.id}}/unlike?_method=DELETE" method="POST" style="display: inline;">
           <button type="submit" class="btn btn-danger">Unlike</button>
         </form>
         {{else}}
-        <form action="/like/{{this.id}}" method="POST" style="display: inline;">
+        <form action="/tweets/{{this.id}}/like" method="POST" style="display: inline;">
           <button type="submit" class="btn btn-primary">Like</button>
         </form>
         {{/if}}
