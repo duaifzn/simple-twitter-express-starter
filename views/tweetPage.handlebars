@@ -12,10 +12,14 @@
                 <li><a href="/users/{{userData.id}}/followers">Follower {{#count userData.Followers}}{{/count}}</a></li>
                 <li><a href="/users/{{userData.id}}/likes">Like{{#count userData.Likes}}{{/count}}</a> </li>
                 <br>
-
+                {{#ifCond user.id userData.id}}
                 <li class="my-3" style="display: inline">
                     <a href="/users/{{userData.id}}/edit" class="btn btn-primary">edit</a>
                 </li>
+                {{/ifCond}}
+                {{#ifCond user.id userData.id}}
+
+                {{else}}
                 {{#if userData.isFollowed}}
                 <form action="/followships/{{user.id}}?_method=DELETE" method="POST" style="display: inline">
                     <button type="submit" class="btn btn-danger">Unfollow</button></form>
@@ -24,6 +28,7 @@
                     <input type="hidden" name="id" value="{{user.id}}">
                     <button type="submit" class="btn btn-primary">Follow</button> </form>
                 {{/if}}
+                {{/ifCond}}
 
             </ul>
         </div>

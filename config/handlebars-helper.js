@@ -13,7 +13,14 @@ module.exports = {
   },
   count: function (data) {
     return data.length
-  }
+  },
+  ifCond: function (a, b, options) {
+    if (a === b) {
+      return options.fn(this)
+    } else {
+      return options.inverse(this)
+    }
+  },
 
 }
 
