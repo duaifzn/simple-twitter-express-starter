@@ -30,6 +30,9 @@
           {{/ifRole}}
           {{#if user}}
           <a href="/users/{{user.id}}/tweets"><img src="{{user.avatar}}" alt="avatar" width="50px" class="border"></a>
+          <a href="/chat" class="text-light btn btn-danger font-weight-bold mx-1" height="50px">
+            聊天室
+          </a>
           <a href="/logout" class="text-primary font-weight-bold ml-2 mt-1">LogOut</a>
           {{/if}}
         </div>

@@ -1,6 +1,7 @@
 const adminController = require('../controllers/adminController.js')
 const userController = require('../controllers/userController')
 const tweetController = require('../controllers/tweetController')
+const chatController = require('../controllers/chatController')
 
 const helpers = require('../_helpers')
 const multer = require('multer')
@@ -62,9 +63,7 @@ module.exports = (app, passport) => {
   app.get('/logout', userController.logOut)
 
   // 聊天室
-  app.get('/chat', authenticated, (req, res) => {
-    res.render('chat')
-  })
+  app.get('/chat', authenticated, chatController.chatPage)
 
   // 看見某一使用者的推播牆，以及該使用者簡介
   app.get('/users/:id/tweets', authenticated, userController.tweetPage)

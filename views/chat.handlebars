@@ -1,0 +1,187 @@
+{{!-- adapt from: https://blog.csdn.net/lizhipeng123321/article/details/79480835 --}}
+
+<div id="loginbox">
+  <div style="width:260px;margin:200px auto;">
+    請先輸入你在聊天室的暱稱<br>
+    <br>
+    <input id="userName" name="userName" placeholder="請輸入使用者名稱" style="width:180px;" type="text" value="{{userData.name}}">
+    <input onclick="CHAT.usernameSubmit();" style="width:50px;" type="button" value="提交">
+  </div>
+</div>
+
+<div id="chatbox" style="display:none;">
+  <div style="background:#3d3d3d;height: 28px; width: 100%;font-size:12px;">
+    <div style="line-height: 28px;color:#fff;">
+      <span style="text-align:left;margin-left:10px;">Websocket多人聊天室</span> <span
+        style="float:right; margin-right:10px;"><span id="showusername"></span> | <a href="javascript:;"
+          onclick="CHAT.logout()" style="color:#fff;">退出</a></span>
+    </div>
+  </div>
+  <div id="doc">
+    <div id="chat">
+      <div class="message" id="message">
+        <div id="onlinecount"
+          style="background:#EFEFF4; font-size:12px; margin-top:10px; margin-left:10px; color:#666;"></div>
+      </div>
+      <div class="input-box">
+        <div class="input">
+          <input id="content" maxlength="140" name="content" placeholder="請輸入聊天內容，按Ctrl提交" type="text">
+        </div>
+        <div class="action">
+          <button id="mjr_send" onclick="CHAT.submit();" type="button">提交</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+<script>
+  (function () {
+      let d = document
+      let w = window
+      let p = parseInt
+      let dd = d.documentElement
+      let db = d.body
+      let dc = d.compatMode == 'CSS1Compat'
+      let dx = dc ? dd : db
+      let ec = encodeURIComponent
+
+      w.CHAT = {
+        msgObj: d.querySelector('#message'),
+        screenheight: w.innerHeight ? w.innerHeight : dx.clientHeight,
+        userName: null,
+        userId: null,
+        socket: null,
+        // 讓瀏覽器滾動條保持在最低部
+        scrollToBottom: function () {
+          w.scrollTo(0, this.msgObj.clientHeight)
+        },
+        // 退出，本例只是一個簡單的重新整理
+        logout: function () {
+          // this.socket.disconnect();
+          location.reload()
+        },
+        // 提交聊天訊息內容
+        submit: function () {
+          let content = d.querySelector('#content').value
+          if (content != '') {
+            let obj = {
+              userId: this.userId,
+              userName: this.userName,
+              content: content
+            }
+            this.socket.emit('message', obj)
+            d.querySelector('#content').value = ''
+          }
+          return false
+        },
+        genUid: function () {
+          return new Date().getTime() + '' + Math.floor(Math.random() * 899 + 100)
+        },
+        // 更新系統訊息，本例中在使用者加入、退出的時候呼叫
+        updateSysMsg: function (o, action) {
+          // 當前線上使用者列表
+          let onlineUsers = o.onlineUsers
+          // 當前線上人數
+          let onlineCount = o.onlineCount
+          // 新加入使用者的資訊
+          let user = o.user
+
+          // 更新線上人數
+          let userhtml = ''
+          let separator = ''
+          for (key in onlineUsers) {
+            if (onlineUsers.hasOwnProperty(key)) {
+              userhtml += separator + onlineUsers[key]
+              separator = '、'
+            }
+          }
+          d.querySelector('#onlinecount').innerHTML = '當前共有 ' + onlineCount + ' 人線上，線上列表：' + userhtml
+
+          // 新增系統訊息
+          let html = ''
+          html += '<div class="msg-system">'
+          html += user.userName
+          html += (action == 'login') ? ' 加入了聊天室' : ' 退出了聊天室'
+          html += '</div>'
+          let section = d.createElement('section')
+          section.className = 'system J-mjrlinkWrap J-cutMsg'
+          section.innerHTML = html
+          this.msgObj.appendChild(section)
+          this.scrollToBottom()
+        },
+        // 第一個介面使用者提交使用者名稱
+        usernameSubmit: function () {
+          let userName = d.querySelector('#userName').value
+          if (userName !== '') {
+            d.querySelector('#userName').value = ''
+            d.querySelector('#loginbox').style.display = 'none'
+            d.querySelector('#chatbox').style.display = 'block'
+            this.init(userName)
+          }
+          return false
+        },
+        init: function (userName) {
+          /*
+          客戶端根據時間和隨機數生成uid,這樣使得聊天室使用者名稱稱可以重複。
+          實際專案中，如果是需要使用者登入，那麼直接採用使用者的uid來做標識就可以
+          */
+          this.userId = this.genUid()
+          this.userName = userName
+
+          d.querySelector('#showusername').innerHTML = this.userName
+          this.msgObj.style.minHeight = (this.screenheight - db.clientHeight + this.msgObj.clientHeight) + 'px'
+          this.scrollToBottom()
+
+          // 連線websocket後端伺服器
+          this.socket = io.connect('ws://localhost:8080/')
+
+          // 告訴伺服器端有使用者登入
+          this.socket.emit('login', { userId: this.userId, userName: this.userName })
+
+          // 監聽新使用者登入
+          this.socket.on('login', function (o) {
+            CHAT.updateSysMsg(o, 'login')
+          })
+
+          // 監聽使用者退出
+          this.socket.on('logout', function (o) {
+            CHAT.updateSysMsg(o, 'logout')
+          })
+
+          // 監聽訊息傳送
+          this.socket.on('message', function (obj) {
+            let isme = (obj.userId == CHAT.userId)
+            let contentDiv = '<div>' + obj.content + '</div>'
+            let usernameDiv = '<span>' + obj.userName + '</span>'
+
+            let section = d.createElement('section')
+            if (isme) {
+              section.className = 'user'
+              section.innerHTML = contentDiv + usernameDiv
+            } else {
+              section.className = 'service'
+              section.innerHTML = usernameDiv + contentDiv
+            }
+            CHAT.msgObj.appendChild(section)
+            CHAT.scrollToBottom()
+          })
+        }
+      }
+      // 通過“回車”提交使用者名稱
+      d.querySelector('#userName').onkeydown = function (e) {
+        e = e || event
+        if (e.keyCode === 13) {
+          CHAT.usernameSubmit()
+        }
+      }
+      // 通過“回車”提交資訊
+      d.querySelector('#content').onkeydown = function (e) {
+        e = e || event
+        if (e.keyCode === 13) {
+          CHAT.submit()
+        }
+      }
+    })()
+</script>
