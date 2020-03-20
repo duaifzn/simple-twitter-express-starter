@@ -15,7 +15,6 @@ if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
 }
 
-
 app.engine('handlebars', exphbs({ defaultLayout: 'main', helpers: require('./config/handlebars-helper') }))
 app.set('view engine', 'handlebars')
 
@@ -32,15 +31,13 @@ app.use((req, res, next) => {
   next()
 })
 
-
 require('./routes')(app, passport) // 教材U16表示需要放在 app.js 的最後一行，因為按照由上而下的順序，當主程式把 app (也就是 express() ) 傳入路由時，程式中間做的樣板引擎設定、伺服器設定，也要一併透過 app 變數傳進去？
 // use helpers.getUser(req) to replace req.user
 // use helpers.ensureAuthenticated(req) to replace req.isAuthenticated()
 
-
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}!`)
-  console.log('Enter http://localhost:3000/ if you run this app on your local computer.')
+  console.log(`Enter http://localhost:${port}/ if you run this app on your local computer.`)
 })
 
 module.exports = app
