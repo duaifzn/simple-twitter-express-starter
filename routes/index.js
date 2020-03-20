@@ -5,24 +5,23 @@ const tweetController = require('../controllers/tweetController')
 const helpers = require('../_helpers')
 const multer = require('multer')
 const upload = multer({ dest: 'temp/' })
-const expressWs = require('express-ws')
-
+// const expressWs = require('express-ws')
 
 module.exports = (app, passport) => {
-  //web socket
-  expressWs(app)
-  app.ws('/msg', function (ws, req) {
-    //console.log(ws)
-    ws.on('open', function (msg) {
-      console.log('open!!');
-    });
-    ws.on('message', function (msg) {
-      ws.send("msg");
-    });
-    ws.on('close', function (msg) {
+  // web socket
+  // expressWs(app)
+  // app.ws('/msg', function (ws, req) {
+  //   // console.log(ws)
+  //   ws.on('open', function (msg) {
+  //     console.log('open!!')
+  //   })
+  //   ws.on('message', function (msg) {
+  //     ws.send('msg')
+  //   })
+  //   ws.on('close', function (msg) {
 
-    });
-  })
+  //   })
+  // })
   //
   const unAuthenticated = (req, res, next) => {
     if (!req.isAuthenticated()) {
@@ -61,6 +60,11 @@ module.exports = (app, passport) => {
   app.post('/signup', userController.signUp)
   // 登出
   app.get('/logout', userController.logOut)
+
+  // 聊天室
+  app.get('/chat', authenticated, (req, res) => {
+    res.render('chat')
+  })
 
   // 看見某一使用者的推播牆，以及該使用者簡介
   app.get('/users/:id/tweets', authenticated, userController.tweetPage)
@@ -105,8 +109,6 @@ module.exports = (app, passport) => {
   app.delete('/admin/tweets/:id', authenticatedAdmin, adminController.deleteTweet)
   // 看見站內所有的使用者
   app.get('/admin/users', authenticatedAdmin, adminController.adminUserPage)
-
-
 
   app.all('*', tweetController.redirectInvalidUrl) // 避免404當掉
 }
