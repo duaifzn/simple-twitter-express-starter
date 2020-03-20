@@ -6,23 +6,29 @@
                 <li class="my-2"><strong>{{userData.name}}</strong></li>
                 <li>{{userData.introduction}}</li>
                 <br>
-                <li><a href="/users/{{userData.id}}/tweets">Tweets {{#count userData.Tweets}}{{/count}}</a></li>
+                <li><a href="/users/{{userData.id}}/tweets">Tweets {{#count tweets}}{{/count}}</a></li>
                 <li><a href="/users/{{userData.id}}/followings">Following {{#count userData.Followings}}{{/count}}</a>
                 </li>
                 <li><a href="/users/{{userData.id}}/followers">Follower {{#count userData.Followers}}{{/count}}</a></li>
                 <li><a href="/users/{{userData.id}}/likes">Like{{#count userData.Likes}}{{/count}}</a> </li>
                 <br>
-
+                {{#ifCond user.id userData.id}}
                 <li class="my-3" style="display: inline">
                     <a href="/users/{{userData.id}}/edit" class="btn btn-primary">edit</a>
                 </li>
-                {{#ifFollowed user.id userData.id}}
-                <form action="/following/{{userData.id}}?_method=DELETE" method="POST" style="display: inline">
+                {{/ifCond}}
+                {{#ifCond user.id userData.id}}
+
+                {{else}}
+                {{#if userData.isFollowed}}
+                <form action="/followships/{{user.id}}?_method=DELETE" method="POST" style="display: inline">
                     <button type="submit" class="btn btn-danger">Unfollow</button></form>
                 {{else}}
-                <form action="/following/{{userData.id}}" method="POST" style="display: inline">
-                    <button type="submit" class="btn btn-primary">Follow</button></form>
-                {{/ifFollowed}}
+                <form action="/followships" method="POST" style="display: inline">
+                    <input type="hidden" name="id" value="{{user.id}}">
+                    <button type="submit" class="btn btn-primary">Follow</button> </form>
+                {{/if}}
+                {{/ifCond}}
 
             </ul>
         </div>
@@ -43,11 +49,12 @@
                             <a class="ml-2" href="#">Like({{this.Likes.length}})</a>
                             <div class="ml-auto">
                                 {{#if this.isLiked}}
-                                <form action="/like/{{this.id}}?_method=DELETE" method="POST" style="display: inline;">
+                                <form action="/tweets/{{this.id}}/unlike?_method=DELETE" method="POST"
+                                    style="display: inline;">
                                     <button type="submit" class="btn btn-danger">Unlike</button>
                                 </form>
                                 {{else}}
-                                <form action="/like/{{this.id}}" method="POST" style="display: inline;">
+                                <form action="/tweets/{{this.id}}/like" method="POST" style="display: inline;">
                                     <button type="submit" class="btn btn-primary">Like</button>
                                 </form>
                                 {{/if}}

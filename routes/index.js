@@ -5,8 +5,25 @@ const tweetController = require('../controllers/tweetController')
 const helpers = require('../_helpers')
 const multer = require('multer')
 const upload = multer({ dest: 'temp/' })
+const expressWs = require('express-ws')
+
 
 module.exports = (app, passport) => {
+  //web socket
+  expressWs(app)
+  app.ws('/msg', function (ws, req) {
+    //console.log(ws)
+    ws.on('open', function (msg) {
+      console.log('open!!');
+    });
+    ws.on('message', function (msg) {
+      ws.send("msg");
+    });
+    ws.on('close', function (msg) {
+
+    });
+  })
+  //
   const unAuthenticated = (req, res, next) => {
     if (!req.isAuthenticated()) {
       return next()
@@ -77,9 +94,9 @@ module.exports = (app, passport) => {
   app.delete('/followships/:followingId', authenticated, userController.deleteFollowship)
 
   // 新增一筆 like 記錄
-  app.post('/like/:tweetId', authenticated, userController.createLike)
+  app.post('/tweets/:id/like', authenticated, tweetController.createLike)
   // 刪除一筆 like 記錄
-  app.delete('/like/:tweetId', authenticated, userController.deleteLike)
+  app.delete('/tweets/:id/unlike', authenticated, tweetController.deleteLike)
 
   app.get('/admin', authenticatedAdmin, (req, res) => res.redirect('/admin/tweets'))
   // 看見站內所有的推播 (設為後台首頁)
@@ -88,6 +105,8 @@ module.exports = (app, passport) => {
   app.delete('/admin/tweets/:id', authenticatedAdmin, adminController.deleteTweet)
   // 看見站內所有的使用者
   app.get('/admin/users', authenticatedAdmin, adminController.adminUserPage)
+
+
 
   app.all('*', tweetController.redirectInvalidUrl) // 避免404當掉
 }

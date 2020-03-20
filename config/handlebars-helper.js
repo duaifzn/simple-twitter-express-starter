@@ -1,4 +1,5 @@
 const moment = require('moment')
+const helpers = require('../_helpers')
 module.exports = {
   ifRole: function (role, options) {
     if (role === 'admin') {
@@ -13,12 +14,13 @@ module.exports = {
   count: function (data) {
     return data.length
   },
-  ifFollowed: function (a, b, options) {
+  ifCond: function (a, b, options) {
     if (a === b) {
       return options.fn(this)
     } else {
       return options.inverse(this)
     }
-  }
+  },
+
 }
 
