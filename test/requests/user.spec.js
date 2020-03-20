@@ -125,14 +125,14 @@ describe('# user request', () => {
     describe('successfully update', () => {
       it('will change users intro', (done) => {
         request(app)
-          .post('/users/1/edit')
+          .put('/users/1/edit')
           .send('name=abc')
           .set('Accept', 'application/json')
           .expect(302)
           .end(function (err, res) {
             if (err) return done(err);
             db.User.findByPk(1).then(user => {
-              //console.log(user)
+              console.log(user)
               user.name.should.equal('abc');
               return done();
             })
