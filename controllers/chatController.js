@@ -6,7 +6,7 @@ const chatController = {
   chatPage: (req, res) => {
     User.findByPk(helpers.getUser(req).id)
       .then(user => {
-        res.render('chat', JSON.parse(JSON.stringify({ userData: user })))
+        res.render('chat/chat', JSON.parse(JSON.stringify({ userData: user })))
       })
   }
 }

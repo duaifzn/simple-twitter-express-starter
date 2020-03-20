@@ -1,0 +1,38 @@
+{{!-- adapt from: https://blog.csdn.net/lizhipeng123321/article/details/79480835 --}}
+
+<div id="login-box" class="mt-5">
+  <div style="width:260px;margin:200px auto;">
+    {{userData.name}}，請選擇你要進入的聊天室：<br>
+    <br>
+    <input id="user-name" name="user-name" placeholder="請輸入使用者名稱" style="width:180px;" type="text" value="{{userData.name}}">
+    <input
+      onclick="CHAT.usernameSubmit();" style="width:50px;" type="button" value="提交">
+  </div>
+</div>
+
+<div id="chat-box" style="display:none;" class="mt-5">
+  <div style="background:#3d3d3d;height: 28px; width: 100%;font-size:12px;">
+    <div style="line-height: 28px;color:#fff;">
+      <span style="text-align:left;margin-left:10px;">Websocket多人聊天室</span> <span style="float:right; margin-right:10px;"><span id="show-user-name"></span></span>
+    </div>
+  </div>
+  <div id="doc">
+    <div id="chat">
+      <div class="message" id="message">
+        <div id="online-count"
+          style="background:#EFEFF4; font-size:12px; margin-top:10px; margin-left:10px; color:#666;"></div>
+      </div>
+      <div class="input-box">
+        <div class="input">
+          <input id="content" maxlength="140" name="content" placeholder="請輸入聊天內容" type="text">
+        </div>
+        <div class="action">
+          <button id="mjr_send" onclick="CHAT.submit();" type="button">提交</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+<script src="./groupChat.js"></script>
