@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "set NODE_ENV=development && node app.js",
-    "dev": "set NODE_ENV=development && nodemon app.js",
+    "start": "concurrently \"set NODE_ENV=development && node app.js\"  \" node socket.js \"",
+    "dev": "concurrently \"set NODE_ENV=development && nodemon app.js\"  \" nodemon socket.js \"",
     "test": "set \"NODE_ENV=test\" && mocha test/*/*.js --exit --recursive --timeout 10000"
   },
   "author": "",
@@ -34,6 +34,7 @@
     "sequelize-cli": "^5.5.1",
     "sinon": "^7.2.3",
     "sinon-chai": "^3.3.0",
+    "socket.io": "^2.3.0",
     "ws": "^7.2.3"
   },
   "devDependencies": {
