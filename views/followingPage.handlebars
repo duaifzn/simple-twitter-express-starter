@@ -16,7 +16,7 @@
   <div class="col-8">
     <h1>Following</h1>
     <div class="row">
-      {{#each userData.Followings}}
+      {{#each userFollowings}}
       <div class="col-6">
         <div class="card mb-3">
           <div class="row no-gutters">
@@ -27,13 +27,14 @@
               <div class="card-body">
                 <h5 class="card-title"><a href="/users/{{this.id}}/tweets">{{this.name}}</a></h5>
                 <p class="card-text">{{this.introduction}}</p>
-                {{#ifFollowed user.id this.id}}
-                <form action="/following/{{this.id}}?_method=DELETE" method="POST" style="display: inline">
+                {{#if this.isFollowed}}
+                <form action="/followships/{{this.id}}?_method=DELETE" method="POST" style="display: inline">
                   <button type="submit" class="btn btn-danger">Unfollow</button></form>
                 {{else}}
-                <form action="/following/{{this.id}}" method="POST" style="display: inline">
+                <form action="/followships" method="POST" style="display: inline">
+                  <input type="hidden" name="id" value="{{this.id}}">
                   <button type="submit" class="btn btn-primary">Follow</button> </form>
-                {{/ifFollowed}}
+                {{/if}}
               </div>
             </div>
           </div>
