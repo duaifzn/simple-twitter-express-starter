@@ -62,5 +62,5 @@ io.on('connection', (socket) => {
 
 server.listen(port, () => {
   console.log(`Socket server is listening on port ${port}`)
-  console.log(`Enter http://localhost:${port}/ if you run on your local computer.`)
+  console.log(`Enter http://localhost:${port}/ if you run it on your local computer.`)
 })

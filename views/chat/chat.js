@@ -1,36 +1,39 @@
 (function () {
-console.log('test')
-
   // 瀏覽器相容
   const compatMode = document.compatMode === 'CSS1Compat'
   const compactDoc = compatMode ? document.documentElement : document.body
 
   window.CHAT = {
-    msgObj: document.querySelector('#message'),
+    msgObj: document.querySelector('#messages'),
     screenHeight: window.innerHeight ? window.innerHeight : compactDoc.clientHeight,
     userName: null,
     userId: null,
     socket: null,
+
     // 讓瀏覽器滾動條保持在最低部
     scrollToBottom: function () {
-      window.scrollTo(0, this.msgObj.clientHeight)
+      this.msgObj.scrollTo(0, this.msgObj.scrollHeight)
     },
+
     submit: function () {
-      const content = document.querySelector('#content').value
-      if (content !== '') {
+      const content = document.querySelector('#content')
+      if (content.value !== '') {
         const obj = {
           userId: this.userId,
           userName: this.userName,
-          content: content
+          content: content.value
         }
         this.socket.emit('message', obj)
-        document.querySelector('#content').value = ''
+        content.value = ''
+        content.placeholder = '請按Enter送出聊天內容'
+      } else {
+        content.placeholder = '請輸入訊息！'
       }
-      return false
     },
-    genUid: function () {
-      return new Date().getTime() + '' + Math.floor(Math.random() * 899 + 100)
+    getUserId: function () {
+      return document.querySelector('#user-id').value
     },
+
     // 更新系統訊息，本例中在使用者加入、退出的時候呼叫
     updateSysMsg: function (obj, action) {
       // 當前線上使用者列表
@@ -57,14 +60,14 @@ console.log('test')
       HTML += user.userName
       HTML += (action === 'login') ? ' 加入了聊天室' : ' 退出了聊天室'
       HTML += '</div>'
-      const section = document.createElement('section')
-      section.className = 'system J-mjrlinkWrap J-cutMsg'
-      section.innerHTML = HTML
-      this.msgObj.appendChild(section)
+      const blockquote = document.createElement('blockquote')
+      blockquote.className = 'system-message'
+      blockquote.innerHTML = HTML
+      this.msgObj.appendChild(blockquote)
       this.scrollToBottom()
     },
     // 第一個介面使用者提交使用者名稱
-    usernameSubmit: function () {
+    submitUserName: function () {
       const userName = document.querySelector('#user-name').value
       if (userName !== '') {
         document.querySelector('#user-name').value = ''
@@ -74,17 +77,11 @@ console.log('test')
       }
       return false
     },
+
     init: function (userName) {
       const CHAT = window.CHAT
-      /*
-      客戶端根據時間和隨機數生成uid,這樣使得聊天室使用者名稱稱可以重複。
-      實際專案中，如果是需要使用者登入，那麼直接採用使用者的uid來做標識就可以
-      */
-      this.userId = this.genUid()
+      this.userId = this.getUserId()
       this.userName = userName
-
-      document.querySelector('#show-user-name').innerHTML = this.userName
-      this.msgObj.style.minHeight = (this.screenHeight - document.body.clientHeight + this.msgObj.clientHeight) + 'px'
       this.scrollToBottom()
 
       // 連線websocket後端伺服器
@@ -105,34 +102,29 @@ console.log('test')
 
       // 監聽訊息傳送
       this.socket.on('message', function (obj) {
-        const contentDiv = '<div>' + obj.content + '</div>'
-        const usernameDiv = '<span>' + obj.userName + '</span>'
+        const messageSpan = `${obj.userName}：${obj.content}`
 
-        const section = document.createElement('section')
+        const blockquote = document.createElement('blockquote')
         if (obj.userId === CHAT.userId) {
-          section.className = 'user'
-          section.innerHTML = contentDiv + usernameDiv
+          blockquote.className = 'user'
         } else {
-          section.className = 'service'
-          section.innerHTML = usernameDiv + contentDiv
+          blockquote.className = 'other'
         }
-        CHAT.msgObj.appendChild(section)
+        blockquote.innerHTML = messageSpan
+        CHAT.msgObj.appendChild(blockquote)
         CHAT.scrollToBottom()
       })
     }
   }
-  // 通過“Enter”提交使用者名稱
-  document.querySelector('#user-name').onkeydown = (event) => {
-    const CHAT = window.CHAT
-    if (event.keyCode === 13) {
-      CHAT.usernameSubmit()
-    }
-  }
-  // 通過“Enter”提交資訊
+  // 通過“Enter”提交訊息
   document.querySelector('#content').onkeydown = (event) => {
     const CHAT = window.CHAT
     if (event.keyCode === 13) {
       CHAT.submit()
     }
   }
+
+  // window.onbeforeunload = () => {
+  //   return 'Are you sure you want to leave?'
+  // }
 })()

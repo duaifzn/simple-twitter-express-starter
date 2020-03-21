@@ -1,38 +1,34 @@
 {{!-- adapt from: https://blog.csdn.net/lizhipeng123321/article/details/79480835 --}}
 
-<div id="login-box" class="mt-5">
-  <div style="width:260px;margin:200px auto;">
-    {{userData.name}}，請選擇你要進入的聊天室：<br>
-    <br>
-    <input id="user-name" name="user-name" placeholder="請輸入使用者名稱" style="width:180px;" type="text" value="{{userData.name}}">
-    <input
-      onclick="CHAT.usernameSubmit();" style="width:50px;" type="button" value="提交">
-  </div>
+<div id="login-box" class="pt-5 mx-auto" style="width: 350px;">
+  <h5 class="pt-4"> {{userData.name}}，請選擇你要進入的聊天室：</h5>
+  <input id="user-name" class="d-none" name="user-name" placeholder="使用者名稱" type="text" value="{{userData.name}}">
+  <input id="user-id" class="d-none" name="user-id" placeholder="使用者id" type="text" value="{{userData.id}}">
+  <div class="selections">
+    <input onclick="CHAT.submitUserName()" type="button" value="群聊" class="btn btn-primary">
+    <input onclick="" type="button" value="私訊" class="btn btn-secondary">
+  </div>  
 </div>
 
-<div id="chat-box" style="display:none;" class="mt-5">
-  <div style="background:#3d3d3d;height: 28px; width: 100%;font-size:12px;">
-    <div style="line-height: 28px;color:#fff;">
-      <span style="text-align:left;margin-left:10px;">Websocket多人聊天室</span> <span style="float:right; margin-right:10px;"><span id="show-user-name"></span></span>
+<div id="chat-box" style="display:none; " class="container mb-2 pt-3 border">
+
+  <header class="user-title navbar-fixed-top pt-5 pt-md-1">
+    <h4 id="show-user-name" class="mx-auto" style="min-width: 350px;">Websocket多人聊天室 使用者：{{userData.name}}</h4>
+    <h5 id="online-count" class="mx-auto" style="min-width: 350px;">當前共有 10人在線上，
+      線上列表：</h5>
+  </header>
+
+  <section class="messages" id="messages" style="height: 60vh; overflow: auto; overflow-x:hidden;">
+    {{!-- messages --}}
+  </section>
+
+  <footer class="input-box navbar-fixed-bottom">
+    <div class="input">
+      <input type="text" id="content" class="form-control" name="content" placeholder="請按Enter送出聊天內容">
     </div>
-  </div>
-  <div id="doc">
-    <div id="chat">
-      <div class="message" id="message">
-        <div id="online-count"
-          style="background:#EFEFF4; font-size:12px; margin-top:10px; margin-left:10px; color:#666;"></div>
-      </div>
-      <div class="input-box">
-        <div class="input">
-          <input id="content" maxlength="140" name="content" placeholder="請輸入聊天內容" type="text">
-        </div>
-        <div class="action">
-          <button id="mjr_send" onclick="CHAT.submit();" type="button">提交</button>
-        </div>
-      </div>
-    </div>
-  </div>
+  </footer>
+  
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
-<script src="./groupChat.js"></script>
+<script src="./chat.js"></script>
