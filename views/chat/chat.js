@@ -66,7 +66,7 @@
       this.msgObj.appendChild(blockquote)
       this.scrollToBottom()
     },
-    // 第一個介面使用者提交使用者名稱
+    // 從聊天選項切換到聊天畫面
     submitUserName: function () {
       const userName = document.querySelector('#user-name').value
       if (userName !== '') {
@@ -80,6 +80,9 @@
 
     init: function (userName) {
       const CHAT = window.CHAT
+      const receiverId = document.querySelector('#private-message').value
+      console.log('receiverId', receiverId)
+
       this.userId = this.getUserId()
       this.userName = userName
       this.scrollToBottom()
@@ -103,6 +106,7 @@
       // 監聽訊息傳送
       this.socket.on('message', function (obj) {
         const messageSpan = `${obj.userName}：${obj.content}`
+        const dateSpan = `<br/>(${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()} ${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()})`
 
         const blockquote = document.createElement('blockquote')
         if (obj.userId === CHAT.userId) {
@@ -110,7 +114,7 @@
         } else {
           blockquote.className = 'other'
         }
-        blockquote.innerHTML = messageSpan
+        blockquote.innerHTML = messageSpan + dateSpan
         CHAT.msgObj.appendChild(blockquote)
         CHAT.scrollToBottom()
       })
@@ -123,8 +127,20 @@
       CHAT.submit()
     }
   }
+  document.querySelector('#private-message').onkeydown = (event) => {
+    const CHAT = window.CHAT
+    if (event.keyCode === 13 && document.querySelector('#private-message').value !== '') {
+      CHAT.submitUserName()
+    }
+  }
 
-  // window.onbeforeunload = () => {
-  //   return 'Are you sure you want to leave?'
-  // }
+  window.onbeforeunload = () => {
+    return 'Are you sure you want to leave?'
+  }
+
+  document.querySelector('#group-message').addEventListener('click', () => {
+    console.log('test')
+    document.querySelector('#private-message').value = ''
+    console.log('test2', document.querySelector('#private-message').value)
+  })
 })()
