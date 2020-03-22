@@ -5,10 +5,17 @@
         <textarea class="form-control border-info" id="description" name="description" rows="4"
           placeholder="What's on your mind ?"></textarea>
       </div>
+
+    <div>
+      <span class="badge badge-dark">Check-in Here</span> 
+      <input  id="CheckIn" name="CheckIn" placeholder="Where are you now?">
+    </div>
+
       <div class="button d-flex justify-content-end">
         <input type="hidden" id="userId" name="userId" value="{{user.id}}">
         <button type="submit" class="btn btn-info text-dark font-weight-bold">Tweet</button>
       </div>
+   
     </form>
     <div class="tweets pt-1">
       {{#each tweets}}
@@ -27,7 +34,9 @@
             {{!-- 按下與表示like數量應該要在同一個地方！ --}}
 
             <a class="ml-2 text-danger">Like({{#count this.Likes}}{{/count}})</a>
-
+            
+            <a class="ml-2 text-info" href="https://maps.google.com/?q={{this.CheckIn}}" target="_blank" >@ {{this.CheckIn}} </a>
+            
             {{#if this.isLiked}}
             <form action="/tweets/{{this.id}}/unlike?_method=DELETE" method="POST" style="display: inline;"
               class="ml-2">

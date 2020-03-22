@@ -25,7 +25,8 @@ const tweetController = {
 
     Tweet.create({
       UserId: helpers.getUser(req).id,
-      description: req.body.description
+      description: req.body.description,
+      CheckIn: req.body.CheckIn
     }).then(tweet => {
       return res.redirect('back')
     })
