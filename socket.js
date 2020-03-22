@@ -6,7 +6,7 @@ const server = require('http').Server(app)
 const io = require('socket.io')(server)
 
 app.get('/', (req, res) => {
-  res.send('<h1>Welcome Realtime Server</h1>')
+  res.send('<h1>Welcome to Realtime Websocket Server</h1>')
 })
 
 // 線上使用者名單
