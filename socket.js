@@ -55,7 +55,7 @@ io.on('connection', (socket) => {
   // 監聽使用者釋出聊天內容
   socket.on('message', (obj) => {
     // 向所有客戶端廣播發布的訊息
-    io.emit('message', obj)
+    io.sockets.emit('message', obj)
     console.log(obj.userName + '：' + obj.content)
   })
 })
