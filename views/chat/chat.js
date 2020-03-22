@@ -1,3 +1,5 @@
+// adapt from: https://blog.csdn.net/lizhipeng123321/article/details/79480835
+
 (function () {
   // 瀏覽器相容
   const compatMode = document.compatMode === 'CSS1Compat'
@@ -56,7 +58,7 @@
 
       // 新增系統訊息
       let HTML = ''
-      HTML += '<div class="msg-system">'
+      HTML += '<div class="msg-system d-flex justify-content-center">'
       HTML += user.userName
       HTML += (action === 'login') ? ' 加入了聊天室' : ' 退出了聊天室'
       HTML += '</div>'
@@ -71,8 +73,6 @@
       const userName = document.querySelector('#user-name').value
       if (userName !== '') {
         document.querySelector('#user-name').value = ''
-        document.querySelector('#login-box').style.display = 'none'
-        document.querySelector('#chat-box').style.display = 'block'
         this.init(userName)
       }
       return false
@@ -80,11 +80,11 @@
 
     init: function (userName) {
       const CHAT = window.CHAT
-      const receiverId = document.querySelector('#private-message').value
+      const receiverId = document.querySelector('#receiver').value
       console.log('receiverId', receiverId)
 
       this.userId = this.getUserId()
-      this.userName = userName
+      this.userName = userName + `"${this.userId}"`
       this.scrollToBottom()
 
       // 連線websocket後端伺服器
@@ -105,14 +105,29 @@
 
       // 監聽訊息傳送
       this.socket.on('message', function (obj) {
-        const messageSpan = `${obj.userName}：${obj.content}`
-        const dateSpan = `<br/>(${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()} ${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()})`
+        function formatDate (date) {
+          const y = date.getFullYear()
+          let m = date.getMonth() + 1
+          m = m < 10 ? ('0' + m) : m
+          let d = date.getDate()
+          d = d < 10 ? ('0' + d) : d
+          let hour = date.getHours()
+          hour = hour < 10 ? ('0' + hour) : hour
+          let minute = date.getMinutes()
+          minute = minute < 10 ? ('0' + minute) : minute
+          let second = date.getSeconds()
+          second = second < 10 ? ('0' + second) : second
+          return y + '-' + m + '-' + d + ' ' + hour + ':' + minute + ':' + second
+        }
+
+        const messageSpan = `<span>${obj.userName}：<br/>${obj.content}<br/>`
+        const dateSpan = `(${formatDate(new Date())})</span>`
 
         const blockquote = document.createElement('blockquote')
         if (obj.userId === CHAT.userId) {
-          blockquote.className = 'user'
+          blockquote.className = 'user d-flex justify-content-end'
         } else {
-          blockquote.className = 'other'
+          blockquote.className = 'other d-flex justify-content-start'
         }
         blockquote.innerHTML = messageSpan + dateSpan
         CHAT.msgObj.appendChild(blockquote)
@@ -127,20 +142,21 @@
       CHAT.submit()
     }
   }
-  document.querySelector('#private-message').onkeydown = (event) => {
+  document.querySelector('#receiver').onkeydown = (event) => {
     const CHAT = window.CHAT
-    if (event.keyCode === 13 && document.querySelector('#private-message').value !== '') {
+    if (event.keyCode === 13 && document.querySelector('#receiver').value !== '') {
       CHAT.submitUserName()
     }
   }
 
+  // 自動登入聊天室
+  if (document.querySelector('#user-name').value) {
+    const CHAT = window.CHAT
+    CHAT.submitUserName()
+  }
+
+  // 避免意離開聊天室
   window.onbeforeunload = () => {
     return 'Are you sure you want to leave?'
   }
-
-  document.querySelector('#group-message').addEventListener('click', () => {
-    console.log('test')
-    document.querySelector('#private-message').value = ''
-    console.log('test2', document.querySelector('#private-message').value)
-  })
 })()
