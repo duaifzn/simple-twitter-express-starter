@@ -1,12 +1,13 @@
 {{!-- adapt from: https://blog.csdn.net/lizhipeng123321/article/details/79480835 --}}
 
 <div id="login-box" class="pt-5 mx-auto" style="width: 350px;">
-  <h5 class="pt-4"> {{userData.name}}，請選擇你要進入的聊天室：</h5>
+  <h5 class="pt-4"> {{userData.name}}，你的id為"{{userData.id}}"，</h5>
+  <h5>請選擇你要進入的聊天室：</h5>
   <input id="user-name" class="d-none" name="user-name" placeholder="使用者名稱" type="text" value="{{userData.name}}">
   <input id="user-id" class="d-none" name="user-id" placeholder="使用者id" type="text" value="{{userData.id}}">
   <div class="selections">
-    <input onclick="CHAT.submitUserName()" type="button" value="群聊" class="btn btn-primary">
-    <input onclick="" type="button" value="私訊" class="btn btn-secondary">
+    <input type="text" id="private-message" placeholder="私訊，請輸入對方id後按Enter送出" class="form-control m-1" style="width:  275px;" disabled>
+    <input onclick="CHAT.submitUserName()" type="button" id="group-message" value="群聊，所有上線使用者都能留言" class="btn btn-primary m-1" style="width:  275px;">
   </div>  
 </div>
 
