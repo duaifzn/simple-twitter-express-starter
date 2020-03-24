@@ -15,7 +15,7 @@ const onlineUsers = {}
 let onlineCount = 0
 
 io.on('connection', (socket) => {
-  console.log('Connected')
+  console.log('Websocket connected')
 
   // 監聽新使用者加入
   socket.on('login', (obj) => {
@@ -53,10 +53,32 @@ io.on('connection', (socket) => {
   })
 
   // 監聽使用者釋出聊天內容
-  socket.on('message', (obj) => {
+  socket.on('publicMessage', (obj) => {
     // 向所有客戶端廣播發布的訊息
-    io.sockets.emit('message', obj)
-    console.log(obj.userName + '：' + obj.content)
+    io.sockets.emit('publicMessage', obj)
+    console.log(obj.userName + '：' + obj.content + ', public')
+  })
+  // 建立對個人私訊用的房間
+  socket.on('personalRoom', (obj) => {
+    socket.join(obj.userId)
+  })
+  // 向指定客戶端廣播發布的訊息
+  socket.on('privateMessage', (obj) => {
+    if (obj.userId !== obj.receiverId) {
+      socket.emit('privateMessage', obj) // 避免私訊給自己時，重複傳給發訊者自己
+    }
+    console.log(Object.keys(onlineUsers), 'test')
+    console.log(Object.keys(onlineUsers).indexOf(obj.receiverId), 'test')
+    if (Object.keys(onlineUsers).indexOf(obj.receiverId) >= 0) { // 對象在線上
+      io.to(obj.receiverId).emit('privateMessage', obj) // 傳給指定id的對象
+    } else {
+      socket.emit('privateMessage', { // 對象不在線上
+        userName: '系統提示',
+        content: '此id不存在，或對方已離線！',
+        receiverId: obj.userId
+      })
+    }
+    console.log(obj.userName + '：' + obj.content + ', private, to: ' + obj.receiverId)
   })
 })
 

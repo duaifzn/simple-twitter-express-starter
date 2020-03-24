@@ -7,7 +7,7 @@
 
 <div id="chat-box" class="container mb-2 pt-3 border">
 
-  <header class="user-title pt-5 pt-md-1">
+  <header class="user-title pt-5 pt-md-1 text-center">
     <h4 id="title">Websocket聊天室</h4>
     <h5 id="show-user-info"> 使用者：{{userData.name}}，你的id為"{{userData.id}}"，</h5>
     <h5 id="online-count" >當前共有 0人在線上，線上列表：</h5>
@@ -18,9 +18,10 @@
   </section>
 
   <footer class="input-box">
-    <div class="input row">
-      <input type="text" id="receiver" placeholder="請按Enter送出要私訊的id" class="col-3" disabled style="height: 5vh;">
-      <input type="text" id="content" class="col-9" name="content" placeholder="請按Enter送出聊天內容" style="height: 5vh;">
+    <div class="input row border border-dark">
+      <span class="bg-dark col-2 col-lg-1 my-auto p-0 pt-1 text-center text-white" style="height: 4vh;">私訊：</span>
+      <input type="number" id="receiver" placeholder="id" class="col-1 p-0 text-center bg-light" min="1">
+      <input type="text" id="content" class="col-9 col-lg-10" name="content" placeholder="id空白為群聊，按Enter送出文字" autofocus>
     </div>
   </footer>
   
