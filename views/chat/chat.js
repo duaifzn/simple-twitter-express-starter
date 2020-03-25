@@ -134,22 +134,26 @@ window.CHAT = {
       return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second
     }
 
-    // 自動轉換內容中的網址為超連結，修改自：https://codepen.io/zuhairtaha/pen/NmbGKJ?editors=1010
-    function URLify (string) {
-      const urls = string.match(/(((wss?|chrome|ssh|git|telnet|ftp|https?):\/\/)[-\w@:%_+.~#?,&//=]+)/g)
-      if (urls) {
-        urls.forEach(function (url) {
-          string = string.replace(url, '<a target="_blank" href="' + url + '">' + url + '</a>')
-        })
-      }
-      return string.replace('(', '<br/>(')
+    // 自動轉換內容中的超連結，修改自：https://ourcodeworld.com/articles/read/97/how-to-convert-url-websites-email-from-a-string-to-html-a-tags-with-javascript
+    function Linkify (inputText) {
+      var replacedText, replacePattern1, replacePattern2, replacePattern3
+
+      // 常見開頭，即統一資源識別碼（Uniform Resource Identifier，縮寫：URI）連結
+      replacePattern1 = /(\b(wss?|chrome|ssh|git|telnet|ftp|https?):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/gim
+      replacedText = inputText.replace(replacePattern1, '<a href="$1" target="_blank">$1</a>')
+
+      // 電子郵件連結
+      replacePattern3 = /(([a-zA-Z0-9\-_.])+@[a-zA-Z_]+?(\.[a-zA-Z]{2,6})+)/gim
+      replacedText = replacedText.replace(replacePattern3, '<a href="mailto:$1">$1</a>')
+
+      return replacedText.replace('(', '<br/>(')
     }
 
     // 渲染對話相關內容
     function renderMessage (obj) {
       // 單條訊息的組成元素
       const receiverSpan = `<span>${obj.userName}"${obj.userId}"：`
-      const messageSpan = URLify(`<br/>${obj.content}<br/>`)
+      const messageSpan = Linkify(`<br/>${obj.content}<br/>`)
       const dateSpan = `(${formatDate(new Date())})</span>`
       // 單條訊息的組合
       const blockquote = document.createElement('blockquote')
