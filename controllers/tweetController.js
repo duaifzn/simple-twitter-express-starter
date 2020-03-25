@@ -5,6 +5,7 @@ const Like = db.Like
 const Reply = db.Reply
 const helpers = require('../_helpers')
 
+
 const tweetController = {
   redirectInvalidUrl: (req, res) => { // 防止亂打網址404
     // req.flash('error_messages', '不要瞎掰好嗎？') // 非預期出現
