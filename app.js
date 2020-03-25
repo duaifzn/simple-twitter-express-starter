@@ -29,8 +29,12 @@ app.use((req, res, next) => {
   res.locals.user = helpers.getUser(req)
   res.locals.success_messages = req.flash('success_messages')
   res.locals.error_messages = req.flash('error_messages')
+  req.userData = helpers.getUser(req)
+  //req.wsUserId = helpers.getUser(req).id
+  //req.wsUserFollow = helpers.getUser(req).Followings
   next()
 })
+
 
 
 require('./routes')(app, passport) // 教材U16表示需要放在 app.js 的最後一行，因為按照由上而下的順序，當主程式把 app (也就是 express() ) 傳入路由時，程式中間做的樣板引擎設定、伺服器設定，也要一併透過 app 變數傳進去？
