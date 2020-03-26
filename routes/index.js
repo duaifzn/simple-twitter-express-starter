@@ -1,10 +1,12 @@
 const adminController = require('../controllers/adminController.js')
 const userController = require('../controllers/userController')
 const tweetController = require('../controllers/tweetController')
+const chatController = require('../controllers/chatController')
 
 const helpers = require('../_helpers')
 const multer = require('multer')
 const upload = multer({ dest: 'temp/' })
+
 //websocket 紀錄client的位置
 let position = []
 
@@ -51,12 +53,15 @@ module.exports = (app, passport) => {
   // 登出
   app.get('/logout', userController.logOut)
 
+  // 聊天室
+  app.get('/chat', authenticated, chatController.chatPage)
+
   // 看見某一使用者的推播牆，以及該使用者簡介
   app.get('/users/:id/tweets', authenticated, userController.tweetPage)
   // 編輯自己的介紹 (表單頁)
   app.get('/users/:id/edit', authenticated, userController.editUserPage)
   // 編輯自己的介紹 (寫入資料庫)
-  app.put('/users/:id/edit', authenticated, upload.single('image'), userController.editUser)
+  app.post('/users/:id/edit', authenticated, upload.single('image'), userController.editUser)
   // 看見某一使用者正在關注的使用者
   app.get('/users/:id/followings', authenticated, userController.followingPage)
   // 看見某一使用者的跟隨者
@@ -122,8 +127,6 @@ module.exports = (app, passport) => {
   app.delete('/admin/tweets/:id', authenticatedAdmin, adminController.deleteTweet)
   // 看見站內所有的使用者
   app.get('/admin/users', authenticatedAdmin, adminController.adminUserPage)
-
-
 
   app.all('*', tweetController.redirectInvalidUrl) // 避免404當掉
 }

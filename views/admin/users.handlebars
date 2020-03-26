@@ -37,11 +37,11 @@
       </a>
     </li>
     {{#each totalPage}}
-    {{#ifFollowed this ../page}}
+    {{#ifCond this ../page}}
     <li class="page-item active"><a class="page-link" href="#">{{this}}</a></li>
     {{else}}
     <li class="page-item"><a class="page-link" href="/admin/users?page={{this}}">{{this}}</a></li>
-    {{/ifFollowed}}
+    {{/ifCond}}
     {{/each}}
     <a class="page-link" href="/admin/users?page={{next}}" aria-label="Next">
       <span aria-hidden="true">&raquo;</span>
