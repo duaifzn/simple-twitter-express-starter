@@ -33,9 +33,7 @@
               <i class="fas fa-bell"></i>
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenu2" id="bellList">
-              {{!-- <button class="dropdown-item" type="button">Action</button>
-              <button class="dropdown-item" type="button">Another action</button>
-              <button class="dropdown-item" type="button">Something else here</button> --}}
+              {{!-- 新通知位置 --}}
             </div>
           </div>
           <a href="/logout" class="text-primary font-weight-bold ml-2 mt-1">LogOut</a>
@@ -95,7 +93,7 @@
     }
 
     ws.onclose = () => {
-      localStorage.clear()
+      //localStorage.clear()
       console.log('close connection')
     }
 
@@ -103,9 +101,14 @@
     ws.onmessage = event => {
       bellMenu.push(JSON.stringify(event.data))
       localStorage.setItem('bellMenu', JSON.stringify(bellMenu))
+      //加入新通知
+      let btn = document.createElement("BUTTON");
+      document.getElementById("bell").style.color = "#ff3333";
+      btn.classList.add("dropdown-item")
+      btn.innerHTML = "new tweet: " + event.data
+      bellList.appendChild(btn)
     }
     function sendMessage() {
-
       let description = document.getElementById("description").value
       ws.send(description)
     }

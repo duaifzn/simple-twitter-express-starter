@@ -30,8 +30,6 @@ app.use((req, res, next) => {
   res.locals.success_messages = req.flash('success_messages')
   res.locals.error_messages = req.flash('error_messages')
   req.userData = helpers.getUser(req)
-  //req.wsUserId = helpers.getUser(req).id
-  //req.wsUserFollow = helpers.getUser(req).Followings
   next()
 })
 
