@@ -33,6 +33,7 @@ const tweetController = {
   },
 
   tweetHomePage: (req, res) => {
+    //console.log(req.session)
     Tweet.findAll({ include: [Like, Reply, User] }).then(tweets => {
       tweets = tweets.map(tweet => (
         {

@@ -5,13 +5,12 @@ const tweetController = require('../controllers/tweetController')
 const helpers = require('../_helpers')
 const multer = require('multer')
 const upload = multer({ dest: 'temp/' })
-
+//websocket 紀錄client的位置
+let position = []
 
 
 module.exports = (app, passport) => {
   const expressWs = require('express-ws')(app)
-  var EventEmitter = require('events').EventEmitter;
-  var event = new EventEmitter();
 
   const unAuthenticated = (req, res, next) => {
     if (!req.isAuthenticated()) {
@@ -73,13 +72,26 @@ module.exports = (app, passport) => {
   app.get('/tweets', authenticated, tweetController.tweetHomePage)
 
   //websocket
-  app.ws('/tweets', function (ws, req, client) {
+  app.ws('/tweets', function (ws, req) {
     console.log('Client connected')
+    //存入連接伺服器的client 的ws位置
+    position[`${req.userData.id}`] = ws
+
     ws.on('message', data => {
+      //提取追隨者的ws位置
+      let followers = []
+      req.userData.Followers.forEach(user => {
+        if (position[`${user.id}`] !== null) {
+          followers.push(position[`${user.id}`])
+        }
+      })
+      //搜尋所有連接伺服器的client
       var aWss = expressWs.getWss('/tweets');
       aWss.clients.forEach(function (client) {
-        if (client !== ws) { client.send(data) }
-
+        //如果是追隨者才傳資料
+        if (followers.includes(client)) {
+          client.send(data)
+        }
       });
     })
     ws.on('close', () => {
