@@ -6,24 +6,12 @@ const chatController = require('../controllers/chatController')
 const helpers = require('../_helpers')
 const multer = require('multer')
 const upload = multer({ dest: 'temp/' })
-// const expressWs = require('express-ws')
+
+//websocket 紀錄client的位置
+let position = []
 
 module.exports = (app, passport) => {
-  // web socket
-  // expressWs(app)
-  // app.ws('/msg', function (ws, req) {
-  //   // console.log(ws)
-  //   ws.on('open', function (msg) {
-  //     console.log('open!!')
-  //   })
-  //   ws.on('message', function (msg) {
-  //     ws.send('msg')
-  //   })
-  //   ws.on('close', function (msg) {
-
-  //   })
-  // })
-  //
+  const expressWs = require('express-ws')(app)
   const unAuthenticated = (req, res, next) => {
     if (!req.isAuthenticated()) {
       return next()
@@ -48,6 +36,7 @@ module.exports = (app, passport) => {
   app.get('/', authenticated, (req, res) => {
     res.redirect('/tweets')
   })
+
   // 登入頁面
   app.get('/signin', unAuthenticated, userController.signInPage)
   // 登入
@@ -84,8 +73,36 @@ module.exports = (app, passport) => {
 
   // 看見站內所有的推播，以及跟隨者最多的使用者 (設為前台首頁)
   app.get('/tweets', authenticated, tweetController.tweetHomePage)
-  // 將新增的推播寫入資料庫
+
+  //websocket
+  app.ws('/tweets', function (ws, req) {
+    console.log('Client connected')
+    //存入連接伺服器的client 的ws位置
+    position[`${req.userData.id}`] = ws
+
+    ws.on('message', data => {
+      //提取追隨者的ws位置
+      let followers = []
+      req.userData.Followers.forEach(user => {
+        if (position[`${user.id}`] !== null) {
+          followers.push(position[`${user.id}`])
+        }
+      })
+      //搜尋所有連接伺服器的client
+      var aWss = expressWs.getWss('/tweets');
+      aWss.clients.forEach(function (client) {
+        //如果是追隨者才傳資料
+        if (followers.includes(client)) {
+          client.send(data)
+        }
+      });
+    })
+    ws.on('close', () => {
+      console.log('Close connected')
+    })
+  })
   app.post('/tweets', authenticated, tweetController.createTweet)
+
   // 可以在這頁回覆特定的 tweet，並看見 tweet 主人的簡介
   app.get('/tweets/:tweet_id/replies', authenticated, tweetController.tweetReplyPage)
   // 將回覆的內容寫入資料庫
