@@ -1,4 +1,4 @@
-// adapt from: https://blog.csdn.net/lizhipeng123321/article/details/79480835
+// 修改自：https://blog.csdn.net/lizhipeng123321/article/details/79480835
 
 const app = require('express')()
 const port = process.env.PORT || 8080
@@ -23,7 +23,8 @@ io.on('connection', (socket) => {
     socket.name = obj.userId
 
     // 檢查線上列表，如果不在裡面就加入
-    if (!onlineUsers.hasOwnProperty(obj.userId)) {
+    const hasOwnProperty = Object.prototype.hasOwnProperty.call(onlineUsers, obj.userId)
+    if (!hasOwnProperty) {
       onlineUsers[obj.userId] = obj.userName
       // 線上人數+1
       onlineCount++
@@ -37,7 +38,8 @@ io.on('connection', (socket) => {
   // 監聽使用者登出(離開聊天室頁面)
   socket.on('disconnect', () => {
     // 將登出的使用者從線上列表中刪除
-    if (onlineUsers.hasOwnProperty(socket.name)) {
+    const hasOwnProperty = Object.prototype.hasOwnProperty.call(onlineUsers, socket.name)
+    if (hasOwnProperty) {
       // 登出使用者的資訊
       const obj = { userId: socket.name, userName: onlineUsers[socket.name] }
 
