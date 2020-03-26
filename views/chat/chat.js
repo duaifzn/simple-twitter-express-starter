@@ -53,7 +53,6 @@ window.CHAT = {
 
   // 更新系統訊息，本例中在使用者登入、登出的時候呼叫
   updateSystemBroadcast: function (obj, action) {
-    console.log(obj, 'res')
     // 當前線上使用者列表
     this.onlineUsers = obj.onlineUsers
     // 當前線上人數
@@ -71,7 +70,7 @@ window.CHAT = {
       }
     }
 
-    document.querySelector('#online-count').innerHTML = `當前共有${this.onlineCount}人線上，線上列表：${userHTML}`
+    document.querySelector('#online-count').innerHTML = `當前共有${this.onlineCount}人在線上，線上列表：${userHTML}`
 
     // 新增系統訊息
     let HTML = ''
@@ -136,15 +135,19 @@ window.CHAT = {
 
     // 自動轉換內容中的超連結，修改自：https://ourcodeworld.com/articles/read/97/how-to-convert-url-websites-email-from-a-string-to-html-a-tags-with-javascript
     function Linkify (inputText) {
-      var replacedText, replacePattern1, replacePattern2, replacePattern3
+      var replacedText, replacePattern1, replacePattern2, replacePattern3 // 方便同一行宣告，且var為原始寫法
 
       // 常見開頭，即統一資源識別碼（Uniform Resource Identifier，縮寫：URI）連結
-      replacePattern1 = /(\b(wss?|chrome|ssh|git|telnet|ftp|https?):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/gim
+      replacePattern1 = /(\b(wss?|chrome|edge|ssh|git|telnet|ftp|https?):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/gim
       replacedText = inputText.replace(replacePattern1, '<a href="$1" target="_blank">$1</a>')
 
       // 電子郵件連結
-      replacePattern3 = /(([a-zA-Z0-9\-_.])+@[a-zA-Z_]+?(\.[a-zA-Z]{2,6})+)/gim
-      replacedText = replacedText.replace(replacePattern3, '<a href="mailto:$1">$1</a>')
+      replacePattern2 = /(([a-zA-Z0-9\-_.])+@[a-zA-Z_]+?(\.[a-zA-Z]{2,6})+)/gim
+      replacedText = replacedText.replace(replacePattern2, '<a href="mailto:$1">$1</a>')
+
+      // 手機/市話號碼
+      replacePattern3 = /((\d[\d\-.]*){9,})/g
+      replacedText = replacedText.replace(replacePattern3, '<a href="tel://$1">$1</a>')
 
       return replacedText.replace('(', '<br/>(')
     }
