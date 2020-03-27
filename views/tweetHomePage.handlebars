@@ -111,3 +111,26 @@
 
   </div>
 </div>
+
+<script>
+  function initMap() {
+    var input = document.getElementById('CheckIn');
+    var autocomplete = new google.maps.places.Autocomplete(input);
+
+    autocomplete.addListener('place_changed', function () {
+      var place = autocomplete.getPlace();
+      if (!place.geometry) {
+        // User entered the name of a Place that was not suggested and
+        // pressed the Enter key, or the Place Details request failed.
+        window.alert("No details available for input: '" + place.name + "'");
+        return;
+      }
+    });
+  }
+
+</script>
+<script
+  src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&callback=initMap"
+  async defer>
+  //因為收到 Github 通知不要暴露 API Key 在 Github 中，這邊先把 API Key 拿下來，大家要用時可再放上
+  </script>
