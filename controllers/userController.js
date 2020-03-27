@@ -20,7 +20,7 @@ const userController = {
     }).then(user => {
       Tweet.findAll({ include: [Like, Reply], where: { UserId: req.params.id } })
         .then(tweets => {
-          console.log(tweets, 'tweets')
+          // console.log(tweets, 'tweets')
           if (tweets.length === 0) {
             req.flash('error_messages', "this user didn't exist!")
             res.redirect('/tweets')
@@ -68,7 +68,7 @@ const userController = {
     const { file } = req
     if (file) {
       imgur.setClientID(IMGUR_CLIENT_ID)
-      console.log('ID', IMGUR_CLIENT_ID, file.path)
+      // console.log('ID', IMGUR_CLIENT_ID, file.path)
       imgur.upload(file.path, (err, img) => {
         return User.findByPk(req.params.id).then(user => {
           user
