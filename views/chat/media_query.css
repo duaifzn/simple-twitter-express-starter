@@ -1,0 +1,166 @@
+@media (max-width: 426px) {
+  #private-check {
+    margin-top: 0;
+    width: 20px;
+    height: 20px;
+  }
+  .inputs {
+    height: 15vh;
+  }
+  @media (max-height: 550px) {
+    #messages {
+      height: 25vh;
+    }
+  }
+
+  @media (min-height: 550px) {
+    #messages {
+      height: 30vh;
+    }  
+  }  
+
+  @media (min-height: 625px) {
+    #messages {
+      height: 40vh;
+    }
+    .inputs {
+      height: 12vh;
+    }
+  }  
+
+  @media (min-height: 675px) {
+    #messages {
+      height: 42.5vh;
+    }
+  } 
+
+  @media (min-height: 750px) {
+    #messages {
+      height: 50vh;
+    }    
+    .inputs {
+      height: 9vh;
+    }
+  }  
+
+  @media (min-height: 850px) {
+    #messages {
+      height: 55vh;
+    }    
+  }
+
+  @media (min-height: 925px) {
+    #messages {
+      height: 57.5vh;
+    }    
+  }
+
+  @media (min-height: 1000px) {
+    #messages {
+      height: 62.5vh;
+    }
+    .inputs {
+      height: 6vh;
+    }
+  }
+
+  @media (min-height: 1125px) {
+    #messages {
+      height: 65vh;
+    }    
+  }
+
+  @media (min-height: 1250px) {
+    #messages {
+      height: 67.5vh;
+    }    
+  }
+}
+
+@media (min-width: 426px) and (max-width: 767.98px) {
+  @media (max-height: 550px) {
+    #messages {
+      height: 37.5vh;
+    }
+  }
+
+  @media (min-height: 550px) {
+    #messages {
+      height: 40vh;
+    }
+  }
+
+  @media (min-height: 625px) {
+    #messages {
+      height: 50vh;
+    }
+  }
+
+  @media (min-height: 725px) {
+    #messages {
+      height: 57.5vh;
+    }
+  }
+
+  @media (min-height: 850px) {
+    #messages {
+      height: 62.5vh;
+    }
+  }
+
+  @media (min-height: 1000px) {
+    #messages {
+      height: 67.5vh;
+    }
+  }
+
+  @media (min-height: 1250px) {
+    #messages {
+      height: 72.5vh;
+    }
+  }
+}
+
+@media (min-width: 767.98px) {
+  @media (max-height: 550px) {
+    #messages {
+      height: 37.5vh;
+    }
+  }
+
+  @media (min-height: 550px) {
+    #messages {
+      height: 50vh;
+    }
+  }
+
+  @media (min-height: 625px) {
+    #messages {
+      height: 55vh;
+    }
+  }
+
+  @media (min-height: 725px) {
+    #messages {
+      height: 62.5vh;
+    }
+  }
+
+  @media (min-height: 850px) {
+    #messages {
+      height: 67.5vh;
+    }
+  }
+
+  @media (min-height: 1000px) {
+    #messages {
+      height: 72.5vh;
+    }
+  }
+
+  @media (min-height: 1250px) {
+    #messages {
+      height: 77.5vh;
+    }
+  }
+}

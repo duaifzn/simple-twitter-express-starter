@@ -1,9 +1,12 @@
-<h1>推文後台</h1>
-<h5>(以更新時間遞減排序)</h5>
-<span>切換：</span>
-<a href="#">推文</a>
-<span>/</span>
-<a href="/admin/users">使用者</a>
+<div class="d-flex justify-content-between px-3">
+  <span class="row">
+    <h1>推文後台</h1><h5 style='line-height: 65px;'>(以更新時間遞減排序)</h5>
+  </span>
+  <span class="row ml-2">
+    <span>切換：</span>
+    <span><a href="#">推文</a>/<a href="/admin/users">使用者</a></span>
+  </span>
+</div>
 
 <table class="table mt-3">
   <thead class="thead-dark">
@@ -11,8 +14,8 @@
       <th scope="col">Id</th>
       <th scope="col">Description(Preview)</th>
       <th scope="col">Author</th>
-      <th scope="col"></th>
-      <th scope="col"></th>
+      <th scope="col">Details</th>
+      <th scope="col">Delete</th>
     </tr>
   </thead>
   <tbody>
@@ -22,17 +25,21 @@
       <td>{{this.description}}</td>
       <td>{{this.User.name}}</td>
       <td>
-        <a href="/tweets/{{this.id}}/replies" class="btn btn-info">Details</a>
+        <a href="/tweets/{{this.id}}/replies" class="btn btn-info">
+          <i class="fas fa-info"></i>
+        </a>
       </td>
       <td><form action="/admin/tweets/{{this.id}}?_method=DELETE" method="POST" style="display: inline;">
         <button type="submit" class="btn btn-danger"
-          onclick="if(confirm('Are you sure?')) return true; else return false">Delete</button>
+          onclick="if(confirm('Are you sure?')) return true; else return false">
+          <i class="fas fa-trash"></i>
+        </button>
       </form></td>
     </tr>
     {{/each}}
   </tbody>
 </table>
-<nav aria-label="Page navigation example">
+<nav aria-label="Page navigation example" class="d-flex justify-content-center">
   <ul class="pagination">
     <li class="page-item">
       <a class="page-link" href="/admin/tweets?page={{prev}}" aria-label="Previous">

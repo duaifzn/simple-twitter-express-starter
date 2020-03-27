@@ -1,4 +1,4 @@
-// adapt from: https://blog.csdn.net/lizhipeng123321/article/details/79480835
+// 修改自：https://blog.csdn.net/lizhipeng123321/article/details/79480835
 
 const app = require('express')()
 const port = process.env.PORT || 8080
@@ -23,7 +23,8 @@ io.on('connection', (socket) => {
     socket.name = obj.userId
 
     // 檢查線上列表，如果不在裡面就加入
-    if (!onlineUsers.hasOwnProperty(obj.userId)) {
+    const hasOwnProperty = Object.prototype.hasOwnProperty.call(onlineUsers, obj.userId)
+    if (!hasOwnProperty) {
       onlineUsers[obj.userId] = obj.userName
       // 線上人數+1
       onlineCount++
@@ -34,11 +35,12 @@ io.on('connection', (socket) => {
     console.log(obj.userName + '已上線！')
   })
 
-  // 監聽使用者退出
+  // 監聽使用者登出(離開聊天室頁面)
   socket.on('disconnect', () => {
-    // 將退出的使用者從線上列表中刪除
-    if (onlineUsers.hasOwnProperty(socket.name)) {
-      // 退出使用者的資訊
+    // 將登出的使用者從線上列表中刪除
+    const hasOwnProperty = Object.prototype.hasOwnProperty.call(onlineUsers, socket.name)
+    if (hasOwnProperty) {
+      // 登出使用者的資訊
       const obj = { userId: socket.name, userName: onlineUsers[socket.name] }
 
       // 刪除
@@ -67,18 +69,18 @@ io.on('connection', (socket) => {
     if (obj.userId !== obj.receiverId) {
       socket.emit('privateMessage', obj) // 避免私訊給自己時，重複傳給發訊者自己
     }
-    console.log(Object.keys(onlineUsers), 'test')
-    console.log(Object.keys(onlineUsers).indexOf(obj.receiverId), 'test')
     if (Object.keys(onlineUsers).indexOf(obj.receiverId) >= 0) { // 對象在線上
       io.to(obj.receiverId).emit('privateMessage', obj) // 傳給指定id的對象
     } else {
       socket.emit('privateMessage', { // 對象不在線上
         userName: '系統提示',
-        content: '此id不存在，或對方已離線！',
-        receiverId: obj.userId
+        userId: '警告',
+        content: `使用者"${obj.receiverId}"不在線上，<br/>可能因對方已離線、<br/>無帳號使用此id，<br/>或系統連線錯誤！`,
+        receiverId: obj.userId,
+        receiverName: '使用者'
       })
     }
-    console.log(obj.userName + '：' + obj.content + ', private, to: ' + obj.receiverId)
+    console.log(obj.userName + '：' + obj.content + ', private, to: ' + obj.receiverName)
   })
 })
 

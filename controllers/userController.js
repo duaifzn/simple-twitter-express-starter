@@ -14,22 +14,29 @@ const userController = {
     User.findByPk(req.params.id, {
       include: [
         Like,
-        { model: User, as: "Followers" },
-        { model: User, as: "Followings" },
+        { model: User, as: 'Followers' },
+        { model: User, as: 'Followings' }
       ]
     }).then(user => {
-
       Tweet.findAll({ include: [Like, Reply], where: { UserId: req.params.id } })
         .then(tweets => {
+          console.log(tweets, 'tweets')
+          if (tweets.length === 0) {
+            req.flash('error_messages', "this user didn't exist!")
+            res.redirect('/tweets')
+          }
           tweets = tweets.map(tweet => (
             {
               ...tweet.dataValues,
               isLiked: tweet.Likes.map(l => l.UserId).includes(helpers.getUser(req).id)
             }
           ))
-          return res.render("tweetPage", JSON.parse(JSON.stringify({ userData: user, tweets: tweets })));
+          return res.render('tweetPage', JSON.parse(JSON.stringify({ userData: user, tweets: tweets })))
         })
-    });
+        .catch((user) => {
+          req.flash('error_messages', "this user didn't exist!")
+        })
+    })
   },
 
   editUserPage: (req, res) => {
@@ -50,12 +57,10 @@ const userController = {
 
   editUser: (req, res) => {
     if (!req.body.name) {
-
       req.flash('error_messages', "name didn't exist")
       return res.redirect('back')
     }
     if (Number(req.params.id) !== helpers.getUser(req).id) { // 防止用 POSTMAN 發送 PutUser 的 HTTP請求，這樣還是可以改到別人的資料
-
       req.flash('error_messages', '只能改自己的頁面！')
       res.redirect(`/users/${helpers.getUser(req).id}/edit`)
     }
@@ -111,20 +116,20 @@ const userController = {
       include: [
         Tweet,
         Like,
-        { model: User, as: "Followings" },
-        { model: User, as: "Followers" }]
+        { model: User, as: 'Followings' },
+        { model: User, as: 'Followers' }]
     }).then(userData => {
       userData.Followings = userData.Followings.map(user => ({
         ...user.dataValues,
         isFollowed: userData.Followings.map(u => u.id).includes(user.id)
       }))
 
-      //console.log(userData.Followings)
+      // console.log(userData.Followings)
       return res.render(
-        "followingPage",
+        'followingPage',
         JSON.parse(JSON.stringify({ userData: userData, userFollowings: userData.Followings }))
-      );
-    });
+      )
+    })
   },
 
   followerPage: (req, res) => {
@@ -132,18 +137,18 @@ const userController = {
       include: [
         Like,
         Tweet,
-        { model: User, as: "Followings" },
-        { model: User, as: "Followers" }]
+        { model: User, as: 'Followings' },
+        { model: User, as: 'Followers' }]
     }).then(userData => {
       userData.Followers = userData.Followers.map(user => ({
         ...user.dataValues,
         isFollowed: userData.Followings.map(u => u.id).includes(user.id)
       }))
       return res.render(
-        "followerPage",
+        'followerPage',
         JSON.parse(JSON.stringify({ userData: userData, userFollowers: userData.Followers }))
-      );
-    });
+      )
+    })
   },
   likePage: (req, res) => {
     User.findByPk(req.params.id, {
@@ -156,13 +161,13 @@ const userController = {
     }).then(userData => {
       Like.findAll({ include: [Tweet], where: { UserId: req.params.id } })
         .then(likes => {
-          let likeTweet = []
+          const likeTweet = []
           likes.forEach(l => {
             likeTweet.push(l.TweetId)
-          });
+          })
           Tweet.findAll({ include: [Reply, Like], where: { id: likeTweet } })
             .then(tweets => {
-              data = tweets.map(tweet => (
+              const data = tweets.map(tweet => (
                 {
                   ...tweet.dataValues,
                   isLiked: true
