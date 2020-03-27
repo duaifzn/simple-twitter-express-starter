@@ -18,6 +18,7 @@ const userController = {
         { model: User, as: 'Followings' }
       ]
     }).then(user => {
+      const isFollowed = user.Followers.map(u => u.id).includes(helpers.getUser(req).id)
       Tweet.findAll({ include: [Like, Reply], where: { UserId: req.params.id } })
         .then(tweets => {
           // console.log(tweets, 'tweets')
@@ -31,7 +32,7 @@ const userController = {
               isLiked: tweet.Likes.map(l => l.UserId).includes(helpers.getUser(req).id)
             }
           ))
-          return res.render('tweetPage', JSON.parse(JSON.stringify({ userData: user, tweets: tweets })))
+          return res.render('tweetPage', JSON.parse(JSON.stringify({ userData: user, tweets, isFollowed })))
         })
         .catch((user) => {
           req.flash('error_messages', "this user didn't exist!")
@@ -223,17 +224,18 @@ const userController = {
   },
 
   createFollowship: (req, res) => {
-    if (Number(req.body.id) === helpers.getUser(req).id) {
-      req.flash('error_messages', '不能追蹤自己')
+    // 有bug且使用者已看不到自己頁面的追蹤按鍵，故註解掉
+    // if (Number(req.body.id) === helpers.getUser(req).id) {
+    //   req.flash('error_messages', '不能追蹤自己')
+    //   return res.redirect('back')
+    // } else {
+    return Followship.create({
+      followerId: helpers.getUser(req).id,
+      followingId: req.body.id
+    }).then(followship => {
       return res.redirect('back')
-    } else {
-      return Followship.create({
-        followerId: helpers.getUser(req).id,
-        followingId: req.body.id
-      }).then(followship => {
-        return res.redirect('back')
-      })
-    }
+    })
+    // }
   },
 
   deleteFollowship: (req, res) => {
