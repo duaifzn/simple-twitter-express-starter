@@ -6,6 +6,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Simple Twitter</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="https://cdn.pixabay.com/photo/2017/11/10/05/05/twitter-2935414_960_720.png" type="image/png" />
+  <link rel="shortcut icon" href="https://cdn.pixabay.com/photo/2020/01/07/16/10/twitter-4748000_960_720.png" type="image/png" />
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
     integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
   <link rel="stylesheet" href="https://yarnpkg.com/en/package/normalize.css">
@@ -23,13 +25,13 @@
         <div class="buttons col-8 mx-1 px-1 d-flex justify-content-end">
           {{#ifRole user.role }}
           <a href="/admin" class="text-light btn btn-warning font-weight-bold mx-1" height="50px">
-            後台管理
+            <i class="fas fa-users-cog"></i>
           </a>
           {{/ifRole}}
           {{#if user}}
-          <a href="/users/{{user.id}}/tweets"><img src="{{user.avatar}}" alt="avatar" width="50px" class="border"></a>
-          <a href="/chat" class="text-light btn btn-danger font-weight-bold mx-1" height="50px">
-            聊天室
+          <a href="/users/{{user.id}}/tweets"><img src="{{user.avatar}}" alt="avatar" width="50px" height="38px" class="border"></a>
+          <a href="/chat" class="text-light btn btn-danger font-weight-bold mx-1">
+            <i class="fas fa-comments"></i>
           </a>
           <div class="dropdown" id="remind">
             <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true"

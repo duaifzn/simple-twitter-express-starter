@@ -1,8 +1,9 @@
 {{!-- adapt from: https://blog.csdn.net/lizhipeng123321/article/details/79480835 --}}
+<link rel="stylesheet" href="./media_query.css">
 
 <div id="login-box" class="pt-5 mx-auto d-none getData">
-   <input id="user-name" placeholder="使用者名稱" type="text" value="{{userData.name}}">
-  <input id="user-id" placeholder="使用者id" type="text" value="{{userData.id}}">    
+   <input id="user-name" placeholder="使用者名稱" type="text" value="{{userData.name}}" disabled>
+  <input id="user-id" placeholder="使用者id" type="text" value="{{userData.id}}" disabled>    
 </div>
 
 <div id="chat-box" class="container mb-2 pt-3 border">
@@ -10,18 +11,21 @@
   <header class="user-title pt-5 pt-md-1 text-center">
     <h4 id="title">Websocket聊天室</h4>
     <h5 id="show-user-info"> 使用者：{{userData.name}}，你的id為"{{userData.id}}"，</h5>
-    <h5 id="online-count" >當前共有 0人在線上，線上列表：</h5>
+    <h5 id="online-count" >當前共有 0人在線上</h5>
   </header>
 
-  <section class="messages clearfix" id="messages" style="height: 60vh; overflow: auto; overflow-x:hidden;">
+  <section class="messages" id="messages" style="overflow: auto; overflow-x:hidden;">
     {{!-- messages --}}
   </section>
 
   <footer class="input-box">
-    <div class="input row border border-dark">
-      <span class="bg-dark col-2 col-lg-1 my-auto p-0 pt-1 text-center text-white" style="height: 4vh;">私訊：</span>
-      <input type="number" id="receiver" placeholder="id" class="col-1 p-0 text-center bg-light" min="1">
-      <input type="text" id="content" class="col-9 col-lg-10" name="content" placeholder="id空白為群聊，按Enter送出文字" autofocus>
+    <div class="inputs row border border-dark bg-dark">
+      <span class="col-2 col-lg-1 mt-1 mb-1 p-0 text-center text-white" style="height: 4vh;">
+        <input type="checkbox" id="private-check" name="private-check" value="true">
+        <label for="private-check" class="pt-2">私訊：</label>
+      </span>
+      <input type="number" id="receiver" placeholder="id" class="col-1 p-0 text-center bg-light" min="1" disabled>
+      <input type="text" id="content" class="col-9 col-lg-10" name="content" placeholder="按Enter送出文字" autofocus>
     </div>
   </footer>
   
