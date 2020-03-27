@@ -6,17 +6,20 @@
           placeholder="What's on your mind ?"></textarea>
       </div>
 
-    <div>
-      <span class="badge badge-dark">Check-in Here</span> 
-      <input  id="CheckIn" name="CheckIn" placeholder="Where are you now?">
-    </div>
+      <div class="inputs d-flex justify-content-between">
+        <div class="location">
+          <span class="badge badge-dark">Check-in Here</span>
+          <input id="CheckIn" name="CheckIn" placeholder="Where are you now?">
+        </div>
 
-      <div class="button d-flex justify-content-end">
-        <input type="hidden" id="userId" name="userId" value="{{user.id}}">
-        <button type="submit" onclick="sendMessage()" class="btn btn-info text-dark font-weight-bold">Tweet</button>
-      </div>
+        <div class="button d-flex justify-content-end">
+          <input type="hidden" id="userId" name="userId" value="{{user.id}}">
+          <button type="submit" onclick="sendMessage()" class="btn btn-info text-dark font-weight-bold">Tweet</button>
+        </div>
+      </div>      
    
     </form>
+
     <div class="tweets pt-1">
       {{#each tweets}}
       <div class="card my-2">
@@ -28,28 +31,33 @@
             <label>
               <h6 class="card-title text-primary">@{{this.User.name}}, {{moment this.updatedAt}}</h6>
             </label>
+
             <p>{{this.description}}</p>
-            <a href="/tweets/{{this.id}}/replies">Reply({{#count this.Replies}}{{/count}})</a>
 
-            {{!-- 按下與表示like數量應該要在同一個地方！ --}}
-            <a class="ml-2 text-danger">Like({{#count this.Likes}}{{/count}})</a>
-            
-            {{#if this.isLiked}}
-            <form action="/tweets/{{this.id}}/unlike?_method=DELETE" method="POST" style="display: inline;"
-              class="ml-2">
-              <button type="submit" class="btn btn-danger">Unlike</button>
-            </form>
-            {{else}}
-            <form action="/tweets/{{this.id}}/like" method="POST" style="display: inline;" class="ml-2">
-              <button type="submit" class="btn btn-primary">Like</button>
-            </form>
-            {{/if}}
-            {{!-- 按下與表示like數量應該要在同一個地方！ --}}
-
-            {{#if this.CheckIn}}
-              <a class="ml-2 text-info" href="https://maps.google.com/?q={{this.CheckIn}}" target="_blank">@ {{this.CheckIn}} </a>
-            {{/if}}
-
+            <div class="row ml-0 links">
+              <a href="/tweets/{{this.id}}/replies" style="line-height: 27px;">
+                Reply({{#count this.Replies}}{{/count}})
+              </a>
+              
+              {{#if this.isLiked}}
+              <form action="/tweets/{{this.id}}/unlike?_method=DELETE" method="POST" class="ml-2 text-success d-inline w-25" style="line-height: 25px;">
+                <button type="submit" class="text-success border-0 p-0 bg-white btn btn-link">
+                  Unlike({{#count this.Likes}}{{/count}})
+                </button>
+              </form>
+              {{else}}
+              <form action="/tweets/{{this.id}}/like" method="POST" class="ml-2 text-danger d-inline w-25" style="line-height: 25px;">
+                <button type="submit" class="text-danger border-0 p-0 bg-white btn btn-link">
+                  Like({{#count this.Likes}}{{/count}})
+                </button>
+              </form>
+              {{/if}}
+              
+              {{#if this.CheckIn}}
+              <a class="ml-4 text-info" href="https://maps.google.com/?q={{this.CheckIn}}" target="_blank" style="line-height: 30px;">@ {{this.CheckIn}}
+              </a>
+              {{/if}}
+            </div>
           </div>
         </div>
       </div>
@@ -74,11 +82,11 @@
               {{else}}
               {{#if this.isFollowed}}
               <form action="/followships/{{this.id}}?_method=DELETE" method="POST" style="display: inline">
-                <button type="submit" class="btn btn-danger">Unfollow</button></form>
+                <button type="submit" class="btn btn-warning font-weight-bold">Unfollow</button></form>
               {{else}}
               <form action="/followships" method="POST" style="display: inline">
                 <input type="hidden" name="id" value="{{this.id}}">
-                <button type="submit" class="btn btn-primary">Follow</button> </form>
+                <button type="submit" class="btn btn-info font-weight-bold">Follow</button> </form>
               {{/if}}
               {{/ifCond}}
             </div>
