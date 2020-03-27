@@ -117,18 +117,15 @@ const userController = {
       include: [
         Tweet,
         Like,
-        { model: User, as: 'Followings' },
-        { model: User, as: 'Followers' }]
+        { model: User, as: 'Followers' },
+        { model: User, as: 'Followings' }
+      ]
     }).then(userData => {
-      userData.Followings = userData.Followings.map(user => ({
-        ...user.dataValues,
-        isFollowed: userData.Followings.map(u => u.id).includes(user.id)
-      }))
+      const isFollowed = userData.Followers.map(u => u.id).includes(helpers.getUser(req).id)
 
-      // console.log(userData.Followings)
       return res.render(
         'followingPage',
-        JSON.parse(JSON.stringify({ userData: userData, userFollowings: userData.Followings }))
+        JSON.parse(JSON.stringify({ userData, userFollowings: userData.Followings, isFollowed }))
       )
     })
   },
@@ -139,15 +136,14 @@ const userController = {
         Like,
         Tweet,
         { model: User, as: 'Followings' },
-        { model: User, as: 'Followers' }]
+        { model: User, as: 'Followers' }
+      ]
     }).then(userData => {
-      userData.Followers = userData.Followers.map(user => ({
-        ...user.dataValues,
-        isFollowed: userData.Followings.map(u => u.id).includes(user.id)
-      }))
+      const isFollowed = userData.Followers.map(u => u.id).includes(helpers.getUser(req).id)
+
       return res.render(
         'followerPage',
-        JSON.parse(JSON.stringify({ userData: userData, userFollowers: userData.Followers }))
+        JSON.parse(JSON.stringify({ userData, userFollowers: userData.Followers, isFollowed }))
       )
     })
   },
@@ -160,6 +156,8 @@ const userController = {
         { model: User, as: 'Followers' }
       ]
     }).then(userData => {
+      const isFollowed = userData.Followers.map(u => u.id).includes(helpers.getUser(req).id)
+
       Like.findAll({ include: [Tweet], where: { UserId: req.params.id } })
         .then(likes => {
           const likeTweet = []
@@ -174,7 +172,7 @@ const userController = {
                   isLiked: true
                 }
               ))
-              return res.render('likePage', JSON.parse(JSON.stringify({ userData: userData, tweets: data })))
+              return res.render('likePage', JSON.parse(JSON.stringify({ userData, tweets: data, isFollowed })))
             })
         })
     })
