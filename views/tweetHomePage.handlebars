@@ -6,16 +6,16 @@
           placeholder="What's on your mind ?"></textarea>
       </div>
 
-    <div>
-      <span class="badge badge-dark">Check-in Here</span> 
-      <input  id="CheckIn" name="CheckIn" placeholder="Where are you now?">
-    </div>
+      <div>
+        <span class="badge badge-dark">Check-in Here</span>
+        <input id="CheckIn" name="CheckIn" type="text" placeholder="Where are you now?">
+      </div>
 
       <div class="button d-flex justify-content-end">
         <input type="hidden" id="userId" name="userId" value="{{user.id}}">
         <button type="submit" class="btn btn-info text-dark font-weight-bold">Tweet</button>
       </div>
-   
+
     </form>
     <div class="tweets pt-1">
       {{#each tweets}}
@@ -34,9 +34,10 @@
             {{!-- 按下與表示like數量應該要在同一個地方！ --}}
 
             <a class="ml-2 text-danger">Like({{#count this.Likes}}{{/count}})</a>
-            
-            <a class="ml-2 text-info" href="https://maps.google.com/?q={{this.CheckIn}}" target="_blank" >@ {{this.CheckIn}} </a>
-            
+
+            <a class="ml-2 text-info" href="https://maps.google.com/?q={{this.CheckIn}}" target="_blank">@
+              {{this.CheckIn}} </a>
+
             {{#if this.isLiked}}
             <form action="/tweets/{{this.id}}/unlike?_method=DELETE" method="POST" style="display: inline;"
               class="ml-2">
@@ -89,3 +90,24 @@
     {{/each}}
   </div>
 </div>
+
+<script>
+  function initMap() {
+    var input = document.getElementById('CheckIn');
+    var autocomplete = new google.maps.places.Autocomplete(input);
+
+    autocomplete.addListener('place_changed', function () {
+      var place = autocomplete.getPlace();
+      if (!place.geometry) {
+        // User entered the name of a Place that was not suggested and
+        // pressed the Enter key, or the Place Details request failed.
+        window.alert("No details available for input: '" + place.name + "'");
+        return;
+      }
+    });
+  }
+
+</script>
+<script
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNKduM2kj6eqYI3maujyRnf9d8Lnm9Dks&libraries=places&callback=initMap"
+  async defer></script>
