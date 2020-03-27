@@ -11,13 +11,16 @@
 
     <ul class="font-weight-bold list-unstyled">
       <li>
-        <a href="/users/{{tweet.UserId}}/tweets" class="text-dark h5" style="line-height: 30px;">Tweets {{tweetNumber}}</a>
+        <a href="/users/{{tweet.UserId}}/tweets" class="text-dark h5" style="line-height: 30px;">Tweets
+          {{tweetNumber}}</a>
       </li>
       <li>
-        <a href="/users/{{tweet.UserId}}/followings" class="text-dark h5" style="line-height: 30px;">Following {{followingNumber}}</a>
+        <a href="/users/{{tweet.UserId}}/followings" class="text-dark h5" style="line-height: 30px;">Following
+          {{followingNumber}}</a>
       </li>
       <li>
-        <a href="/users/{{tweet.UserId}}/followers" class="text-dark h5" style="line-height: 30px;">Follower {{followerNumber}}</a>
+        <a href="/users/{{tweet.UserId}}/followers" class="text-dark h5" style="line-height: 30px;">Follower
+          {{followerNumber}}</a>
       </li>
       <li>
         <a href="/users/{{tweet.UserId}}/likes" class="text-dark h5" style="line-height: 30px;">Like {{likeNumber}}</a>
@@ -25,7 +28,7 @@
     </ul>
 
     <div class="button button d-flex justify-content-center">
-      {{#ifCond tweet.UserId user.id}} 
+      {{#ifCond tweet.UserId user.id}}
       {{!-- display: none --}}
       {{else}}
       {{#if isFollowed}}
@@ -39,7 +42,6 @@
       </form>
       {{/if}}
       {{/ifCond}}
-
     </div>
   </div>
 
@@ -60,17 +62,17 @@
                 <h6 class="card-title text-primary">@{{tweet.User.name}}, {{moment tweet.updatedAt}}</h6>
               </a>
             </label>
-      
+
             <p>{{tweet.description}}</p>
-      
+
             <div class="row ml-0 links">
               <a href="/tweets/{{tweet.id}}/replies" style="line-height: 27px;">
                 Reply({{replyNumber}})
               </a>
-      
+
               {{#if isLiked}}
-              <form action="/tweets/{{tweet.id}}/unlike?_method=DELETE" method="POST" class="ml-2 text-success d-inline w-25"
-                style="line-height: 25px;">
+              <form action="/tweets/{{tweet.id}}/unlike?_method=DELETE" method="POST"
+                class="ml-2 text-success d-inline w-25" style="line-height: 25px;">
                 <button type="submit" class="text-success border-0 p-0 bg-white btn btn-link">
                   Unlike({{likedNumber}})
                 </button>
@@ -83,7 +85,7 @@
                 </button>
               </form>
               {{/if}}
-      
+
               {{#if tweet.CheckIn}}
               <a class="ml-4 text-info" href="https://maps.google.com/?q={{tweet.CheckIn}}" target="_blank"
                 style="line-height: 30px;">@ {{tweet.CheckIn}}
@@ -113,15 +115,15 @@
                 <h6 class="card-title text-primary">@{{this.User.name}}, {{moment this.updatedAt}}</h6>
               </a>
             </label>
-      
-            <p>{{this.comment}}</p>      
-            
+
+            <p>{{this.comment}}</p>
+
           </div>
         </div>
       </div>
       {{/each}}
 
-      <form action="/tweets/{{tweet.id}}/replies" method="POST"v class="my-2 ml-4">
+      <form action="/tweets/{{tweet.id}}/replies" method="POST" v class="my-2 ml-4">
         <div class="form-group mb-1">
           <textarea class="form-control border-info" id="text" name="text" rows="3" required></textarea>
         </div>
