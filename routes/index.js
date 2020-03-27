@@ -12,10 +12,6 @@ let position = []
 
 module.exports = (app, passport) => {
   const expressWs = require('express-ws')(app)
-<<<<<<< HEAD
-
-=======
->>>>>>> 52695114eb56070e75e6a88adf7d467d886081ca
   const unAuthenticated = (req, res, next) => {
     if (!req.isAuthenticated()) {
       return next()
