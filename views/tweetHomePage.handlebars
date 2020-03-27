@@ -26,11 +26,13 @@
       <div class="card my-2">
         <div class="card-body row">
           <div class="col-md-4 pr-0">
-            <img src="{{this.User.avatar}}" class="card-img mt-2 border" width="100" alt="avatar">
+            <a href="/users/{{this.User.id}}/tweets"><img src="{{this.User.avatar}}" class="card-img mt-2 border" width="100" alt="avatar"></a>
           </div>
           <div class="col-md-8">
             <label>
-              <h6 class="card-title text-primary">@{{this.User.name}}, {{moment this.updatedAt}}</h6>
+              <a href="/users/{{this.User.id}}/tweets">
+                <h6 class="card-title text-primary">@{{this.User.name}}, {{moment this.updatedAt}}</h6>
+              </a>
             </label>
 
             <p>{{this.description}}</p>
@@ -73,11 +75,17 @@
     <div class="card mb-3" style="max-width: 540px;">
       <div class="row no-gutters">
         <div class="col-md-4 p-1">
-          <img src="{{this.avatar}}" class="card-img mt-4 ml-2 border" width="100" alt="avatar">
+          <a href="/users/{{this.id}}/tweets">
+            <img src="{{this.avatar}}" class="card-img mt-4 ml-2 border" width="100" alt="avatar">
+          </a>
         </div>
         <div class="col-md-8">
           <div class="card-body">
-            <h5 class="card-title"><a href="/users/{{this.id}}/tweets">@{{this.name}}</a></h5>
+            <a href="/users/{{this.id}}/tweets">
+              <h5 class="card-title">
+                @{{this.name}}
+              </h5>
+            </a>
             <p class="card-text">{{this.introduction}}</p>
             <div class="button button d-flex justify-content-end">
               {{#ifCond ../user.id this.id}}
