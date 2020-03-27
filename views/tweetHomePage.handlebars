@@ -32,10 +32,7 @@
             <a href="/tweets/{{this.id}}/replies">Reply({{#count this.Replies}}{{/count}})</a>
 
             {{!-- 按下與表示like數量應該要在同一個地方！ --}}
-
             <a class="ml-2 text-danger">Like({{#count this.Likes}}{{/count}})</a>
-            
-            <a class="ml-2 text-info" href="https://maps.google.com/?q={{this.CheckIn}}" target="_blank" >@ {{this.CheckIn}} </a>
             
             {{#if this.isLiked}}
             <form action="/tweets/{{this.id}}/unlike?_method=DELETE" method="POST" style="display: inline;"
@@ -47,8 +44,11 @@
               <button type="submit" class="btn btn-primary">Like</button>
             </form>
             {{/if}}
-
             {{!-- 按下與表示like數量應該要在同一個地方！ --}}
+
+            {{#if this.CheckIn}}
+              <a class="ml-2 text-info" href="https://maps.google.com/?q={{this.CheckIn}}" target="_blank">@ {{this.CheckIn}} </a>
+            {{/if}}
 
           </div>
         </div>
