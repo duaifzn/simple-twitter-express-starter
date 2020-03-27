@@ -1,23 +1,24 @@
 <div class="row">
   <div class="col-7">
     <form action="/tweets" method="POST">
+    
       <div class="form-group mb-1">
         <textarea class="form-control border-info" id="description" name="description" rows="4"
-          placeholder="What's on your mind ?"></textarea>
+          placeholder="What's on your mind ?" required></textarea>
       </div>
 
       <div class="inputs d-flex justify-content-between">
-        <div class="location pt-1">
+        <div class="location pt-1 pt-md-2">
           <span class="badge badge-dark">Check-in Here</span>
           <input id="CheckIn" name="CheckIn" placeholder="Where are you now?">
         </div>
 
         <div class="tweet d-flex justify-content-end">
           <input type="hidden" id="userId" name="userId" value="{{user.id}}">
-          <button type="submit" onclick="sendMessage()" class="btn btn-info text-dark font-weight-bold">Tweet</button>
+          <button type="submit" onclick="sendMessage()" class="btn btn-info text-dark font-weight-bold my-2 my-md-1">Tweet</button>
         </div>
-      </div>      
-   
+      </div>
+
     </form>
 
     <div class="tweets pt-1">
@@ -41,13 +42,13 @@
               
               {{#if this.isLiked}}
               <form action="/tweets/{{this.id}}/unlike?_method=DELETE" method="POST" class="ml-2 text-success d-inline w-25" style="line-height: 25px;">
-                <button type="submit" class="text-success border-0 p-0 bg-white btn btn-link">
+                <button type="submit" class="text-success border p-0 bg-white btn btn-link">
                   Unlike({{#count this.Likes}}{{/count}})
                 </button>
               </form>
               {{else}}
               <form action="/tweets/{{this.id}}/like" method="POST" class="ml-2 text-danger d-inline w-25" style="line-height: 25px;">
-                <button type="submit" class="text-danger border-0 p-0 bg-white btn btn-link">
+                <button type="submit" class="text-danger border p-0 bg-white btn btn-link">
                   Like({{#count this.Likes}}{{/count}})
                 </button>
               </form>
@@ -64,8 +65,10 @@
       {{/each}}
     </div>
   </div>
+
   <div class="col-5 px-0">
     <h2 class="text-info ml-2">Popular</h2>
+
     {{#each users}}
     <div class="card mb-3" style="max-width: 540px;">
       <div class="row no-gutters">
@@ -78,15 +81,17 @@
             <p class="card-text">{{this.introduction}}</p>
             <div class="button button d-flex justify-content-end">
               {{#ifCond ../user.id this.id}}
-
+              {{!-- display: none --}}
               {{else}}
               {{#if this.isFollowed}}
               <form action="/followships/{{this.id}}?_method=DELETE" method="POST" style="display: inline">
-                <button type="submit" class="btn btn-warning font-weight-bold">Unfollow</button></form>
+                <button type="submit" class="btn btn-warning font-weight-bold" style="width: 90px">Unfollow</button>
+              </form>
               {{else}}
               <form action="/followships" method="POST" style="display: inline">
                 <input type="hidden" name="id" value="{{this.id}}">
-                <button type="submit" class="btn btn-info font-weight-bold">Follow</button> </form>
+                <button type="submit" class="btn btn-info font-weight-bold" style="width: 90px">Follow</button> 
+              </form>
               {{/if}}
               {{/ifCond}}
             </div>
@@ -95,5 +100,6 @@
       </div>
     </div>
     {{/each}}
+
   </div>
 </div>
