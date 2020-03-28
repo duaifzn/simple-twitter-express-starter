@@ -93,8 +93,8 @@
       bellList.appendChild(btn)
     })
 
-
-    var ws = new WebSocket("ws://localhost:3000/tweets");
+    const port = process.env.PORT
+    var ws = new WebSocket(`ws://localhost:${port}/tweets`);
 
     ws.onopen = () => {
       console.log('open connection')
