@@ -6,8 +6,7 @@
   "scripts": {
     "start": "concurrently \"set NODE_ENV=development && node app.js\"  \" node socket.js \"",
     "dev": "concurrently \"set NODE_ENV=development && nodemon app.js\"  \" nodemon socket.js \"",
-    "test": "set \"NODE_ENV=test\" && mocha test/*/*.js --exit --recursive --timeout 10000",
-    "heroku_start": "node app.js"
+    "test": "set \"NODE_ENV=test\" && mocha test/*/*.js --exit --recursive --timeout 10000"
   },
   "author": "",
   "license": "ISC",
