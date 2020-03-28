@@ -119,11 +119,11 @@ window.CHAT = {
     })
 
     // 讓時間單位自動補零成二位
-    function twoDigit (unit) {
+    function twoDigit(unit) {
       return unit < 10 ? ('0' + unit) : unit
     }
     // 調整時間格式，以符合臺灣習慣(年*4-月*2-日*2- 時*2:分*2:秒*2)
-    function formatDate (date) {
+    function formatDate(date) {
       const year = twoDigit(date.getFullYear())
       const month = twoDigit(date.getMonth() + 1)
       const day = twoDigit(date.getDate())
@@ -134,7 +134,7 @@ window.CHAT = {
     }
 
     // 自動轉換內容中的超連結，修改自：https://ourcodeworld.com/articles/read/97/how-to-convert-url-websites-email-from-a-string-to-html-a-tags-with-javascript
-    function Linkify (inputText) {
+    function Linkify(inputText) {
       var replacedText, replacePattern1, replacePattern2, replacePattern3 // 方便同一行宣告，且var為原始寫法
 
       // 常見開頭，即統一資源識別碼（Uniform Resource Identifier，縮寫：URI）連結
@@ -153,7 +153,7 @@ window.CHAT = {
     }
 
     // 渲染對話相關內容
-    function renderMessage (obj) {
+    function renderMessage(obj) {
       // 單條訊息的組成元素
       const receiverSpan = `<span>${obj.userName}"${obj.userId}"：`
       const messageSpan = Linkify(`<br/>${obj.content}<br/>`)
