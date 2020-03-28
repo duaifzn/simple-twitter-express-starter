@@ -187,8 +187,9 @@ const userController = {
           likes.forEach(l => {
             likeTweet.push(l.TweetId)
           })
-          Tweet.findAll({ include: [Reply, Like], where: { id: likeTweet } })
+          Tweet.findAll({ include: [Reply, Like, User], where: { id: likeTweet } })
             .then(tweets => {
+              // console.log(tweets, 'test tweets')
               const data = tweets.map(tweet => (
                 {
                   ...tweet.dataValues,
