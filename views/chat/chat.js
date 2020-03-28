@@ -102,8 +102,7 @@ window.CHAT = {
     this.scrollToBottom()
 
     // 連線websocket後端伺服器
-    const port = process.env.PORT
-    this.socket = io.connect(`ws://localhost:${port}/`)
+    this.socket = io.connect('ws://localhost:8080/')
 
     // 告訴後端伺服器有使用者登入
     this.socket.emit('login', { userId: this.userId, userName: this.userName })
