@@ -2,7 +2,7 @@ const db = require('../models')
 const User = db.User
 const Tweet = db.Tweet
 
-const pageLimit = 20
+const pageLimit = 10
 
 const adminController = {
   adminHomePage: (req, res) => {
