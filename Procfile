@@ -1,1 +1,1 @@
-web: node app.js &&  node socket.js
+web: node app.js
