@@ -18,7 +18,8 @@ const userController = {
         { model: User, as: 'Followings' }
       ]
     }).then(user => {
-      const isFollowed = user.Followers.map(u => u.id).includes(helpers.getUser(req).id)
+      let isFollowed = []
+      if (user) { isFollowed = user.Followers.map(u => u.id).includes(helpers.getUser(req).id) }
       Tweet.findAll({ include: [Like, Reply, User], where: { UserId: req.params.id } })
         .then(tweets => {
           // console.log(tweets, 'tweets')
@@ -35,7 +36,7 @@ const userController = {
           return res.render('tweetPage', JSON.parse(JSON.stringify({ userData: user, tweets, isFollowed })))
         })
         .catch((user) => {
-          req.flash('error_messages', "this user didn't exist!")
+          req.flash('error_messages', 'system error, try later!')
         })
     })
   },
@@ -121,12 +122,20 @@ const userController = {
         { model: User, as: 'Followings' }
       ]
     }).then(userData => {
-      const isFollowed = userData.Followers.map(u => u.id).includes(helpers.getUser(req).id)
+      if (!userData) {
+        req.flash('error_messages', "this user didn't exist!")
+        res.redirect('/tweets')
+      }
+
+      let isFollowed = []
+      if (userData) { isFollowed = userData.Followers.map(u => u.id).includes(helpers.getUser(req).id) }
 
       return res.render(
         'followingPage',
         JSON.parse(JSON.stringify({ userData, userFollowings: userData.Followings, isFollowed }))
       )
+    }).catch((user) => {
+      req.flash('error_messages', 'system error, try later!')
     })
   },
 
@@ -139,12 +148,20 @@ const userController = {
         { model: User, as: 'Followers' }
       ]
     }).then(userData => {
-      const isFollowed = userData.Followers.map(u => u.id).includes(helpers.getUser(req).id)
+      if (!userData) {
+        req.flash('error_messages', "this user didn't exist!")
+        res.redirect('/tweets')
+      }
+
+      let isFollowed = []
+      if (userData) { isFollowed = userData.Followers.map(u => u.id).includes(helpers.getUser(req).id) }
 
       return res.render(
         'followerPage',
         JSON.parse(JSON.stringify({ userData, userFollowers: userData.Followers, isFollowed }))
       )
+    }).catch((user) => {
+      req.flash('error_messages', 'system error, try later!')
     })
   },
   likePage: (req, res) => {
@@ -156,7 +173,13 @@ const userController = {
         { model: User, as: 'Followers' }
       ]
     }).then(userData => {
-      const isFollowed = userData.Followers.map(u => u.id).includes(helpers.getUser(req).id)
+      if (!userData) {
+        req.flash('error_messages', "this user didn't exist!")
+        res.redirect('/tweets')
+      }
+
+      let isFollowed = []
+      if (userData) { isFollowed = userData.Followers.map(u => u.id).includes(helpers.getUser(req).id) }
 
       Like.findAll({ include: [Tweet], where: { UserId: req.params.id } })
         .then(likes => {
@@ -174,6 +197,8 @@ const userController = {
               ))
               return res.render('likePage', JSON.parse(JSON.stringify({ userData, tweets: data, isFollowed })))
             })
+        }).catch((user) => {
+          req.flash('error_messages', 'system error, try later!')
         })
     })
   },
