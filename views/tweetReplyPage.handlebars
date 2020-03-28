@@ -2,7 +2,7 @@
 
   <div class="col-3 info pr-5">
     <a href="/users/{{tweet.UserId}}/tweets">
-      <img src="{{tweet.User.avatar}}" alt="avatar" width="100%" class="border">
+      <img src="{{tweet.User.avatar}}" alt="avatar" width="100" min-height="75" class="border">
       <h2 class="text-info text-center pt-1">{{tweet.User.name}}</h2>
     </a>
     <p class="text-primary" style="line-height: 20px;">
@@ -53,7 +53,7 @@
         <div class="card-body row">
           <div class="col-md-4 pr-0">
             <a href="/users/{{tweet.UserId}}/tweets">
-              <img src="{{tweet.User.avatar}}" class="card-img mt-2 border" width="100" alt="avatar">
+              <img src="{{tweet.User.avatar}}" class="card-img mt-2 border" width="100" min-height="75" alt="avatar">
             </a>
           </div>
           <div class="col-md-8">
@@ -106,7 +106,7 @@
         <div class="card-body row">
           <div class="col-md-4 pr-0">
             <a href="/users/{{this.User.id}}/tweets">
-              <img src="{{this.User.avatar}}" class="card-img mt-2 border" width="100" alt="avatar">
+              <img src="{{this.User.avatar}}" class="card-img mt-2 border" width="100" min-height="75" alt="avatar">
             </a>
           </div>
           <div class="col-md-8">
