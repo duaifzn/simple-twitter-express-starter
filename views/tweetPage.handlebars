@@ -47,7 +47,7 @@
 		</div>
 	</div>
 
-	<div class="col-9 text pl-2">
+	<div class="col-9 texts pl-2">
 		<div class="tweets">
 			{{#each tweets}}
 
@@ -60,9 +60,10 @@
 					</div>
 					<div class="col-md-8">
 						<label>
-							<a href="/users/{{this.User.id}}/tweets">
-								<h6 class="card-title text-primary">{{this.User.name}}, {{moment this.createdAt}}</h6>
-							</a>
+							<h6 class="card-title text-primary">
+								<a href="/users/{{this.User.id}}/tweets">@{{this.User.name}}</a>
+								, {{moment this.updatedAt}}
+							</h6>
 						</label>
 
 						<p>{{this.description}}</p>

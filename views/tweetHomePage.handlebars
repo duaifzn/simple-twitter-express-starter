@@ -30,10 +30,11 @@
             <a href="/users/{{this.User.id}}/tweets"><img src="{{this.User.avatar}}" class="card-img mt-2 border" width="100" min-height="75" alt="avatar"></a>
           </div>
           <div class="col-md-8">
-            <label>
-              <a href="/users/{{this.User.id}}/tweets">
-                <h6 class="card-title text-primary">@{{this.User.name}}, {{moment this.updatedAt}}</h6>
-              </a>
+            <label>              
+              <h6 class="card-title text-primary">
+                <a href="/users/{{this.User.id}}/tweets">@{{this.User.name}}</a>
+                , {{moment this.updatedAt}}
+              </h6>
             </label>
 
             <p>{{this.description}}</p>

@@ -58,9 +58,10 @@
           </div>
           <div class="col-md-8">
             <label>
-              <a href="/users/{{tweet.UserId}}/tweets">
-                <h6 class="card-title text-primary">@{{tweet.User.name}}, {{moment tweet.updatedAt}}</h6>
-              </a>
+              <h6 class="card-title text-primary">
+                <a href="/users/{{tweet.User.id}}/tweets">@{{tweet.User.name}}</a>
+                , {{moment tweet.updatedAt}}
+              </h6>
             </label>
 
             <p>{{tweet.description}}</p>
@@ -111,9 +112,10 @@
           </div>
           <div class="col-md-8">
             <label>
-              <a href="/users/{{this.User.id}}/tweets">
-                <h6 class="card-title text-primary">@{{this.User.name}}, {{moment this.updatedAt}}</h6>
-              </a>
+              <h6 class="card-title text-primary">
+                <a href="/users/{{this.User.id}}/tweets">@{{this.User.name}}</a>
+                , {{moment this.updatedAt}}
+              </h6>
             </label>
 
             <p>{{this.comment}}</p>
