@@ -18,9 +18,10 @@ const userController = {
         { model: User, as: 'Followings' }
       ]
     }).then(user => {
-      Tweet.findAll({ include: [Like, Reply], where: { UserId: req.params.id } })
+      const isFollowed = user.Followers.map(u => u.id).includes(helpers.getUser(req).id)
+      Tweet.findAll({ include: [Like, Reply, User], where: { UserId: req.params.id } })
         .then(tweets => {
-          console.log(tweets, 'tweets')
+          // console.log(tweets, 'tweets')
           if (tweets.length === 0) {
             req.flash('error_messages', "this user didn't exist!")
             res.redirect('/tweets')
@@ -31,7 +32,7 @@ const userController = {
               isLiked: tweet.Likes.map(l => l.UserId).includes(helpers.getUser(req).id)
             }
           ))
-          return res.render('tweetPage', JSON.parse(JSON.stringify({ userData: user, tweets: tweets })))
+          return res.render('tweetPage', JSON.parse(JSON.stringify({ userData: user, tweets, isFollowed })))
         })
         .catch((user) => {
           req.flash('error_messages', "this user didn't exist!")
@@ -68,7 +69,7 @@ const userController = {
     const { file } = req
     if (file) {
       imgur.setClientID(IMGUR_CLIENT_ID)
-      console.log('ID', IMGUR_CLIENT_ID, file.path)
+      // console.log('ID', IMGUR_CLIENT_ID, file.path)
       imgur.upload(file.path, (err, img) => {
         return User.findByPk(req.params.id).then(user => {
           user
@@ -116,18 +117,15 @@ const userController = {
       include: [
         Tweet,
         Like,
-        { model: User, as: 'Followings' },
-        { model: User, as: 'Followers' }]
+        { model: User, as: 'Followers' },
+        { model: User, as: 'Followings' }
+      ]
     }).then(userData => {
-      userData.Followings = userData.Followings.map(user => ({
-        ...user.dataValues,
-        isFollowed: userData.Followings.map(u => u.id).includes(user.id)
-      }))
+      const isFollowed = userData.Followers.map(u => u.id).includes(helpers.getUser(req).id)
 
-      // console.log(userData.Followings)
       return res.render(
         'followingPage',
-        JSON.parse(JSON.stringify({ userData: userData, userFollowings: userData.Followings }))
+        JSON.parse(JSON.stringify({ userData, userFollowings: userData.Followings, isFollowed }))
       )
     })
   },
@@ -138,15 +136,14 @@ const userController = {
         Like,
         Tweet,
         { model: User, as: 'Followings' },
-        { model: User, as: 'Followers' }]
+        { model: User, as: 'Followers' }
+      ]
     }).then(userData => {
-      userData.Followers = userData.Followers.map(user => ({
-        ...user.dataValues,
-        isFollowed: userData.Followings.map(u => u.id).includes(user.id)
-      }))
+      const isFollowed = userData.Followers.map(u => u.id).includes(helpers.getUser(req).id)
+
       return res.render(
         'followerPage',
-        JSON.parse(JSON.stringify({ userData: userData, userFollowers: userData.Followers }))
+        JSON.parse(JSON.stringify({ userData, userFollowers: userData.Followers, isFollowed }))
       )
     })
   },
@@ -159,6 +156,8 @@ const userController = {
         { model: User, as: 'Followers' }
       ]
     }).then(userData => {
+      const isFollowed = userData.Followers.map(u => u.id).includes(helpers.getUser(req).id)
+
       Like.findAll({ include: [Tweet], where: { UserId: req.params.id } })
         .then(likes => {
           const likeTweet = []
@@ -173,7 +172,7 @@ const userController = {
                   isLiked: true
                 }
               ))
-              return res.render('likePage', JSON.parse(JSON.stringify({ userData: userData, tweets: data })))
+              return res.render('likePage', JSON.parse(JSON.stringify({ userData, tweets: data, isFollowed })))
             })
         })
     })
@@ -223,17 +222,18 @@ const userController = {
   },
 
   createFollowship: (req, res) => {
-    if (Number(req.body.id) === helpers.getUser(req).id) {
-      req.flash('error_messages', '不能追蹤自己')
+    // 有bug且使用者已看不到自己頁面的追蹤按鍵，故註解掉
+    // if (Number(req.body.id) === helpers.getUser(req).id) {
+    //   req.flash('error_messages', '不能追蹤自己')
+    //   return res.redirect('back')
+    // } else {
+    return Followship.create({
+      followerId: helpers.getUser(req).id,
+      followingId: req.body.id
+    }).then(followship => {
       return res.redirect('back')
-    } else {
-      return Followship.create({
-        followerId: helpers.getUser(req).id,
-        followingId: req.body.id
-      }).then(followship => {
-        return res.redirect('back')
-      })
-    }
+    })
+    // }
   },
 
   deleteFollowship: (req, res) => {
