@@ -5,15 +5,13 @@ const Like = db.Like
 const Reply = db.Reply
 const helpers = require('../_helpers')
 
-
 const tweetController = {
   redirectInvalidUrl: (req, res) => { // 防止亂打網址404
-    // req.flash('error_messages', '不要瞎掰好嗎？') // 非預期出現
+    // req.flash('error_messages', '不要瞎掰好嗎？') // 偶爾輸入正確路徑時非預期出現？
     res.redirect('/tweets')
   },
 
   createTweet: (req, res) => {
-
     if (!req.body.description) {
       req.flash('error_messages', '要有內容才可以發 tweet!')
       return res.redirect('/tweets')
@@ -34,7 +32,6 @@ const tweetController = {
   },
 
   tweetHomePage: (req, res) => {
-    //console.log(req.session)
     Tweet.findAll({ include: [Like, Reply, User] }).then(tweets => {
       tweets = tweets.map(tweet => (
         {
@@ -56,8 +53,7 @@ const tweetController = {
         ))
         users = users.sort((a, b) => b.PopularNumber - a.PopularNumber).slice(1, 11)
 
-
-        return res.render('tweetHomePage', JSON.parse(JSON.stringify({ users: users, tweets: tweets })))
+        return res.render('tweetHomePage', JSON.parse(JSON.stringify({ users, tweets })))
       })
     })
   },
@@ -65,24 +61,29 @@ const tweetController = {
   tweetReplyPage: (req, res) => {
     Tweet.findByPk(req.params.tweet_id, {
       include: [
+        Like,
         {
           model: User,
           include: [
+            Like,
             Tweet,
             { model: User, as: 'Followings' },
             { model: User, as: 'Followers' }]
         },
-        Reply,
-        Like
+        { model: Reply, include: [User] }
       ]
     }).then(tweet => {
-      const likeNumber = tweet.Likes.length
+      const likeNumber = tweet.User.Likes.length
       const followerNumber = tweet.User.Followings.length
       const followingNumber = tweet.User.Followers.length
       const tweetNumber = tweet.User.Tweets.length
       const replyNumber = tweet.Replies.length
+      const likedNumber = tweet.Likes.length
+      const isLiked = tweet.Likes.map(l => l.UserId).includes(helpers.getUser(req).id)
       const isFollowed = helpers.getUser(req).Followings.map(d => d.id).includes(tweet.UserId)
-      return res.render('tweetReplyPage', JSON.parse(JSON.stringify({ tweet: tweet, likeNumber: likeNumber, followerNumber: followerNumber, followingNumber, tweetNumber: tweetNumber, replyNumber: replyNumber, isFollowed: isFollowed })))
+      return res.render('tweetReplyPage', JSON.parse(JSON.stringify({
+        tweet, likeNumber, followerNumber, followingNumber, tweetNumber, replyNumber, likedNumber, isLiked, isFollowed
+      })))
     }).catch(users => {
       req.flash('error_messages', '無此貼文！')
       return res.redirect('/tweets')

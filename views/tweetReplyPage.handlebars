@@ -1,45 +1,140 @@
-<h1>tweetReplyPage</h1>
 <div class="row">
-  <div class="col-4">
-    <img src="{{tweet.User.avatar}}" alt="avatar" height="200px" width="200px">
-    <h4>{{tweet.User.name}}</h4>
-    <p>{{tweet.User.introduction}}</p>
-    <ul>
-      <li>Tweets:{{tweetNumber}}</li>
-      <li>Following:{{followingNumber}}</li>
-      <li>Follower:{{followerNumber}}</li>
-      <li>Like:{{likeNumber}}</li>
+
+  <div class="col-3 info pr-5">
+    <a href="/users/{{tweet.UserId}}/tweets">
+      <img src="{{tweet.User.avatar}}" alt="avatar" width="100%" class="border">
+      <h2 class="text-info text-center pt-1">{{tweet.User.name}}</h2>
+    </a>
+    <p class="text-primary" style="line-height: 20px;">
+      {{tweet.User.introduction}}
+    </p>
+
+    <ul class="font-weight-bold list-unstyled">
+      <li>
+        <a href="/users/{{tweet.UserId}}/tweets" class="text-dark h5" style="line-height: 30px;">Tweets
+          {{tweetNumber}}</a>
+      </li>
+      <li>
+        <a href="/users/{{tweet.UserId}}/followings" class="text-dark h5" style="line-height: 30px;">Following
+          {{followingNumber}}</a>
+      </li>
+      <li>
+        <a href="/users/{{tweet.UserId}}/followers" class="text-dark h5" style="line-height: 30px;">Follower
+          {{followerNumber}}</a>
+      </li>
+      <li>
+        <a href="/users/{{tweet.UserId}}/likes" class="text-dark h5" style="line-height: 30px;">Like {{likeNumber}}</a>
+      </li>
     </ul>
-    {{#if isFollowed}}
-    <a class="btn btn-danger" href="">取消追蹤</a>
-    {{else}}
-    <a class="btn btn-primary" href="">追蹤</a>
-    {{/if}}
-  </div>
-  <div class="col-8">
-    <div class="tweets">
-      <h1>Tweets</h1>
-      <h4><a href="/users/{{tweet.User.id}}/tweets">{{tweet.User.name}}</a></h4>
-      <p>{{tweet.description}}</p>
-      <span>Reply({{replyNumber}})</span>
-      <span>Like({{likeNumber}})</span>
+
+    <div class="button button d-flex justify-content-center">
+      {{#ifCond tweet.UserId user.id}}
+      {{!-- display: none --}}
+      {{else}}
+      {{#if isFollowed}}
+      <form action="/followships/{{tweet.UserId}}?_method=DELETE" method="POST" style="display: inline">
+        <button type="submit" class="btn btn-warning font-weight-bold" style="width: 10vw">Unfollow</button>
+      </form>
+      {{else}}
+      <form action="/followships" method="POST" style="display: inline">
+        <input type="hidden" name="id" value="{{tweet.UserId}}">
+        <button type="submit" class="btn btn-info font-weight-bold text-dark" style="width: 10vw">Follow</button>
+      </form>
+      {{/if}}
+      {{/ifCond}}
     </div>
+  </div>
+
+  <div class="col-9 text pl-2">
+    <div class="tweets">
+      <h3 class="text-info">Tweets</h3>
+
+      <div class="card my-2 ml-4">
+        <div class="card-body row">
+          <div class="col-md-4 pr-0">
+            <a href="/users/{{tweet.UserId}}/tweets">
+              <img src="{{tweet.User.avatar}}" class="card-img mt-2 border" width="100" alt="avatar">
+            </a>
+          </div>
+          <div class="col-md-8">
+            <label>
+              <a href="/users/{{tweet.UserId}}/tweets">
+                <h6 class="card-title text-primary">@{{tweet.User.name}}, {{moment tweet.updatedAt}}</h6>
+              </a>
+            </label>
+
+            <p>{{tweet.description}}</p>
+
+            <div class="row ml-0 links">
+              <a href="/tweets/{{tweet.id}}/replies" style="line-height: 27px;">
+                Reply({{replyNumber}})
+              </a>
+
+              {{#if isLiked}}
+              <form action="/tweets/{{tweet.id}}/unlike?_method=DELETE" method="POST"
+                class="ml-2 text-success d-inline w-25" style="line-height: 25px;">
+                <button type="submit" class="text-success border-0 p-0 bg-white btn btn-link">
+                  Unlike({{likedNumber}})
+                </button>
+              </form>
+              {{else}}
+              <form action="/tweets/{{tweet.id}}/like" method="POST" class="ml-2 text-danger d-inline w-25"
+                style="line-height: 25px;">
+                <button type="submit" class="text-danger border-0 p-0 bg-white btn btn-link">
+                  Like({{likedNumber}})
+                </button>
+              </form>
+              {{/if}}
+
+              {{#if tweet.CheckIn}}
+              <a class="ml-4 text-info" href="https://maps.google.com/?q={{tweet.CheckIn}}" target="_blank"
+                style="line-height: 30px;">@ {{tweet.CheckIn}}
+              </a>
+              {{/if}}
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
     <div class="replies">
-      <h1>Replies</h1>
+      <h3 class="text-info">Replies</h3>
+
       {{#each tweet.Replies}}
-      <blockquote class="blockquote mb-0">
-        {{this.comment}}
-      </blockquote>
-      <hr />
+      <div class="card my-2 ml-4">
+        <div class="card-body row">
+          <div class="col-md-4 pr-0">
+            <a href="/users/{{this.User.id}}/tweets">
+              <img src="{{this.User.avatar}}" class="card-img mt-2 border" width="100" alt="avatar">
+            </a>
+          </div>
+          <div class="col-md-8">
+            <label>
+              <a href="/users/{{this.User.id}}/tweets">
+                <h6 class="card-title text-primary">@{{this.User.name}}, {{moment this.updatedAt}}</h6>
+              </a>
+            </label>
+
+            <p>{{this.comment}}</p>
+
+          </div>
+        </div>
+      </div>
       {{/each}}
 
-      <form action="/tweets/{{tweet.id}}/replies" method="POST">
-        <div class="form-group">
-          <label for="text">Reply：</label>
-          <textarea class="form-control" id="text" name="text" rows="3" required></textarea>
+      <form action="/tweets/{{tweet.id}}/replies" method="POST" v class="my-2 ml-4">
+        <div class="form-group mb-1">
+          <textarea class="form-control border-info" id="text" name="text" rows="3" required></textarea>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <div class="d-flex justify-content-end pt-1 mr-3">
+          <button type="submit" class="btn btn-info font-weight-bold text-dark" style="width: 90px">
+            Reply
+          </button>
+        </div>
       </form>
+
     </div>
   </div>
+
 </div>
