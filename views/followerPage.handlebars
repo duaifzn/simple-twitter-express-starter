@@ -1,45 +1,93 @@
-<h1>Follower Page</h1>
-
 <div class="row">
-  <div class="col-4">
-    <img src="{{userData.avatar}}" alt="avatar" height="200px" width="200px">
-    <h4>{{userData.name}}</h4>
-    <p>{{userData.introduction}}</p>
-    <ul>
-      <li>Tweets:{{#count userData.Tweets}}{{/count}}</li>
-      <li>Following:{{#count userData.Followings}}{{/count}}</li>
-      <li>Follower:{{#count userData.Followers}}{{/count}}</li>
-      <li>Like:{{#count userData.Likes}}{{/count}}</li>
+
+  <div class="col-3 info pr-5">
+    <img src="{{userData.avatar}}" alt="avatar" width="100%" min-height="75" class="border">
+    <h2 class="text-info text-center pt-1">{{userData.name}}</h2>
+    <p class="text-primary" style="line-height: 20px;">
+      {{userData.introduction}}
+    </p>
+  
+    <ul class="font-weight-bold list-unstyled">
+      <li>
+        <a href="/users/{{userData.id}}/tweets" class="text-dark h5" style="line-height: 30px;">Tweets
+          {{#count userData.Tweets}}{{/count}}</a>
+      </li>
+      <li>
+        <a href="/users/{{userData.id}}/followings" class="text-dark h5" style="line-height: 30px;">Following
+          {{#count userData.Followings}}{{/count}}</a>
+      </li>
+      <li>
+        <a href="/users/{{userData.id}}/followers" class="text-dark h5" style="line-height: 30px;">Follower
+          {{#count userData.Followers}}{{/count}}</a>
+      </li>
+      <li>
+        <a href="/users/{{userData.id}}/likes" class="text-dark h5" style="line-height: 30px;">Like
+          {{#count userData.Likes}}{{/count}}</a>
+      </li>
     </ul>
-    <a href="/users/{{userData.id}}/edit">編輯個人資料</a>
+
+    <div class="button button d-flex justify-content-center">
+      {{#ifCond user.id userData.id}}
+      <div class="d-inline">
+        <a href="/users/{{userData.id}}/edit" class="text-dark btn btn-info font-weight-bold" style="width: 10vw">Edit
+          Profile</a>
+      </div>
+      {{else}}
+      {{#if isFollowed}}
+      <form action="/followships/{{user.id}}?_method=DELETE" method="POST" class="d-inline">
+        <button type="submit" class="btn btn-warning font-weight-bold" style="width: 10vw">Unfollow</button>
+      </form>
+      {{else}}
+      <form action="/followships" method="POST" class="d-inline">
+        <input type="hidden" name="id" value="{{user.id}}">
+        <button type="submit" class="text-dark btn btn-info font-weight-bold" style="width: 10vw">Follow</button>
+      </form>
+      {{/if}}
+      {{/ifCond}}
+    </div>
   </div>
-  <div class="col-8">
-    <h1>Follower</h1>
-    <div class="row">
+
+  <div class="col-9 users mx-0">
+    <h3 class="text-info">Follower</h3>
+    <div class="row Followings p-0">
       {{#each userFollowers}}
-      <div class="col-6">
-        <div class="card mb-3">
-          <div class="row no-gutters">
-            <div class="col-md-4">
-              <img src="{{this.avatar}}" class="card-img" alt="avatar">
-            </div>
-            <div class="col-md-8">
-              <div class="card-body">
-                <h5 class="card-title"><a href="/users/{{this.id}}/tweets">{{this.name}}</a></h5>
-                <p class="card-text">{{this.introduction}}</p>
-                {{#if this.isFollowed}}
-                <form action="/followships/{{this.id}}?_method=DELETE" method="POST" style="display: inline">
-                  <button type="submit" class="btn btn-danger">Unfollow</button></form>
-                {{else}}
-                <form action="/followships" method="POST" style="display: inline">
-                  <input type="hidden" name="id" value="{{this.id}}">
-                  <button type="submit" class="btn btn-primary">Follow</button> </form>
-                {{/if}}
-              </div>
+  
+      <div class="card col-6">
+        <div class="card-body row">
+          <div class="col-md-4 pr-0">
+            <a href="/users/{{this.id}}/tweets">
+              <img src="{{this.avatar}}" class="card-img mt-2 border" width="100" min-height="75" alt="avatar">
+            </a>
+          </div>
+          <div class="col-md-8">
+            <label>
+              <a href="/users/{{this.id}}/tweets">
+                <h6 class="card-title text-primary">{{this.name}}</h6>
+              </a>
+            </label>
+  
+            <p>{{this.introduction}}</p>
+  
+            <div class="button button d-flex justify-content-end">
+              {{#ifCond ../user.id this.id}}
+              {{!-- display: none --}}
+              {{else}}
+              {{#if this.isFollowed}}
+              <form action="/followships/{{this.id}}?_method=DELETE" method="POST" style="display: inline">
+                <button type="submit" class="btn btn-warning font-weight-bold" style="width: 90px">Unfollow</button>
+              </form>
+              {{else}}
+              <form action="/followships" method="POST" style="display: inline">
+                <input type="hidden" name="id" value="{{this.id}}">
+                <button type="submit" class="btn btn-info font-weight-bold text-dark" style="width: 90px">Follow</button>
+              </form>
+              {{/if}}
+              {{/ifCond}}
             </div>
           </div>
         </div>
       </div>
+  
       {{/each}}
     </div>
   </div>
