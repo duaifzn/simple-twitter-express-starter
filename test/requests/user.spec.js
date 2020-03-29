@@ -125,7 +125,7 @@ describe('# user request', () => {
     describe('successfully update', () => {
       it('will change users intro', (done) => {
         request(app)
-          .put('/users/1/edit')
+          .post('/users/1/edit')
           .send('name=abc')
           .set('Accept', 'application/json')
           .expect(302)

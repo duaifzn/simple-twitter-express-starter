@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col-7">
     <form action="/tweets" method="POST">
-    
+
       <div class="form-group mb-1">
         <textarea class="form-control border-info" id="description" name="description" rows="4"
           placeholder="What's on your mind ?" required></textarea>
@@ -15,7 +15,8 @@
 
         <div class="tweet d-flex justify-content-end">
           <input type="hidden" id="userId" name="userId" value="{{user.id}}">
-          <button type="submit" onclick="sendMessage()" class="btn btn-info text-dark font-weight-bold my-2 my-md-1">Tweet</button>
+          <button type="submit" onclick="sendMessage()"
+            class="btn btn-info text-dark font-weight-bold my-2 my-md-1">Tweet</button>
         </div>
       </div>
 
@@ -26,7 +27,8 @@
       <div class="card my-2">
         <div class="card-body row">
           <div class="col-md-4 pr-0">
-            <a href="/users/{{this.User.id}}/tweets"><img src="{{this.User.avatar}}" class="card-img mt-2 border" width="100" alt="avatar"></a>
+            <a href="/users/{{this.User.id}}/tweets"><img src="{{this.User.avatar}}" class="card-img mt-2 border"
+                width="100" alt="avatar"></a>
           </div>
           <div class="col-md-8">
             <label>
@@ -41,23 +43,26 @@
               <a href="/tweets/{{this.id}}/replies" style="line-height: 27px;">
                 Reply({{#count this.Replies}}{{/count}})
               </a>
-              
+
               {{#if this.isLiked}}
-              <form action="/tweets/{{this.id}}/unlike?_method=DELETE" method="POST" class="ml-2 text-success d-inline w-25" style="line-height: 25px;">
+              <form action="/tweets/{{this.id}}/unlike?_method=DELETE" method="POST"
+                class="ml-2 text-success d-inline w-25" style="line-height: 25px;">
                 <button type="submit" class="text-success border p-0 bg-white btn btn-link">
                   Unlike({{#count this.Likes}}{{/count}})
                 </button>
               </form>
               {{else}}
-              <form action="/tweets/{{this.id}}/like" method="POST" class="ml-2 text-danger d-inline w-25" style="line-height: 25px;">
+              <form action="/tweets/{{this.id}}/like" method="POST" class="ml-2 text-danger d-inline w-25"
+                style="line-height: 25px;">
                 <button type="submit" class="text-danger border p-0 bg-white btn btn-link">
                   Like({{#count this.Likes}}{{/count}})
                 </button>
               </form>
               {{/if}}
-              
+
               {{#if this.CheckIn}}
-              <a class="ml-4 text-info" href="https://maps.google.com/?q={{this.CheckIn}}" target="_blank" style="line-height: 30px;">@ {{this.CheckIn}}
+              <a class="ml-4 text-info" href="https://maps.google.com/?q={{this.CheckIn}}" target="_blank"
+                style="line-height: 30px;">@ {{this.CheckIn}}
               </a>
               {{/if}}
             </div>
@@ -98,7 +103,8 @@
               {{else}}
               <form action="/followships" method="POST" style="display: inline">
                 <input type="hidden" name="id" value="{{this.id}}">
-                <button type="submit" class="btn btn-info font-weight-bold text-dark" style="width: 90px">Follow</button> 
+                <button type="submit" class="btn btn-info font-weight-bold text-dark"
+                  style="width: 90px">Follow</button>
               </form>
               {{/if}}
               {{/ifCond}}
@@ -129,8 +135,6 @@
   }
 
 </script>
-<script
-  src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&callback=initMap"
-  async defer>
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&callback=initMap" async defer>
   //因為收到 Github 通知不要暴露 API Key 在 Github 中，這邊先把 API Key 拿下來，大家要用時可再放上
-  </script>
+</script>

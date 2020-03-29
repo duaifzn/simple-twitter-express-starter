@@ -8,7 +8,7 @@
     "operatorsAliases": false
   },
   "test": {
-    "username": "travis",
+    "username": "root",
     "database": "ac_twitter_workspace_test",
     "host": "127.0.0.1",
     "dialect": "mysql",
@@ -16,11 +16,10 @@
     "operatorsAliases": false
   },
   "production": {
-    "use_env_variable": "CLEARDB_DATABASE_URL",
-    "username": "root",
-    "password": null,
-    "database": "database_production",
-    "host": "127.0.0.1",
+    "username": "bab924c7b39cda",
+    "password": "200dc224",
+    "database": "heroku_ca6ec1a7b6ca2c8",
+    "host": "us-cdbr-iron-east-01.cleardb.net",
     "dialect": "mysql"
   }
 }

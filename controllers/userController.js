@@ -222,18 +222,17 @@ const userController = {
   },
 
   createFollowship: (req, res) => {
-    // 有bug且使用者已看不到自己頁面的追蹤按鍵，故註解掉
-    // if (Number(req.body.id) === helpers.getUser(req).id) {
-    //   req.flash('error_messages', '不能追蹤自己')
-    //   return res.redirect('back')
-    // } else {
-    return Followship.create({
-      followerId: helpers.getUser(req).id,
-      followingId: req.body.id
-    }).then(followship => {
+    if (Number(req.body.id) === helpers.getUser(req).id) {
+      req.flash('error_messages', '不能追蹤自己')
       return res.redirect('back')
-    })
-    // }
+    } else {
+      return Followship.create({
+        followerId: helpers.getUser(req).id,
+        followingId: req.body.id
+      }).then(followship => {
+        return res.redirect('back')
+      })
+    }
   },
 
   deleteFollowship: (req, res) => {
