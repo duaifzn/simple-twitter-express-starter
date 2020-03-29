@@ -5,17 +5,7 @@ const bodyParser = require('body-parser')
 const exphbs = require('express-handlebars')
 const methodOverride = require('method-override')
 const session = require('express-session')
-const Sequelize = require('sequelize')
-// initalize sequelize with session store
-// var SequelizeStore = require('connect-session-sequelize')(session.Store);
-// // create database, ensure 'sqlite3' in your package.json
-// var sequelize = new Sequelize(
-//   "database",
-//   "username",
-//   "password", {
-//   "dialect": "sqlite",
-//   "storage": "./session.sqlite"
-// });
+var MySQLStore = require('express-mysql-session')(session)
 const flash = require('connect-flash')
 const path = require('path')
 
@@ -32,15 +22,29 @@ app.set('view engine', 'handlebars')
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
-app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }))
-// app.use(session({
-//   secret: 'keyboard cat',
-//   store: new SequelizeStore({
-//     db: sequelize
-//   }),
-//   resave: false, // we support the touch method so per the express-session docs this should be set to false
-//   saveUninitialized: false
-// }))
+//app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }))
+// var options = {
+//   host: '127.0.0.1',
+//   user: 'root',
+//   password: 'password',
+//   database: 'ac_twitter_workspace'
+// };
+var options = {
+  host: 'us-cdbr-iron-east-01.cleardb.net',
+  user: 'bab924c7b39cda',
+  password: '200dc224',
+  database: 'heroku_ca6ec1a7b6ca2c8'
+};
+
+var sessionStore = new MySQLStore(options);
+
+app.use(session({
+  key: 'session_cookie_name',
+  secret: 'session_cookie_secret',
+  store: sessionStore,
+  resave: false,
+  saveUninitialized: false
+}));
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(flash())
