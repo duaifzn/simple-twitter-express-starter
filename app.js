@@ -5,6 +5,16 @@ const bodyParser = require('body-parser')
 const exphbs = require('express-handlebars')
 const methodOverride = require('method-override')
 const session = require('express-session')
+// initalize sequelize with session store
+var SequelizeStore = require('connect-session-sequelize')(session.Store);
+// create database, ensure 'sqlite3' in your package.json
+var sequelize = new Sequelize(
+  "database",
+  "username",
+  "password", {
+  "dialect": "sqlite",
+  "storage": "./session.sqlite"
+});
 const flash = require('connect-flash')
 const path = require('path')
 
@@ -21,8 +31,15 @@ app.set('view engine', 'handlebars')
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
-app.use(session({ secret: 'secret', cookie: { maxAge: 60000 }, resave: false, saveUninitialized: false }))
-
+//app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }))
+app.use(session({
+  secret: 'secret',
+  store: new SequelizeStore({
+    db: sequelize
+  }),
+  resave: false, // we support the touch method so per the express-session docs this should be set to false
+  saveUninitialized: false
+}))
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(flash())
