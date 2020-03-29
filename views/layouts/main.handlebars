@@ -94,7 +94,7 @@
     })
 
 
-    var ws = new WebSocket("<%= htmlWebpackPlugin.options.portUrl %>");
+    var ws = new WebSocket("ws://localhost:3000/tweets");
 
     ws.onopen = () => {
       console.log('open connection')
