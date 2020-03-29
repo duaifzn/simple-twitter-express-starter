@@ -16,6 +16,10 @@
     "operatorsAliases": false
   },
   "production": {
-    "use_env_variable": "CLEARDB_DATABASE_URL"
+    "username": "bab924c7b39cda",
+    "password": "200dc224",
+    "database": "heroku_ca6ec1a7b6ca2c8",
+    "host": "us-cdbr-iron-east-01.cleardb.net",
+    "dialect": "mysql"
   }
 }
