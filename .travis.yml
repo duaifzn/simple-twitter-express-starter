@@ -20,7 +20,7 @@ before_script:
 deploy:
   provider: heroku
   api_key:
-    secure: 037c968e-d9dc-4b4b-952a-dd6838e167d4
+    secure: travis encrypt $(heroku auth:token) --add deploy.api_key
   app: twitter2020
   on:
     repo: duaifzn/simple-twitter-express-starter
