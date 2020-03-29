@@ -33,6 +33,7 @@ const userController = {
               isLiked: tweet.Likes.map(l => l.UserId).includes(helpers.getUser(req).id)
             }
           ))
+          tweets = tweets.sort((a, b) => b.updatedAt - a.updatedAt)
           return res.render('tweetPage', JSON.parse(JSON.stringify({ userData: user, tweets, isFollowed })))
         })
         .catch((user) => {
@@ -130,6 +131,8 @@ const userController = {
       let isFollowed = []
       if (userData) { isFollowed = userData.Followers.map(u => u.id).includes(helpers.getUser(req).id) }
 
+      userData.Followings = userData.Followings.sort((a, b) => b.Followship.updatedAt - a.Followship.updatedAt)
+      
       return res.render(
         'followingPage',
         JSON.parse(JSON.stringify({ userData, userFollowings: userData.Followings, isFollowed }))
@@ -155,6 +158,8 @@ const userController = {
 
       let isFollowed = []
       if (userData) { isFollowed = userData.Followers.map(u => u.id).includes(helpers.getUser(req).id) }
+
+      userData.Followers = userData.Followers.sort((a, b) => b.Followship.updatedAt - a.Followship.updatedAt)
 
       return res.render(
         'followerPage',
@@ -187,15 +192,18 @@ const userController = {
           likes.forEach(l => {
             likeTweet.push(l.TweetId)
           })
-          Tweet.findAll({ include: [Reply, Like, User], where: { id: likeTweet } })
+          Tweet.findAll({
+            include: [Reply, Like, User], where: { id: likeTweet } })
             .then(tweets => {
-              // console.log(tweets, 'test tweets')
-              const data = tweets.map(tweet => (
+              let data = tweets.map(tweet => (
                 {
                   ...tweet.dataValues,
                   isLiked: true
                 }
               ))
+              data = data.sort((a, b) => b.Likes.find(el => el.UserId === parseInt(req.params.id)).updatedAt - a.Likes.find(el => el.UserId === parseInt(req.params.id)).updatedAt)
+              // console.log(data[0].Likes.find(el => el.UserId === parseInt(req.params.id)), 'test tweets')
+
               return res.render('likePage', JSON.parse(JSON.stringify({ userData, tweets: data, isFollowed })))
             })
         }).catch((user) => {
