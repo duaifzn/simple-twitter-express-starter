@@ -18,9 +18,9 @@ before_install:
 before_script:
   - sequelize db:migrate
 deploy:
-  travis encrypt $(heroku auth:token) --add deploy.api_key
+  
   provider: heroku
-  api_key:
+  api_key: travis encrypt $(heroku auth:token) --add deploy.api_key
   app: twitter2020
   on:
     repo: duaifzn/simple-twitter-express-starter
