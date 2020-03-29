@@ -5,6 +5,7 @@ const bodyParser = require('body-parser')
 const exphbs = require('express-handlebars')
 const methodOverride = require('method-override')
 const session = require('express-session')
+const Sequelize = require('sequelize')
 // initalize sequelize with session store
 var SequelizeStore = require('connect-session-sequelize')(session.Store);
 // create database, ensure 'sqlite3' in your package.json
@@ -33,7 +34,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
 //app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }))
 app.use(session({
-  secret: 'secret',
+  secret: 'keyboard cat',
   store: new SequelizeStore({
     db: sequelize
   }),
