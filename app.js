@@ -21,7 +21,7 @@ app.set('view engine', 'handlebars')
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
-app.use(session({ secret: 'secret', cookie: { maxAge: 365 * 24 * 60 * 60 * 1000 }, resave: false, saveUninitialized: false }))
+app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }))
 
 app.use(passport.initialize())
 app.use(passport.session())
