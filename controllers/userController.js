@@ -19,7 +19,6 @@ const userController = {
         { model: User, as: 'Followings' }
       ]
     }).then(user => {
-      console.log(user)
       const isFollowed = user.Followers.map(u => u.id).includes(helpers.getUser(req).id)
       Tweet.findAll({ include: [Like, Reply, User], where: { UserId: req.params.id } })
         .then(tweets => {
@@ -34,7 +33,7 @@ const userController = {
               isLiked: tweet.Likes.map(l => l.UserId).includes(helpers.getUser(req).id)
             }
           ))
-          return res.render('tweetPage', JSON.parse(JSON.stringify({ userData: user, tweets, isFollowed })))
+          return res.render('tweetPage')
         })
     })
   },
