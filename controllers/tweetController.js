@@ -4,6 +4,7 @@ const Tweet = db.Tweet
 const Like = db.Like
 const Reply = db.Reply
 const helpers = require('../_helpers')
+const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY
 
 const tweetController = {
   redirectInvalidUrl: (req, res) => { // 防止亂打網址404
@@ -52,7 +53,7 @@ const tweetController = {
           }
         ))
         Users = Users.sort((a, b) => b.PopularNumber - a.PopularNumber).slice(0, 10)
-        return res.render('tweetHomePage', JSON.parse(JSON.stringify({ users: Users, tweets })))
+        return res.render('tweetHomePage', JSON.parse(JSON.stringify({ users: Users, tweets, apiKey: GOOGLE_API_KEY })))
       })
     })
   },
