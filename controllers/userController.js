@@ -51,7 +51,7 @@ const userController = {
         .then(user => {
           return res.render('editUserPage', JSON.parse(JSON.stringify({ userData: user })))
         })
-        .catch((user) => {
+        .catch((err) => {
           req.flash('error_messages', "this user didn't exist!")
           res.redirect('/tweets')
         })
