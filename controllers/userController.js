@@ -34,15 +34,11 @@ const userController = {
               isLiked: tweet.Likes.map(l => l.UserId).includes(helpers.getUser(req).id)
             }
           ))
-          return res.render('tweetPage', JSON.parse(JSON.stringify({ userData: user, tweets, isFollowed })), function (err, html) {
-            if (err) {
-              console.log('err:::::', err)
-            }
-          })
+          return res.render('tweetPage', JSON.parse(JSON.stringify({ userData: user, tweets, isFollowed })))
         })
-        .catch((user) => {
-          req.flash('error_messages', "this user didn't exist!")
-        })
+
+    }).catch((user) => {
+      req.flash('error_messages', "this user didn't exist!")
     })
   },
 
