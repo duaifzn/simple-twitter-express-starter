@@ -36,9 +36,6 @@ const userController = {
           ))
           return res.render('tweetPage', JSON.parse(JSON.stringify({ userData: user, tweets, isFollowed })))
         })
-
-    }).catch((user) => {
-      req.flash('error_messages', "this user didn't exist!")
     })
   },
 
