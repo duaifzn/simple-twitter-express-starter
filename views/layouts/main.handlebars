@@ -93,8 +93,10 @@
       bellList.appendChild(btn)
     })
 
-
-    var ws = new WebSocket("ws://localhost:3000/tweets");
+    const socketProtocol = (window.location.protocol === 'https:' ? 'wss:' : 'ws:')
+    const echoSocketUrl = socketProtocol + '//' + window.location.hostname + ':' + window.location.port + '/tweets'
+    console.log('window.location:', echoSocketUrl)
+    var ws = new WebSocket(echoSocketUrl);
 
     ws.onopen = () => {
       console.log('open connection')
