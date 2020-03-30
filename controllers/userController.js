@@ -24,10 +24,6 @@ const userController = {
       Tweet.findAll({ include: [Like, Reply, User], where: { UserId: req.params.id } })
         .then(tweets => {
           // console.log(tweets, 'tweets')
-          if (tweets.length === 0) {
-            req.flash('error_messages', "this user didn't exist!")
-            res.redirect('/tweets')
-          }
           tweets = tweets.map(tweet => (
             {
               ...tweet.dataValues,
