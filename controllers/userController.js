@@ -19,7 +19,7 @@ const userController = {
         { model: User, as: 'Followings' }
       ]
     }).then(user => {
-
+      console.log(user)
       const isFollowed = user.Followers.map(u => u.id).includes(helpers.getUser(req).id)
       Tweet.findAll({ include: [Like, Reply, User], where: { UserId: req.params.id } })
         .then(tweets => {
