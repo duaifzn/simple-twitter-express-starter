@@ -24,14 +24,12 @@ const userController = {
       Tweet.findAll({ include: [Like, Reply, User], where: { UserId: req.params.id } })
         .then(tweets => {
           // console.log(tweets, 'tweets')
-
           tweets = tweets.map(tweet => (
             {
               ...tweet.dataValues,
               isLiked: tweet.Likes.map(l => l.UserId).includes(helpers.getUser(req).id)
             }
           ))
-          console.log(tweets)
           return res.render('tweetPage', JSON.parse(JSON.stringify({ userData: user, tweets, isFollowed })))
         })
     })
