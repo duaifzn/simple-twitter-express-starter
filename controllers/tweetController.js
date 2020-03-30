@@ -52,7 +52,6 @@ const tweetController = {
           }
         ))
         users = users.sort((a, b) => b.PopularNumber - a.PopularNumber).slice(1, 11)
-
         return res.render('tweetHomePage', JSON.parse(JSON.stringify({ users, tweets })))
       })
     })

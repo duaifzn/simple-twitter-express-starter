@@ -51,7 +51,7 @@ const userController = {
         .then(user => {
           return res.render('editUserPage', JSON.parse(JSON.stringify({ userData: user })))
         })
-        .catch((user) => {
+        .catch((err) => {
           req.flash('error_messages', "this user didn't exist!")
           res.redirect('/tweets')
         })
@@ -132,7 +132,7 @@ const userController = {
       if (userData) { isFollowed = userData.Followers.map(u => u.id).includes(helpers.getUser(req).id) }
 
       userData.Followings = userData.Followings.sort((a, b) => b.Followship.updatedAt - a.Followship.updatedAt)
-      
+
       return res.render(
         'followingPage',
         JSON.parse(JSON.stringify({ userData, userFollowings: userData.Followings, isFollowed }))
@@ -192,8 +192,7 @@ const userController = {
           likes.forEach(l => {
             likeTweet.push(l.TweetId)
           })
-          Tweet.findAll({
-            include: [Reply, Like, User], where: { id: likeTweet } })
+          Tweet.findAll({ include: [Reply, Like, User], where: { id: likeTweet } })
             .then(tweets => {
               let data = tweets.map(tweet => (
                 {
