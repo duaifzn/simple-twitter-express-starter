@@ -11,6 +11,7 @@ const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
 
 const userController = {
   tweetPage: (req, res) => {
+
     User.findByPk(req.params.id, {
       include: [
         Like,
@@ -18,6 +19,7 @@ const userController = {
         { model: User, as: 'Followings' }
       ]
     }).then(user => {
+
       const isFollowed = user.Followers.map(u => u.id).includes(helpers.getUser(req).id)
       Tweet.findAll({ include: [Like, Reply, User], where: { UserId: req.params.id } })
         .then(tweets => {
@@ -34,9 +36,6 @@ const userController = {
           ))
           return res.render('tweetPage', JSON.parse(JSON.stringify({ userData: user, tweets, isFollowed })))
         })
-        .catch((user) => {
-          req.flash('error_messages', "this user didn't exist!")
-        })
     })
   },
 
@@ -49,7 +48,7 @@ const userController = {
         .then(user => {
           return res.render('editUserPage', JSON.parse(JSON.stringify({ userData: user })))
         })
-        .catch((user) => {
+        .catch((err) => {
           req.flash('error_messages', "this user didn't exist!")
           res.redirect('/tweets')
         })

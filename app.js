@@ -5,7 +5,7 @@ const bodyParser = require('body-parser')
 const exphbs = require('express-handlebars')
 const methodOverride = require('method-override')
 const session = require('express-session')
-var MySQLStore = require('express-mysql-session')(session)
+// var MySQLStore = require('express-mysql-session')(session)
 const flash = require('connect-flash')
 const path = require('path')
 
@@ -22,29 +22,24 @@ app.set('view engine', 'handlebars')
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
-//app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }))
+app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }))
+
 // var options = {
-//   host: '127.0.0.1',
-//   user: 'root',
-//   password: 'password',
-//   database: 'ac_twitter_workspace'
+//   host: 'us-cdbr-iron-east-01.cleardb.net',
+//   user: 'bab924c7b39cda',
+//   password: '200dc224',
+//   database: 'heroku_ca6ec1a7b6ca2c8'
 // };
-var options = {
-  host: 'us-cdbr-iron-east-01.cleardb.net',
-  user: 'bab924c7b39cda',
-  password: '200dc224',
-  database: 'heroku_ca6ec1a7b6ca2c8'
-};
 
-var sessionStore = new MySQLStore(options);
+// var sessionStore = new MySQLStore(options);
 
-app.use(session({
-  key: 'session_cookie_name',
-  secret: 'session_cookie_secret',
-  store: sessionStore,
-  resave: false,
-  saveUninitialized: false
-}));
+// app.use(session({
+//   key: 'session_cookie_name',
+//   secret: 'session_cookie_secret',
+//   store: sessionStore,
+//   resave: false,
+//   saveUninitialized: false
+// }));
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(flash())
