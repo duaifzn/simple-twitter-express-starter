@@ -43,7 +43,7 @@ const tweetController = {
       User.findAll({
         include: [{ model: User, as: 'Followers' }, { model: User, as: 'Followings' }]
       }).then(users => {
-        users = users.map(user => (
+        let Users = users.map(user => (
           {
             ...user.dataValues,
             PopularNumber: user.Followers.length,
@@ -51,8 +51,8 @@ const tweetController = {
             isFollowed: user.Followers.map(u => u.id).includes(helpers.getUser(req).id)
           }
         ))
-        users = users.sort((a, b) => b.PopularNumber - a.PopularNumber).slice(1, 11)
-        return res.render('tweetHomePage', JSON.parse(JSON.stringify({ users, tweets })))
+        Users = Users.sort((a, b) => b.PopularNumber - a.PopularNumber).slice(0, 10)
+        return res.render('tweetHomePage', JSON.parse(JSON.stringify({ users: Users, tweets })))
       })
     })
   },
