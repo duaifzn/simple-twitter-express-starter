@@ -4,10 +4,10 @@ const fs = require('fs')
 const path = require('path')
 const Sequelize = require('sequelize')
 const basename = path.basename(__filename)
-let env = process.env.NODE_ENV || 'development' // Bob: 個人win10SP4得加上.parse，否則登入就跳錯誤；並在config加上"operatorsAliases": false，才不會有錯誤訊息
+let env = process.env.NODE_ENV || 'development' // Bob: 其他組員與個人Ubuntu上的設定
 
 if (env !== 'development') {
-  env = process.env.NODE_ENV.parse || 'development' //  Bob:其他組員與個人Ubuntu上的設定，用if達成相容性設定
+  env = process.env.NODE_ENV.parse || 'development' //  Bob:用if達成相容性設定，個人win10SP4得加上.parse，否則npm run dev就跳錯誤；並在config加上"operatorsAliases": false，才不會有錯誤訊息
 }
 
 const config = require(__dirname + '/../config/config.json')[env]
