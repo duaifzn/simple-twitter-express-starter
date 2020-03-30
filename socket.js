@@ -6,7 +6,7 @@ const server = require('http').Server(app)
 const io = require('socket.io')(server)
 
 app.get('/', (req, res) => {
-  res.send('<h1>Welcome to Realtime Websocket Server</h1>')
+  res.send('<h1>Welcome to Realtime WebSocket Server</h1>')
 })
 
 // 線上使用者名單
@@ -15,7 +15,7 @@ const onlineUsers = {}
 let onlineCount = 0
 
 io.on('connection', (socket) => {
-  console.log('Websocket connected')
+  console.log('WebSocket connected')
 
   // 監聽新使用者加入
   socket.on('login', (obj) => {
