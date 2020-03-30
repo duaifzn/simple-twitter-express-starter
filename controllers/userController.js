@@ -11,7 +11,7 @@ const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
 
 const userController = {
   tweetPage: (req, res) => {
-    console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+
     User.findByPk(req.params.id, {
       include: [
         Like,
@@ -19,7 +19,7 @@ const userController = {
         { model: User, as: 'Followings' }
       ]
     }).then(user => {
-      console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
+
       const isFollowed = user.Followers.map(u => u.id).includes(helpers.getUser(req).id)
       Tweet.findAll({ include: [Like, Reply, User], where: { UserId: req.params.id } })
         .then(tweets => {
