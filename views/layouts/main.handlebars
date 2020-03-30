@@ -93,7 +93,7 @@
       bellList.appendChild(btn)
     })
 
-    const socketProtocol = 'ws:'
+    const socketProtocol = (window.location.protocol === 'https:' ? 'wss:' : 'ws:')
     const echoSocketUrl = socketProtocol + '//' + window.location.hostname + ':' + window.location.port + '/tweets'
     var ws = new WebSocket(echoSocketUrl);
 
