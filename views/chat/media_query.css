@@ -9,19 +9,19 @@
   }
   @media (max-height: 550px) {
     #messages {
-      height: 25vh;
+      height: 12.5vh;
     }
   }
 
   @media (min-height: 550px) {
     #messages {
-      height: 30vh;
+      height: 15vh;
     }  
   }  
 
   @media (min-height: 625px) {
     #messages {
-      height: 40vh;
+      height: 25vh;
     }
     .inputs {
       height: 12vh;
@@ -30,13 +30,13 @@
 
   @media (min-height: 675px) {
     #messages {
-      height: 42.5vh;
+      height: 30vh;
     }
   } 
 
   @media (min-height: 750px) {
     #messages {
-      height: 50vh;
+      height: 40vh;
     }    
     .inputs {
       height: 9vh;
@@ -45,19 +45,19 @@
 
   @media (min-height: 850px) {
     #messages {
-      height: 55vh;
+      height: 45vh;
     }    
   }
 
   @media (min-height: 925px) {
     #messages {
-      height: 57.5vh;
+      height: 47.5vh;
     }    
   }
 
   @media (min-height: 1000px) {
     #messages {
-      height: 62.5vh;
+      height: 55vh;
     }
     .inputs {
       height: 6vh;
@@ -66,13 +66,13 @@
 
   @media (min-height: 1125px) {
     #messages {
-      height: 65vh;
+      height: 60vh;
     }    
   }
 
   @media (min-height: 1250px) {
     #messages {
-      height: 67.5vh;
+      height: 62.5vh;
     }    
   }
 }
@@ -80,43 +80,43 @@
 @media (min-width: 426px) and (max-width: 767.98px) {
   @media (max-height: 550px) {
     #messages {
-      height: 37.5vh;
+      height: 20vh;
     }
   }
 
   @media (min-height: 550px) {
     #messages {
-      height: 40vh;
+      height: 25vh;
     }
   }
 
   @media (min-height: 625px) {
     #messages {
-      height: 50vh;
+      height: 32.5vh;
     }
   }
 
   @media (min-height: 725px) {
     #messages {
-      height: 57.5vh;
+      height: 40vh;
     }
   }
 
   @media (min-height: 850px) {
     #messages {
-      height: 62.5vh;
+      height: 50vh;
     }
   }
 
   @media (min-height: 1000px) {
     #messages {
-      height: 67.5vh;
+      height: 55vh;
     }
   }
 
   @media (min-height: 1250px) {
     #messages {
-      height: 72.5vh;
+      height: 62.5vh;
     }
   }
 }
@@ -124,43 +124,43 @@
 @media (min-width: 767.98px) {
   @media (max-height: 550px) {
     #messages {
-      height: 37.5vh;
+      height: 27.5vh;
     }
   }
 
   @media (min-height: 550px) {
     #messages {
-      height: 50vh;
+      height: 32.5vh;
     }
   }
 
   @media (min-height: 625px) {
     #messages {
-      height: 55vh;
+      height: 40vh;
     }
   }
 
   @media (min-height: 725px) {
     #messages {
-      height: 62.5vh;
+      height: 47.5vh;
     }
   }
 
   @media (min-height: 850px) {
     #messages {
-      height: 67.5vh;
+      height: 55vh;
     }
   }
 
   @media (min-height: 1000px) {
     #messages {
-      height: 72.5vh;
+      height: 60vh;
     }
   }
 
   @media (min-height: 1250px) {
     #messages {
-      height: 77.5vh;
+      height: 67.5vh;
     }
   }
 }
