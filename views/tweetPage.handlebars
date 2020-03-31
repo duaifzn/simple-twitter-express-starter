@@ -1,7 +1,7 @@
 <div class="row">
 
 	<div class="col-3 info pr-5">
-		<img src="{{userData.avatar}}" alt="avatar" width="100%" class="border">
+		<img src="{{userData.avatar}}" alt="avatar" width="100%" min-height="75" class="border">
 		<h2 class="text-info text-center pt-1">{{userData.name}}</h2>
 		<p class="text-primary" style="line-height: 20px;">
 			{{userData.introduction}}
@@ -29,7 +29,7 @@
 		<div class="button button d-flex justify-content-center">
 			{{#ifCond user.id userData.id}}
 			<div class="d-inline">
-				<a href="/users/{{userData.id}}/edit" class="text-dark btn btn-info font-weight-bold" style="width: 15vw">Edit
+				<a href="/users/{{userData.id}}/edit" class="text-dark btn btn-info font-weight-bold" style="width: 100%">Edit
 					Profile</a>
 			</div>
 			{{else}}
@@ -47,7 +47,7 @@
 		</div>
 	</div>
 
-	<div class="col-9 text pl-2">
+	<div class="col-9 texts pl-2">
 		<div class="tweets">
 			{{#each tweets}}
 
@@ -55,14 +55,15 @@
 				<div class="card-body row">
 					<div class="col-md-4 pr-0">
 						<a href="/users/{{this.User.id}}/tweets">
-							<img src="{{this.User.avatar}}" class="card-img mt-2 border" width="100" alt="avatar">
+							<img src="{{this.User.avatar}}" class="card-img mt-2 border" width="100" min-height="75" alt="avatar">
 						</a>
 					</div>
 					<div class="col-md-8">
 						<label>
-							<a href="/users/{{this.User.id}}/tweets">
-								<h6 class="card-title text-primary">{{this.User.name}}, {{moment this.createdAt}}</h6>
-							</a>
+							<h6 class="card-title text-primary">
+								<a href="/users/{{this.User.id}}/tweets">@{{this.User.name}}</a>
+								, {{moment this.updatedAt}}
+							</h6>
 						</label>
 
 						<p>{{this.description}}</p>

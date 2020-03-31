@@ -27,14 +27,14 @@
       <div class="card my-2">
         <div class="card-body row">
           <div class="col-md-4 pr-0">
-            <a href="/users/{{this.User.id}}/tweets"><img src="{{this.User.avatar}}" class="card-img mt-2 border"
-                width="100" alt="avatar"></a>
+            <a href="/users/{{this.User.id}}/tweets"><img src="{{this.User.avatar}}" class="card-img mt-2 border" width="100" min-height="75" alt="avatar"></a>
           </div>
           <div class="col-md-8">
-            <label>
-              <a href="/users/{{this.User.id}}/tweets">
-                <h6 class="card-title text-primary">@{{this.User.name}}, {{moment this.updatedAt}}</h6>
-              </a>
+            <label>              
+              <h6 class="card-title text-primary">
+                <a href="/users/{{this.User.id}}/tweets">@{{this.User.name}}</a>
+                , {{moment this.updatedAt}}
+              </h6>
             </label>
 
             <p>{{this.description}}</p>
@@ -81,7 +81,7 @@
       <div class="row no-gutters">
         <div class="col-md-4 p-1">
           <a href="/users/{{this.id}}/tweets">
-            <img src="{{this.avatar}}" class="card-img mt-4 ml-2 border" width="100" alt="avatar">
+            <img src="{{this.avatar}}" class="card-img mt-4 ml-2 border" width="100" min-height="75" alt="avatar">
           </a>
         </div>
         <div class="col-md-8">
@@ -135,8 +135,8 @@
   }
 
 </script>
-<script
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNKduM2kj6eqYI3maujyRnf9d8Lnm9Dks&libraries=places&callback=initMap"
+<script class="api-key"
+  src="https://maps.googleapis.com/maps/api/js?key={{apiKey}}&libraries=places&callback=initMap"
   async defer>
   //因為收到 Github 通知不要暴露 API Key 在 Github 中，這邊先把 API Key 拿下來，大家要用時可再放上
   </script>

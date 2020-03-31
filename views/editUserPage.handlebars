@@ -1,19 +1,27 @@
-<form action="/users/{{userData.id}}/edit" method="POST" enctype="multipart/form-data">
-  <div class="form-group">
-    <label for="name">Name</label>
-    <input type="text" class="form-control" name="name" value="{{userData.name}}" id="name">
+<div class="row">
+
+  <div class="col-4 info pt-3">  
+    <img src="{{userData.avatar}}" alt="avatar" width="100%" min-height="75" class="border">
+    <input type="file" class="d-none" name="image" id="image">
+    <label for="image" class="text-dark btn btn-info font-weight-bold mt-3 d-block" width="100px">Browse files..</label>
   </div>
 
-  <div class="form-group">
-    <label for="introduction">Introduction</label>
-    <textarea type="text" class="form-control" name="introduction"
-      id="introduction">{{userData.introduction}}</textarea>
+  <div class="col-8 edit pt-3">
+    <form action="/users/{{userData.id}}/edit" method="POST" enctype="multipart/form-data">
+      <div class="form-group">
+        <input type="text" class="form-control border-info pl-2 h4" name="name" value="{{userData.name}}" placeholder="Name" id="name" width="100%" required>        
+      </div>
+    
+      <div class="form-group">
+        <textarea type="text" class="form-control border-info h4" name="introduction" rows="9" id="introduction" placeholder="Type anything about you here....">
+          {{userData.introduction}}
+        </textarea>
+      </div>
+    
+      <div class="d-flex justify-content-end pt-1 mr-3">
+        <button type="submit" class="text-dark btn btn-info font-weight-bold h3">Update</button>
+      </div>
+    </form>
   </div>
 
-  <div class="form-group">
-    <label for="image">Image</label>
-    <input type="file" class="form-control-file" name="image" id="image">
-  </div>
-
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+</div>

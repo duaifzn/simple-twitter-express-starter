@@ -1,48 +1,108 @@
 <div class="row">
-  <div class="col-4">
-    <img src="{{userData.avatar}}" alt="avatar" height="200px" width="200px">
-    <h4>{{userData.name}}</h4>
-    <p>{{userData.introduction}}</p>
-    <ul>
-      <li>Tweets:{{#count userData.Tweets}}{{/count}}</li>
-      <li>Following:{{#count userData.Followings}}{{/count}}</li>
-      <li>Follower:{{#count userData.Followers}}{{/count}}</li>
-      <li>Like:{{#count userData.Likes}}{{/count}}</li>
+
+  <div class="col-3 info pr-5">
+    <img src="{{userData.avatar}}" alt="avatar" width="100%" min-height="75" class="border">
+    <h2 class="text-info text-center pt-1">{{userData.name}}</h2>
+    <p class="text-primary" style="line-height: 20px;">
+      {{userData.introduction}}
+    </p>
+
+    <ul class="font-weight-bold list-unstyled">
+      <li>
+        <a href="/users/{{userData.id}}/tweets" class="text-dark h5" style="line-height: 30px;">Tweets
+          {{#count userData.Tweets}}{{/count}}</a>
+      </li>
+      <li>
+        <a href="/users/{{userData.id}}/followings" class="text-dark h5" style="line-height: 30px;">Following
+          {{#count userData.Followings}}{{/count}}</a>
+      </li>
+      <li>
+        <a href="/users/{{userData.id}}/followers" class="text-dark h5" style="line-height: 30px;">Follower
+          {{#count userData.Followers}}{{/count}}</a>
+      </li>
+      <li>
+        <a href="/users/{{userData.id}}/likes" class="text-dark h5" style="line-height: 30px;">Like
+          {{#count userData.Likes}}{{/count}}</a>
+      </li>
     </ul>
-    {{#if this.isFollowed}}
-    <form action="/followships/{{user.id}}?_method=DELETE" method="POST" style="display: inline">
-      <button type="submit" class="btn btn-danger">Unfollow</button></form>
-    {{else}}
-    <form action="/followships" method="POST" style="display: inline">
-      <input type="hidden" name="id" value="{{user.id}}">
-      <button type="submit" class="btn btn-primary">Follow</button> </form>
-    {{/if}}
+
+    <div class="button button d-flex justify-content-center">
+      {{#ifCond user.id userData.id}}
+      <div class="d-inline">
+        <a href="/users/{{userData.id}}/edit" class="text-dark btn btn-info font-weight-bold" style="width: 100%">Edit
+          Profile</a>
+      </div>
+      {{else}}
+      {{#if isFollowed}}
+      <form action="/followships/{{user.id}}?_method=DELETE" method="POST" class="d-inline">
+        <button type="submit" class="btn btn-warning font-weight-bold" style="width: 10vw">Unfollow</button>
+      </form>
+      {{else}}
+      <form action="/followships" method="POST" class="d-inline">
+        <input type="hidden" name="id" value="{{user.id}}">
+        <button type="submit" class="text-dark btn btn-info font-weight-bold" style="width: 10vw">Follow</button>
+      </form>
+      {{/if}}
+      {{/ifCond}}
+    </div>
   </div>
-  <div class="col-8">
-    <h1>Like</h1>
+
+  <div class="col-9 texts mx-0">
+    <h3 class="text-info pb-2">Like</h3>
+    <div class="Likes ml-2 pl-2">
     {{#each tweets}}
-    <div class="card">
-      <div class="card-body">
-        <label>
-          <h4 class="card-title">{{this.User.name}}</h4>
-        </label>
-        <label class="m-auto">
-          <h5>{{moment this.createdAt}}</h5>
-        </label>
-        <p>{{this.description}}</p>
-        <a href="/tweets/{{this.UserId}}/replies">Reply({{#count this.Replies}}{{/count}})</a>
-        <a class="ml-2" href="#">Like({{#count this.Likes}}{{/count}})</a>
-        {{#if this.isLiked}}
-        <form action="/tweets/{{this.id}}/unlike?_method=DELETE" method="POST" style="display: inline;">
-          <button type="submit" class="btn btn-danger">Unlike</button>
-        </form>
-        {{else}}
-        <form action="/tweets/{{this.id}}/like" method="POST" style="display: inline;">
-          <button type="submit" class="btn btn-primary">Like</button>
-        </form>
-        {{/if}}
+
+    <div class="card mb-2 ml-2">
+      <div class="card-body row">
+        <div class="col-md-4 pr-0">
+          <a href="/users/{{this.User.id}}/tweets">
+            <img src="{{this.User.avatar}}" class="card-img mt-2 border" width="100" min-height="75" alt="avatar">
+          </a>
+        </div>
+        <div class="col-md-8">
+          <label>
+            <h6 class="card-title text-primary">
+              <a href="/users/{{this.User.id}}/tweets">@{{this.User.name}}</a>
+              , {{moment this.updatedAt}}
+            </h6>
+          </label>
+    
+          <p>{{this.description}}</p>
+    
+          <div class="row ml-0 links">
+            <a href="/tweets/{{this.id}}/replies" style="line-height: 27px;">
+              Reply({{this.Replies.length}})
+            </a>
+    
+            {{#if this.isLiked}}
+            <form action="/tweets/{{this.id}}/unlike?_method=DELETE" method="POST" class="ml-2 text-success d-inline w-25"
+              style="line-height: 25px;">
+              <button type="submit" class="text-success border-0 p-0 bg-white btn btn-link">
+                Unlike({{this.Likes.length}})
+              </button>
+            </form>
+
+            {{else}}
+            <form action="/tweets/{{this.id}}/like" method="POST" class="ml-2 text-danger d-inline w-25"
+              style="line-height: 25px;">
+              <button type="submit" class="text-danger border-0 p-0 bg-white btn btn-link">
+                Like({{this.Likes.length}})
+              </button>
+            </form>
+
+            {{/if}}
+    
+            {{#if this.CheckIn}}
+            <a class="ml-4 text-info" href="https://maps.google.com/?q={{this.CheckIn}}" target="_blank"
+              style="line-height: 30px;">@ {{this.CheckIn}}
+            </a>
+            {{/if}}
+          </div>
+        </div>
       </div>
     </div>
+
     {{/each}}
+    </div>
   </div>
 </div>
