@@ -21,7 +21,7 @@
       <a class="navbar-brand text-dark font-weight-bold ml-1" href="/">
         <h3>Simple Twitter</h3>
       </a>
-      <div class="navbar-collapse offcanvas-collapse col-5 col-sm-4 col-md-3 d-flex justify-content-end"
+      <div class="navbar-collapse offcanvas-collapse col-12 col-sm-5 col-md-3 d-flex justify-content-end"
         id="navbarsExampleDefault">
         <div class="buttons col-8 mx-1 px-1 d-flex justify-content-end">
           {{#ifRole user.role }}
@@ -47,6 +47,7 @@
           <a href="/logout" class="text-primary font-weight-bold ml-2 mt-1">LogOut</a>
           {{/if}}
         </div>
+      </div>
     </nav>
     {{#if success_messages}}
     <div class="alert alert-success" role="alert">
@@ -62,7 +63,7 @@
   </header>
   <main role="main" class="pt-5 mt-5">
     <div class="album bg-light">
-      <div class="container">
+      <div class="container mt-3">
         {{{body}}}
       </div>
     </div>

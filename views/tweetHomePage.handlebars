@@ -8,16 +8,18 @@
       </div>
 
       <div class="inputs d-flex justify-content-between">
-        <div class="location pt-1 pt-md-2">
+
+        <div class="location pl-1 pl-sm-2 pt-md-1 col-8">
           <span class="badge badge-dark">Check-in Here</span>
-          <input id="CheckIn" name="CheckIn" placeholder="Where are you now?">
+          <input id="CheckIn" name="CheckIn" placeholder="Where are you now?" class="w-100">
         </div>
 
-        <div class="tweet d-flex justify-content-end">
+        <div class="tweet d-flex justify-content-end col-4">
           <input type="hidden" id="userId" name="userId" value="{{user.id}}">
           <button type="submit" onclick="sendMessage()"
-            class="btn btn-info text-dark font-weight-bold my-2 my-md-1">Tweet</button>
+            class="btn btn-info text-dark font-weight-bold my-1 my-md-1 submit ">Tweet</button>
         </div>
+
       </div>
 
     </form>
@@ -27,10 +29,11 @@
       <div class="card my-2">
         <div class="card-body row">
           <div class="col-md-4 pr-0">
-            <a href="/users/{{this.User.id}}/tweets"><img src="{{this.User.avatar}}" class="card-img mt-2 border" width="100" min-height="75" alt="avatar"></a>
+            <a href="/users/{{this.User.id}}/tweets"><img src="{{this.User.avatar}}" class="card-img mt-2 border"
+                width="100" min-height="75" alt="avatar"></a>
           </div>
           <div class="col-md-8">
-            <label>              
+            <label>
               <h6 class="card-title text-primary">
                 <a href="/users/{{this.User.id}}/tweets">@{{this.User.name}}</a>
                 , {{moment this.updatedAt}}
@@ -91,7 +94,7 @@
                 @{{this.name}}
               </h5>
             </a>
-            <p class="card-text">{{this.introduction}}</p>
+            <p class="card-text">{{this.description}}</p>
             <div class="button button d-flex justify-content-end">
               {{#ifCond ../user.id this.id}}
               {{!-- display: none --}}
@@ -120,23 +123,39 @@
 
 <script>
   function initMap() {
-    var input = document.getElementById('CheckIn');
-    var autocomplete = new google.maps.places.Autocomplete(input);
+    const input = document.getElementById('CheckIn')
+    const autocomplete = new google.maps.places.Autocomplete(input)
 
     autocomplete.addListener('place_changed', function () {
-      var place = autocomplete.getPlace();
+      var place = autocomplete.getPlace()
       if (!place.geometry) {
         // User entered the name of a Place that was not suggested and
         // pressed the Enter key, or the Place Details request failed.
-        window.alert("No details available for input: '" + place.name + "'");
-        return;
+        window.alert("No details available for input: '" + place.name + "'")
+        return
       }
-    });
+    })
   }
 
+  // 設定輸入字數提示與上限，超過時鎖按鈕直到字數低於上限
+  description.addEventListener('input', function (event) {
+    const description = document.querySelector('#description')
+    const submit = document.querySelector('.submit')
+    if (event.target.id === 'description') {
+      let count = event.target.value.length
+      if (count >= 0 && count <= 140) {
+        submit.innerHTML = `Tweet`
+        submit.disabled = false
+      } else {
+        submit.innerHTML = `字數超過！`
+        submit.disabled = true
+      }
+    }
+  })
+
 </script>
-<script class="api-key"
-  src="https://maps.googleapis.com/maps/api/js?key={{apiKey}}&libraries=places&callback=initMap"
+
+<script class="api-key" src="https://maps.googleapis.com/maps/api/js?key={{apiKey}}&libraries=places&callback=initMap"
   async defer>
   //因為收到 Github 通知不要暴露 API Key 在 Github 中，這邊先把 API Key 拿下來，大家要用時可再放上
   </script>
