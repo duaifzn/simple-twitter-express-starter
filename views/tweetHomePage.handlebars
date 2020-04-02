@@ -16,7 +16,7 @@
   }
 </style>
 
-<div class="row">
+<div class="row pt-3">
   <div class="col-7">
     <form action="/tweets" method="POST">
 
@@ -35,7 +35,7 @@
         <div class="tweet d-flex justify-content-end col-4">
           <input type="hidden" id="userId" name="userId" value="{{user.id}}">
           <button type="submit" onclick="sendMessage()"
-            class="btn btn-info text-dark font-weight-bold my-1 my-md-1 submit ">Tweet</button>
+            class="btn btn-info text-dark font-weight-bold my-1 my-md-1 submit p-1">Tweet</button>
         </div>
 
       </div>
@@ -68,14 +68,14 @@
               {{#if this.isLiked}}
               <form action="/tweets/{{this.id}}/unlike?_method=DELETE" method="POST"
                 class="ml-2 text-success d-inline w-25" style="line-height: 25px;">
-                <button type="submit" class="text-success border p-0 bg-white btn btn-link">
+                <button type="submit" class="text-success p-0 bg-white btn btn-link">
                   Unlike({{#count this.Likes}}{{/count}})
                 </button>
               </form>
               {{else}}
               <form action="/tweets/{{this.id}}/like" method="POST" class="ml-2 text-danger d-inline w-25"
                 style="line-height: 25px;">
-                <button type="submit" class="text-danger border p-0 bg-white btn btn-link">
+                <button type="submit" class="text-danger p-0 bg-white btn btn-link">
                   Like({{#count this.Likes}}{{/count}})
                 </button>
               </form>
@@ -100,7 +100,7 @@
     {{#each users}}
     <div class="card mb-3" style="max-width: 540px;">
       <div class="row no-gutters">
-        <div class="col-md-4 p-1">
+        <div class="col-11 col-md-4 p-1">
           <a href="/users/{{this.id}}/tweets">
             <img src="{{this.avatar}}" class="card-img mt-4 ml-2 border" width="100" min-height="75" alt="avatar">
           </a>

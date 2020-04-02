@@ -1,6 +1,6 @@
 <div class="row">
 
-  <div class="col-3 info pr-5">
+  <div class="col-12 col-md-3 info pr-5 py-3">
     <a href="/users/{{tweet.UserId}}/tweets">
       <img src="{{tweet.User.avatar}}" alt="avatar" width="100%" min-height="75" class="border">
       <h2 class="text-info text-center pt-1">{{tweet.User.name}}</h2>
@@ -33,19 +33,19 @@
       {{else}}
       {{#if isFollowed}}
       <form action="/followships/{{tweet.UserId}}?_method=DELETE" method="POST" style="display: inline">
-        <button type="submit" class="btn btn-warning font-weight-bold" style="width: 10vw">Unfollow</button>
+        <button type="submit" class="btn btn-warning font-weight-bold" style="width: 100%">Unfollow</button>
       </form>
       {{else}}
       <form action="/followships" method="POST" style="display: inline">
         <input type="hidden" name="id" value="{{tweet.UserId}}">
-        <button type="submit" class="btn btn-info font-weight-bold text-dark" style="width: 10vw">Follow</button>
+        <button type="submit" class="btn btn-info font-weight-bold text-dark" style="width: 100%">Follow</button>
       </form>
       {{/if}}
       {{/ifCond}}
     </div>
   </div>
 
-  <div class="col-9 text pl-2">
+  <div class="col-12 col-md-9 text pl-2">
     <div class="tweets">
       <h3 class="text-info">Tweets</h3>
 
