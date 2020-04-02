@@ -1,3 +1,21 @@
+<style>  
+  @media (max-width: 530px) {
+    #CheckIn {
+      width: 111px;
+    }
+  }
+  @media (max-width: 410px) {
+    #CheckIn {
+      width: 56px;
+    }    
+  }
+  @media (max-width: 370px) {
+    #label {
+      width: 59px;
+    }
+  }
+</style>
+
 <div class="row">
   <div class="col-7">
     <form action="/tweets" method="POST">
@@ -10,8 +28,8 @@
       <div class="inputs d-flex justify-content-between">
 
         <div class="location pl-1 pl-sm-2 pt-md-1 col-8">
-          <span class="badge badge-dark">Check-in Here</span>
-          <input id="CheckIn" name="CheckIn" placeholder="Where are you now?" class="w-100">
+          <span id="label" class="badge badge-dark">Check-in Here</span>
+          <input id="CheckIn" name="CheckIn" placeholder="Where are you now?">
         </div>
 
         <div class="tweet d-flex justify-content-end col-4">
