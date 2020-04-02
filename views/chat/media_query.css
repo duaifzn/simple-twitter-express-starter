@@ -36,7 +36,7 @@
 
   @media (min-height: 750px) {
     #messages {
-      height: 42.5vh;
+      height: 40vh;
     }    
     .inputs {
       height: 9vh;
