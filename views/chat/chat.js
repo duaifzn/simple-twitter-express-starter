@@ -103,7 +103,7 @@ window.CHAT = {
 
     // 連線websocket後端伺服器
     // this.socket = io.connect('ws://localhost:8080/') // 另開的本地伺服器
-    this.socket = io.connect('ws://ws-server-for-simple-twitter.herokuapp.com/') // 連到另外建置的遠端伺服器
+    this.socket = io.connect('wss://ws-server-for-simple-twitter.herokuapp.com/') // 連到另外建置的遠端伺服器
 
     // 告訴後端伺服器有使用者登入
     this.socket.emit('login', { userId: this.userId, userName: this.userName })
