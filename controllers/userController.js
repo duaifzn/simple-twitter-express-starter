@@ -133,6 +133,13 @@ const userController = {
 
       userData.Followings = userData.Followings.sort((a, b) => b.Followship.updatedAt - a.Followship.updatedAt)
 
+      userData.Followings = userData.Followings.map(follower => (
+        {
+          ...follower.dataValues,
+          isFollowed: userData.Followings.map(u => u.id).includes(follower.id)
+        }
+      ))
+
       return res.render(
         'followingPage',
         JSON.parse(JSON.stringify({ userData, userFollowings: userData.Followings, isFollowed }))
@@ -160,6 +167,15 @@ const userController = {
       if (userData) { isFollowed = userData.Followers.map(u => u.id).includes(helpers.getUser(req).id) }
 
       userData.Followers = userData.Followers.sort((a, b) => b.Followship.updatedAt - a.Followship.updatedAt)
+
+      userData.Followers = userData.Followers.map(follower => (
+        {
+          ...follower.dataValues,
+          isFollowed: userData.Followings.map(u => u.id).includes(follower.id)
+        }
+      ))
+
+      // console.log('test', userData.Followers[0].name, userData.Followers[0].isFollowed)
 
       return res.render(
         'followerPage',
