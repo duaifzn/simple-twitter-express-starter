@@ -115,19 +115,19 @@
             <p class="card-text">{{this.introduction}}</p>
             <div class="button button d-flex justify-content-end">
               {{#ifCond ../user.id this.id}}
-              {{!-- display: none --}}
+                {{!-- display: none --}}
               {{else}}
-              {{#if this.isFollowed}}
-              <form action="/followships/{{this.id}}?_method=DELETE" method="POST" style="display: inline">
-                <button type="submit" class="btn btn-warning font-weight-bold" style="width: 90px">Unfollow</button>
-              </form>
-              {{else}}
-              <form action="/followships" method="POST" style="display: inline">
-                <input type="hidden" name="id" value="{{this.id}}">
-                <button type="submit" class="btn btn-info font-weight-bold text-dark"
-                  style="width: 90px">Follow</button>
-              </form>
-              {{/if}}
+                {{#if this.isFollowed}}
+                <form action="/followships/{{this.id}}?_method=DELETE" method="POST" style="display: inline">
+                  <button type="submit" class="btn btn-warning font-weight-bold" style="width: 90px">Unfollow</button>
+                </form>
+                {{else}}
+                <form action="/followships" method="POST" style="display: inline">
+                  <input type="hidden" name="id" value="{{this.id}}">
+                  <button type="submit" class="btn btn-info font-weight-bold text-dark"
+                    style="width: 90px">Follow</button>
+                </form>
+                {{/if}}
               {{/ifCond}}
             </div>
           </div>
