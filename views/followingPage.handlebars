@@ -34,12 +34,12 @@
       </div>
       {{else}}
       {{#if isFollowed}}
-      <form action="/followships/{{user.id}}?_method=DELETE" method="POST" class="d-inline">
+      <form action="/followships/{{userData.id}}?_method=DELETE" method="POST" class="d-inline">
         <button type="submit" class="btn btn-warning font-weight-bold" style="width: 100％">Unfollow</button>
       </form>
       {{else}}
       <form action="/followships" method="POST" class="d-inline">
-        <input type="hidden" name="id" value="{{user.id}}">
+        <input type="hidden" name="id" value="{{userData.id}}">
         <button type="submit" class="text-dark btn btn-info font-weight-bold" style="width: 100％">Follow</button>
       </form>
       {{/if}}
@@ -72,16 +72,16 @@
               {{#ifCond ../user.id this.id}}
               {{!-- display: none --}}
               {{else}}
-              {{#if this.isFollowed}}
+              {{!-- {{#if this.isFollowed}} --}}
               <form action="/followships/{{this.id}}?_method=DELETE" method="POST" style="display: inline">
                 <button type="submit" class="btn btn-warning font-weight-bold" style="width: 90px">Unfollow</button>
               </form>
-              {{else}}
-              <form action="/followships" method="POST" style="display: inline">
+              {{!-- {{else}} --}}
+              {{!-- <form action="/followships" method="POST" style="display: inline">
                 <input type="hidden" name="id" value="{{this.id}}">
                 <button type="submit" class="btn btn-info font-weight-bold text-dark" style="width: 90px">Follow</button>
-              </form>
-              {{/if}}
+              </form> --}}
+              {{!-- {{/if}} --}}
               {{/ifCond}}
             </div>
           </div>
