@@ -1,12 +1,12 @@
-<div class="row">
+<div class="row  py-3">
 
-  <div class="col-4 info pt-3">  
+  <div class="col-12 col-md-4 info pt-3">  
     <img src="{{userData.avatar}}" alt="avatar" width="100%" min-height="75" class="border">
     <input type="file" class="d-none" name="image" id="image">
     <label for="image" class="text-dark btn btn-info font-weight-bold mt-3 d-block" width="100px">Browse files..</label>
   </div>
 
-  <div class="col-8 edit pt-3">
+  <div class="col-12 col-md-8 edit pt-3">
     <form action="/users/{{userData.id}}/edit" method="POST" enctype="multipart/form-data">
       <div class="form-group">
         <input type="text" class="form-control border-info pl-2 h4" name="name" value="{{userData.name}}" placeholder="Name" id="name" width="100%" required>        

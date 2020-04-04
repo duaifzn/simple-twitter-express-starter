@@ -48,7 +48,7 @@ const tweetController = {
           {
             ...user.dataValues,
             PopularNumber: user.Followers.length,
-            introduction: user.dataValues.introduction !== null ? user.dataValues.introduction.substring(0, 50) : '',
+            introduction: user.dataValues.introduction !== null ? (user.dataValues.introduction.length > 50 ? (user.dataValues.introduction.substring(0, 50) + '...') : user.dataValues.introduction) : '',
             isFollowed: user.Followers.map(u => u.id).includes(helpers.getUser(req).id)
           }
         ))

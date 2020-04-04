@@ -1,14 +1,14 @@
 {
-  "name": "test",
+  "name": "simple-twitter",
   "version": "1.0.0",
-  "description": "",
+  "description": "A social networking site, as a group project written in full-stack JavaScript and HTML mainly",
   "main": "index.js",
   "scripts": {
     "start": "concurrently \"set NODE_ENV=development && node app.js\"  \" node socket.js \"",
     "dev": "concurrently \"set NODE_ENV=development && nodemon app.js\"  \" nodemon socket.js \"",
     "test": "set \"NODE_ENV=test\" && mocha test/*/*.js --exit --recursive --timeout 10000"
   },
-  "author": "",
+  "author": "duaifzn, BOBYZH, and ctli1993",
   "license": "ISC",
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",

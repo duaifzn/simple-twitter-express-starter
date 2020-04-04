@@ -2,9 +2,9 @@
 const bcrypt = require('bcryptjs')
 const faker = require('faker')
 
-function randomDate(start, end) {
-  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()))
-}
+// function randomDate (start, end) {
+//   return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()))
+// }
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
@@ -92,16 +92,6 @@ module.exports = {
     //       updatedAt: randomDate(new Date(2020, 2, 12), new Date())
     //     })
     //   ) , {})
-
-    // // return queryInterface.bulkInsert('Likes',
-    // //   Array.from({ length: 800 }).map(d =>
-    // //     ({
-    // //       UserId: Math.floor(Math.random() * 4) + 1,
-    // //       TweetId: Math.floor(Math.random() * 100) + 1,
-    // //       createdAt: randomDate(new Date(2020, 2, 9), new Date(2020, 2, 11)),
-    // //       updatedAt: randomDate(new Date(2020, 2, 12), new Date())
-    // //     })
-    // //   ), {})
   },
 
   down: (queryInterface, Sequelize) => {
@@ -109,6 +99,5 @@ module.exports = {
     // queryInterface.bulkDelete('Tweets', null, {})
     // queryInterface.bulkDelete('Followships', null, {})
     // queryInterface.bulkDelete('Replies', null, {})
-    // return queryInterface.bulkDelete('Likes', null, {})
   }
 }
