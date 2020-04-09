@@ -30,7 +30,7 @@ npm i nodemon -g
 ```
 npm i 
 ```
-5. 可使用migrate與seeder建立資料庫與範例資料，供快速檢視功能：
+5. 在建立名稱為"ac_twitter_workspace"，可使用migrate與seeder建立資料庫與範例資料，供快速檢視功能：
 ```
 npx sequelize db:migrate
 npx sequelize db:seed:all
